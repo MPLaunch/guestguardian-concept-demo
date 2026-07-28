@@ -56,17 +56,30 @@
         }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
         rv.forEach(function (el) { io.observe(el); });
 
-        /* Watchdog: if the observer has not fired for anything already on
-           screen within 1.2s (headless renderers, odd browsers, throttled
-           tabs), stop waiting and show everything. */
-        setTimeout(function () {
-          var onscreen = Array.prototype.filter.call(rv, function (el) {
+        /* Watchdog. Two passes, because a PARTIAL observer failure is the
+           nastier case: if even one element reveals, a "did anything fire?"
+           check would stand down and leave the rest invisible forever.
+           So we repeatedly sweep anything sitting in the viewport unrevealed. */
+        var sweep = function () {
+          var vh = window.innerHeight || document.documentElement.clientHeight || 0;
+          // Fail OPEN: an unmeasurable viewport (hidden/headless/zero-height
+          // renderer) must never leave the page blank.
+          if (!vh) { revealAll(); return; }
+          Array.prototype.forEach.call(rv, function (el) {
+            if (el.classList.contains('in')) return;
             var r = el.getBoundingClientRect();
-            return r.top < window.innerHeight && r.bottom > 0;
+            if (r.top < vh && r.bottom > 0) {
+              el.style.transitionDelay = '0ms';
+              el.classList.add('in');
+            }
           });
-          var shown = onscreen.filter(function (el) { return el.classList.contains('in'); });
-          if (onscreen.length && !shown.length) { revealAll(); }
-        }, 1200);
+        };
+        setTimeout(sweep, 1200);
+        setTimeout(sweep, 3000);
+        window.addEventListener('scroll', function () {
+          clearTimeout(window.__ggSweep);
+          window.__ggSweep = setTimeout(sweep, 900);
+        }, { passive: true });
       } catch (err) {
         revealAll();
       }
@@ -154,6 +167,85 @@
     });
     calc();
   }
+
+  /* ---- Staggered word reveal on headings.
+     Splits into spans only when JS is present; without JS the heading renders
+     normally, and textContent is byte-identical either way (SEO-safe). ---- */
+  var rws = document.querySelectorAll('.rw');
+  if (rws.length && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    rws.forEach(function (h) {
+      var kicker = h.querySelector('.h1-kicker');
+      var nodes = Array.prototype.filter.call(h.childNodes, function (n) { return n !== kicker; });
+      var frag = document.createDocumentFragment();
+      nodes.forEach(function (node) {
+        if (node.nodeType === 3) {
+          node.textContent.split(/(\s+)/).forEach(function (tok) {
+            if (!tok) return;
+            if (/^\s+$/.test(tok)) { frag.appendChild(document.createTextNode(tok)); return; }
+            var w = document.createElement('span');
+            w.className = 'w';
+            var i = document.createElement('i');
+            i.textContent = tok;
+            w.appendChild(i);
+            frag.appendChild(w);
+          });
+        } else {
+          frag.appendChild(node.cloneNode(true));
+        }
+      });
+      nodes.forEach(function (n) { h.removeChild(n); });
+      h.appendChild(frag);
+      h.querySelectorAll('.w > i').forEach(function (i, idx) {
+        i.style.transitionDelay = (idx * 55) + 'ms';
+      });
+    });
+    if ('IntersectionObserver' in window) {
+      var rio = new IntersectionObserver(function (es) {
+        es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('in'); rio.unobserve(e.target); } });
+      }, { threshold: 0.2 });
+      rws.forEach(function (h) { rio.observe(h); });
+      setTimeout(function () { rws.forEach(function (h) { h.classList.add('in'); }); }, 1400);
+    } else {
+      rws.forEach(function (h) { h.classList.add('in'); });
+    }
+  } else {
+    rws.forEach(function (h) { h.classList.add('in'); });
+  }
+
+  /* ---- Before / after slider ---- */
+  document.querySelectorAll('.ba').forEach(function (ba) {
+    var set = function (clientX) {
+      var r = ba.getBoundingClientRect();
+      var pct = ((clientX - r.left) / r.width) * 100;
+      pct = Math.max(2, Math.min(98, pct));
+      ba.style.setProperty('--pos', pct + '%');
+    };
+    var down = false;
+    var start = function (e) { down = true; set((e.touches ? e.touches[0] : e).clientX); };
+    var move = function (e) { if (!down) return; set((e.touches ? e.touches[0] : e).clientX); };
+    var end = function () { down = false; };
+    ba.addEventListener('mousedown', start);
+    ba.addEventListener('touchstart', start, { passive: true });
+    window.addEventListener('mousemove', move);
+    window.addEventListener('touchmove', move, { passive: true });
+    window.addEventListener('mouseup', end);
+    window.addEventListener('touchend', end);
+    ba.addEventListener('click', function (e) { set(e.clientX); });
+  });
+
+  /* ---- Process steps light up as they enter ---- */
+  var psteps = document.querySelectorAll('.pstep');
+  if (psteps.length && 'IntersectionObserver' in window) {
+    var pio = new IntersectionObserver(function (es) {
+      es.forEach(function (e) { e.target.classList.toggle('in', e.isIntersecting); });
+    }, { threshold: 0.55 });
+    psteps.forEach(function (s) { pio.observe(s); });
+  }
+
+  /* ---- Marquee: duplicate the track so the loop is seamless ---- */
+  document.querySelectorAll('.marquee-track').forEach(function (t) {
+    t.innerHTML = t.innerHTML + t.innerHTML;
+  });
 
   /* Footer year */
   document.querySelectorAll('[data-year]').forEach(function (el) {

@@ -20,7 +20,20 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500&family=Outfit:wght@200;300;400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/style.css">
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"Service","name":"Short-term rental management","description":"Full-service short-term rental and Airbnb management across Adelaide, South Australia.","serviceType":"Short-term rental management","provider":{"@id":"https://guestguardian-concept.mplaunch.com.au/#business"},"areaServed":{"@type":"City","name":"Adelaide, SA"}}</script>
+<script type="application/ld+json">{
+ "@context": "https://schema.org",
+ "@type": "Service",
+ "name": "Short-term rental management",
+ "description": "Full-service short-term rental and Airbnb management across Adelaide, South Australia.",
+ "serviceType": "Short-term rental management",
+ "provider": {
+  "@id": "https://guestguardian-concept.mplaunch.com.au/#business"
+ },
+ "areaServed": {
+  "@type": "City",
+  "name": "Adelaide, SA"
+ }
+}</script>
 </head>
 <body>
 
@@ -43,13 +56,13 @@
 </svg>
       <span class="brand-name">Guest <b>Guardian</b></span>
     </a>
-    <nav class="menu" aria-label="Primary"><a href="index.html">Home</a><a href="services.html" aria-current="page">Services</a><a href="areas.html">Areas</a><a href="pricing.html">Pricing</a><a href="about.html">About</a></nav>
+    <nav class="menu" aria-label="Primary"><a href="index.html">Home</a><a href="services.html" aria-current="page">Services</a><a href="areas.html">Areas</a><a href="pricing.html">Pricing</a><a href="journal.html">Journal</a><a href="about.html">About</a></nav>
     <div class="nav-cta">
       <a class="btn btn-primary" href="contact.html">Free rental appraisal <svg class="arw" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 12h13M12 5l7 7-7 7"/></svg></a>
       <button class="burger" aria-label="Menu" aria-expanded="false"><span></span><span></span></button>
     </div>
   </div>
-  <div class="mobile-menu"><a href="index.html">Home</a><a href="services.html">Services</a><a href="areas.html">Areas</a><a href="pricing.html">Pricing</a><a href="about.html">About</a><a href="contact.html">Contact</a><a class="btn btn-primary" href="contact.html">Free rental appraisal</a></div>
+  <div class="mobile-menu"><a href="index.html">Home</a><a href="services.html">Services</a><a href="areas.html">Areas</a><a href="pricing.html">Pricing</a><a href="journal.html">Journal</a><a href="about.html">About</a><a href="contact.html">Contact</a><a class="btn btn-primary" href="contact.html">Free rental appraisal</a></div>
 </header>
 
 <main>
@@ -84,22 +97,24 @@
 
 <section class="pad" id="listing">
   <div class="wrap media">
-    <div class="media-img" style="background:var(--sage-pale)"><img src="assets/img/kitchen.jpg" alt="Listing and photography for Adelaide short-term rentals" loading="lazy" decoding="async"></div>
+    <div class="media-img img-warm" style="background:var(--sage-pale)"><img src="assets/img/kitchen.jpg" alt="Listing and photography for Adelaide short-term rentals" loading="lazy" decoding="async"></div>
     <div class="rv">
-      <p class="eyebrow">01 &nbsp;Service</p>
-      <h2 class="h2">Listing &amp; photography</h2>
+      <span class="sec-num">01 <i>/ 07</i></span>
+      <p class="eyebrow">Service</p>
+      <h2 class="h2 rw">Listing &amp; photography</h2>
       <p class="lede">A listing is a shopfront. Most Adelaide listings are losing bookings before anyone reads the description, because the first photo does not stop the scroll.</p>
       <ul class="checks"><li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg><span>Professional photography, shot at the right time of day</span></li><li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg><span>Written listing copy per channel, not copy-pasted</span></li><li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg><span>Live on Airbnb, Stayz and Booking.com</span></li><li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg><span>Styling recommendations before the shoot</span></li><li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg><span>Refreshed seasonally so it never goes stale</span></li></ul>
       
     </div>
   </div>
 </section>
-<section class="pad dark" id="pricing-engine">
+<section class="pad dark grain" id="pricing-engine">
   <div class="wrap media reverse">
-    <div class="media-img" style="background:rgba(255,255,255,.06)"><img src="assets/img/desk.jpg" alt="Dynamic pricing for Adelaide short-term rentals" loading="lazy" decoding="async"></div>
+    <div class="media-img img-warm" style="background:rgba(255,255,255,.06)"><img src="assets/img/desk.jpg" alt="Dynamic pricing for Adelaide short-term rentals" loading="lazy" decoding="async"></div>
     <div class="rv">
-      <p class="eyebrow">02 &nbsp;Service</p>
-      <h2 class="h2">Dynamic pricing</h2>
+      <span class="sec-num">02 <i>/ 07</i></span>
+      <p class="eyebrow">Service</p>
+      <h2 class="h2 rw">Dynamic pricing</h2>
       <p class="lede">A fixed nightly rate is the most expensive mistake in short-stay. Adelaide swings hard around events, and a static price misses both the peak and the floor.</p>
       <ul class="checks"><li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg><span>Repriced daily against live demand and competitor supply</span></li><li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg><span>Event calendar built in: Mad March, WOMADelaide, LIV Golf, Gather Round, the Adelaide 500</span></li><li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg><span>School holiday and long weekend premiums applied automatically</span></li><li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg><span>Minimum-stay rules tuned by season</span></li><li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg><span>Last-minute discounting rules to protect occupancy without dumping rate</span></li></ul>
       
@@ -108,22 +123,24 @@
 </section>
 <section class="pad" id="guest-care">
   <div class="wrap media">
-    <div class="media-img" style="background:var(--sage-pale)"><img src="assets/img/lounge.jpg" alt="Guest communication for Adelaide short-term rentals" loading="lazy" decoding="async"></div>
+    <div class="media-img img-warm" style="background:var(--sage-pale)"><img src="assets/img/lounge.jpg" alt="Guest communication for Adelaide short-term rentals" loading="lazy" decoding="async"></div>
     <div class="rv">
-      <p class="eyebrow">03 &nbsp;Service</p>
-      <h2 class="h2">Guest communication</h2>
+      <span class="sec-num">03 <i>/ 07</i></span>
+      <p class="eyebrow">Service</p>
+      <h2 class="h2 rw">Guest communication</h2>
       <p class="lede">Guests message at every hour. Response speed drives both your review score and your ranking on the platform, so it cannot wait until morning.</p>
       <ul class="checks"><li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg><span>24/7 response cover, every day of the year</span></li><li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg><span>Pre-arrival, in-stay and post-stay sequences</span></li><li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg><span>Check-in support and troubleshooting</span></li><li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg><span>Issue resolution before it becomes a review</span></li><li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg><span>Review responses written and posted for you</span></li></ul>
       
     </div>
   </div>
 </section>
-<section class="pad dark" id="housekeeping">
+<section class="pad dark grain" id="housekeeping">
   <div class="wrap media reverse">
-    <div class="media-img" style="background:rgba(255,255,255,.06)"><img src="assets/img/clean.jpg" alt="Housekeeping and linen for Adelaide short-term rentals" loading="lazy" decoding="async"></div>
+    <div class="media-img img-warm" style="background:rgba(255,255,255,.06)"><img src="assets/img/clean.jpg" alt="Housekeeping and linen for Adelaide short-term rentals" loading="lazy" decoding="async"></div>
     <div class="rv">
-      <p class="eyebrow">04 &nbsp;Service</p>
-      <h2 class="h2">Housekeeping &amp; linen</h2>
+      <span class="sec-num">04 <i>/ 07</i></span>
+      <p class="eyebrow">Service</p>
+      <h2 class="h2 rw">Housekeeping &amp; linen</h2>
       <p class="lede">Cleanliness is the number one thing guests mention in reviews. We run turnovers to a hotel standard with a photographed check after every stay.</p>
       <ul class="checks"><li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg><span>Hotel-grade turnover between every guest</span></li><li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg><span>Premium linen and towels, laundered off-site</span></li><li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg><span>Consumables restocked, never left short</span></li><li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg><span>Photographed condition report after each stay</span></li><li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg><span>Damage identified and claimed same-day</span></li></ul>
       
@@ -132,34 +149,42 @@
 </section>
 <section class="pad" id="maintenance">
   <div class="wrap media">
-    <div class="media-img" style="background:var(--sage-pale)"><img src="assets/img/bedroom.jpg" alt="Maintenance for Adelaide short-term rentals" loading="lazy" decoding="async"></div>
+    <div class="media-img img-warm" style="background:var(--sage-pale)"><img src="assets/img/bedroom.jpg" alt="Maintenance for Adelaide short-term rentals" loading="lazy" decoding="async"></div>
     <div class="rv">
-      <p class="eyebrow">05 &nbsp;Service</p>
-      <h2 class="h2">Maintenance</h2>
+      <span class="sec-num">05 <i>/ 07</i></span>
+      <p class="eyebrow">Service</p>
+      <h2 class="h2 rw">Maintenance</h2>
       <p class="lede">Small problems become expensive ones and bad reviews. We catch them on inspection instead of hearing about them from a guest.</p>
       <ul class="checks"><li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg><span>Trade network on call across metro Adelaide</span></li><li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg><span>Preventative schedule for filters, smoke alarms, servicing</span></li><li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg><span>Routine inspections with photographs</span></li><li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg><span>Owner sign-off required above your set threshold</span></li><li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg><span>Every job itemised on your statement</span></li></ul>
       
     </div>
   </div>
 </section>
-<section class="pad dark" id="styling">
+<section class="pad dark grain" id="styling">
   <div class="wrap media reverse">
-    <div class="media-img" style="background:rgba(255,255,255,.06)"><img src="assets/img/hero-home.jpg" alt="Styling and furnishing for Adelaide short-term rentals" loading="lazy" decoding="async"></div>
+    <div class="ba" role="group" aria-label="Before and after styling comparison">
+         <img src="assets/img/style-before.jpg" alt="Adelaide rental before styling">
+         <img class="ba-after" src="assets/img/style-after.jpg" alt="The same room after styling and furnishing">
+         <span class="ba-tag l">Before</span><span class="ba-tag r">After</span>
+         <div class="ba-handle"><span class="ba-knob"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M9 7l-5 5 5 5M15 7l5 5-5 5"/></svg></span></div>
+       </div>
     <div class="rv">
-      <p class="eyebrow">06 &nbsp;Service</p>
-      <h2 class="h2">Styling &amp; furnishing</h2>
+      <span class="sec-num">06 <i>/ 07</i></span>
+      <p class="eyebrow">Service</p>
+      <h2 class="h2 rw">Styling &amp; furnishing</h2>
       <p class="lede">Presentation sets the nightly rate ceiling. Getting it right once pays for itself across every booking that follows.</p>
       <ul class="checks"><li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg><span>Full furnishing packages for new listings</span></li><li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg><span>Light refresh for tired properties</span></li><li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg><span>Sourced to photograph well and survive guest use</span></li><li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg><span>Styled for the property and the target guest</span></li><li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg><span>Coordinated end to end so you do not shop for anything</span></li></ul>
-      
+      <p class="small muted mt-2">Drag the handle to compare. Illustrative images.</p>
     </div>
   </div>
 </section>
 <section class="pad" id="compliance">
   <div class="wrap media">
-    <div class="media-img" style="background:var(--sage-pale)"><img src="assets/img/city.jpg" alt="Compliance and insurance for Adelaide short-term rentals" loading="lazy" decoding="async"></div>
+    <div class="media-img img-warm" style="background:var(--sage-pale)"><img src="assets/img/city.jpg" alt="Compliance and insurance for Adelaide short-term rentals" loading="lazy" decoding="async"></div>
     <div class="rv">
-      <p class="eyebrow">07 &nbsp;Service</p>
-      <h2 class="h2">Compliance &amp; insurance</h2>
+      <span class="sec-num">07 <i>/ 07</i></span>
+      <p class="eyebrow">Service</p>
+      <h2 class="h2 rw">Compliance &amp; insurance</h2>
       <p class="lede">Short-stay rules keep moving. We track what applies to your property so a technicality never becomes a shutdown.</p>
       <ul class="checks"><li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg><span>Council requirements reviewed per property</span></li><li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg><span>Short-stay levy and registration obligations tracked</span></li><li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg><span>Insurance adequacy reviewed, gaps flagged in writing</span></li><li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg><span>Smoke alarm and safety compliance kept current</span></li><li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg><span>Records kept and available on request</span></li></ul>
       
@@ -176,9 +201,10 @@
 
 </main>
 
-<section class="cta-band pad">
+<section class="cta-band pad grain">
   <div class="wrap">
     <p class="eyebrow centered">Get started</p>
+    <div class="rule-accent centered"></div>
     <h2 class="h2">What could your property earn?</h2>
     <p class="lede">A free, no-obligation appraisal with a realistic nightly rate, an occupancy estimate and a clear net figure after costs. Usually back with you inside one business day.</p>
     <div class="cta-actions">
@@ -235,6 +261,7 @@
       <span>&copy; <span data-year>2026</span> Guest Guardian Pty Ltd. ABN 84 687 233 389.</span>
       <span><a href="#">Privacy</a> &nbsp;·&nbsp; <a href="#">Terms</a></span>
     </div>
+    <div class="foot-mark" aria-hidden="true"><span>Guest Guardian</span></div>
   </div>
   <div class="mpl-ribbon">
     Design concept by <b>MP Launch</b> &mdash; prepared for Guest Guardian, July 2026.

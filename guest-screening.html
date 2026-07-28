@@ -20,7 +20,46 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500&family=Outfit:wght@200;300;400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/style.css">
-<script type="application/ld+json">[{"@context":"https://schema.org","@type":"Service","name":"Guest screening","description":"Screening and vetting of every short-term rental booking before approval, for Adelaide property owners.","serviceType":"Guest screening","provider":{"@id":"https://guestguardian-concept.mplaunch.com.au/#business"},"areaServed":{"@type":"City","name":"Adelaide, SA"}},{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://guestguardian-concept.mplaunch.com.au/index.html"},{"@type":"ListItem","position":2,"name":"Services","item":"https://guestguardian-concept.mplaunch.com.au/services.html"},{"@type":"ListItem","position":3,"name":"Guest screening","item":"https://guestguardian-concept.mplaunch.com.au/guest-screening.html"}]}]</script>
+<script type="application/ld+json">[
+ {
+  "@context": "https://schema.org",
+  "@type": "Service",
+  "name": "Guest screening",
+  "description": "Screening and vetting of every short-term rental booking before approval, for Adelaide property owners.",
+  "serviceType": "Guest screening",
+  "provider": {
+   "@id": "https://guestguardian-concept.mplaunch.com.au/#business"
+  },
+  "areaServed": {
+   "@type": "City",
+   "name": "Adelaide, SA"
+  }
+ },
+ {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+   {
+    "@type": "ListItem",
+    "position": 1,
+    "name": "Home",
+    "item": "https://guestguardian-concept.mplaunch.com.au/index.html"
+   },
+   {
+    "@type": "ListItem",
+    "position": 2,
+    "name": "Services",
+    "item": "https://guestguardian-concept.mplaunch.com.au/services.html"
+   },
+   {
+    "@type": "ListItem",
+    "position": 3,
+    "name": "Guest screening",
+    "item": "https://guestguardian-concept.mplaunch.com.au/guest-screening.html"
+   }
+  ]
+ }
+]</script>
 </head>
 <body>
 
@@ -43,13 +82,13 @@
 </svg>
       <span class="brand-name">Guest <b>Guardian</b></span>
     </a>
-    <nav class="menu" aria-label="Primary"><a href="index.html">Home</a><a href="services.html" aria-current="page">Services</a><a href="areas.html">Areas</a><a href="pricing.html">Pricing</a><a href="about.html">About</a></nav>
+    <nav class="menu" aria-label="Primary"><a href="index.html">Home</a><a href="services.html" aria-current="page">Services</a><a href="areas.html">Areas</a><a href="pricing.html">Pricing</a><a href="journal.html">Journal</a><a href="about.html">About</a></nav>
     <div class="nav-cta">
       <a class="btn btn-primary" href="contact.html">Free rental appraisal <svg class="arw" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 12h13M12 5l7 7-7 7"/></svg></a>
       <button class="burger" aria-label="Menu" aria-expanded="false"><span></span><span></span></button>
     </div>
   </div>
-  <div class="mobile-menu"><a href="index.html">Home</a><a href="services.html">Services</a><a href="areas.html">Areas</a><a href="pricing.html">Pricing</a><a href="about.html">About</a><a href="contact.html">Contact</a><a class="btn btn-primary" href="contact.html">Free rental appraisal</a></div>
+  <div class="mobile-menu"><a href="index.html">Home</a><a href="services.html">Services</a><a href="areas.html">Areas</a><a href="pricing.html">Pricing</a><a href="journal.html">Journal</a><a href="about.html">About</a><a href="contact.html">Contact</a><a class="btn btn-primary" href="contact.html">Free rental appraisal</a></div>
 </header>
 
 <main>
@@ -97,9 +136,10 @@
 
 </main>
 
-<section class="cta-band pad">
+<section class="cta-band pad grain">
   <div class="wrap">
     <p class="eyebrow centered">Get started</p>
+    <div class="rule-accent centered"></div>
     <h2 class="h2">What could your property earn?</h2>
     <p class="lede">A free, no-obligation appraisal with a realistic nightly rate, an occupancy estimate and a clear net figure after costs. Usually back with you inside one business day.</p>
     <div class="cta-actions">
@@ -156,6 +196,7 @@
       <span>&copy; <span data-year>2026</span> Guest Guardian Pty Ltd. ABN 84 687 233 389.</span>
       <span><a href="#">Privacy</a> &nbsp;·&nbsp; <a href="#">Terms</a></span>
     </div>
+    <div class="foot-mark" aria-hidden="true"><span>Guest Guardian</span></div>
   </div>
   <div class="mpl-ribbon">
     Design concept by <b>MP Launch</b> &mdash; prepared for Guest Guardian, July 2026.
