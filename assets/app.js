@@ -247,6 +247,16 @@
     t.innerHTML = t.innerHTML + t.innerHTML;
   });
 
+  /* ---- Booking engine iframe: hide the loading panel once it renders ---- */
+  var bookFrame = document.getElementById('book-frame');
+  var bookLoad = document.getElementById('book-loading');
+  if (bookFrame && bookLoad) {
+    var hideLoader = function () { bookLoad.classList.add('gone'); };
+    bookFrame.addEventListener('load', hideLoader);
+    // Fail open: never leave a loading panel covering the engine.
+    setTimeout(hideLoader, 6000);
+  }
+
   /* Footer year */
   document.querySelectorAll('[data-year]').forEach(function (el) {
     el.textContent = String(new Date().getFullYear());
