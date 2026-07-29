@@ -19,7 +19,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500&family=Outfit:wght@200;300;400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/style.css?v=1fec035d">
+<link rel="stylesheet" href="assets/style.css?v=d4cb3f49">
 <script type="application/ld+json">[
  {
   "@context": "https://schema.org",
@@ -182,20 +182,28 @@
 
 <section class="pad-sm">
   <div class="wrap">
-    <!-- Filters the cards below instantly on real property attributes (sleeps,
-         bedrooms, pool) read from their booking engine. Deliberately NO date
-         field: verified 29 Jul that the Holiday Future search ignores date
-         params, so a date filter here would be a lie. Dates are chosen on the
-         live calendar inside the booking window, where they work. -->
-    <div class="bookbar bookbar-filter rv" id="propfilter">
+    <!-- Real availability search. Verified 29 Jul: their engine takes
+         ?start=&end=&numberOfGuests= (NOT startDate/endDate) and returns
+         date-filtered results with live per-property pricing.
+         Guests/bedrooms/pool also filter the cards below instantly. -->
+    <form class="bookbar bookbar-filter rv" id="propfilter" action="https://guestguardian.holidayfuture.com/search" method="get">
+      <label class="bb-field">
+        <span class="bb-label">Arrive</span>
+        <input type="date" name="start" id="f-start">
+      </label>
+      <label class="bb-field">
+        <span class="bb-label">Depart</span>
+        <input type="date" name="end" id="f-end">
+      </label>
       <label class="bb-field">
         <span class="bb-label">Guests</span>
-        <select id="f-guests">
-          <option value="0" selected>Any</option>
-          <option value="2">2+</option>
-          <option value="5">5+</option>
-          <option value="7">7+</option>
-          <option value="10">10+</option>
+        <select name="numberOfGuests" id="f-guests">
+          <option value="1">1</option>
+          <option value="2" selected>2</option>
+          <option value="4">4</option>
+          <option value="5">5</option>
+          <option value="7">7</option>
+          <option value="10">10</option>
           <option value="12">12</option>
         </select>
       </label>
@@ -212,12 +220,12 @@
         <span class="bb-label">Pool</span>
         <select id="f-pool">
           <option value="any" selected>Any</option>
-          <option value="yes">With a pool</option>
+          <option value="yes">Yes</option>
         </select>
       </label>
-      <div class="bb-count"><strong id="f-count">4</strong> of 4 homes</div>
-      <p class="bb-hint">Filters our homes instantly. Choose your dates on the live calendar in the next step.</p>
-    </div>
+      <button class="btn btn-primary" type="submit">Check availability <svg class="arw" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 12h13M12 5l7 7-7 7"/></svg></button>
+      <p class="bb-hint"><strong id="f-count">4</strong> of our 4 homes match. Add dates and hit check availability for live prices and what's actually free.</p>
+    </form>
 
     <div class="sec-head split rv mt-3" style="margin-bottom:1.75rem">
       <div>
@@ -379,7 +387,7 @@
   </div>
 </footer>
 
-<script src="assets/app.js?v=1fec035d"></script>
+<script src="assets/app.js?v=d4cb3f49"></script>
 <!-- Preview open beacon: texts Peter when the prospect opens this. JS-driven so
      link-unfurling crawlers (iMessage/WhatsApp/Outlook) don't trigger a false alarm;
      the endpoint throttles server-side to at most one text per 6h. -->

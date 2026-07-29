@@ -286,6 +286,23 @@
       if (el) el.addEventListener('change', applyFilter);
     });
     applyFilter();
+
+    /* Depart can never precede arrive. */
+    var fStart = document.getElementById('f-start');
+    var fEnd = document.getElementById('f-end');
+    if (fStart && fEnd) {
+      var today = new Date().toISOString().slice(0, 10);
+      fStart.min = today;
+      fEnd.min = today;
+      fStart.addEventListener('change', function () {
+        fEnd.min = fStart.value || today;
+        if (fEnd.value && fEnd.value <= fStart.value) {
+          var next = new Date(fStart.value);
+          next.setDate(next.getDate() + 1);
+          fEnd.value = next.toISOString().slice(0, 10);
+        }
+      });
+    }
   }
 
   /* ---- Booking modal.
@@ -349,12 +366,18 @@
         ev.preventDefault();
         var params = [];
         Array.prototype.forEach.call(bookbar.elements, function (el) {
+          // Only named fields go to their engine. Bedrooms/pool are ours and
+          // filter the cards locally, so they are deliberately unnamed.
           if (el.name && el.value) {
             params.push(encodeURIComponent(el.name) + '=' + encodeURIComponent(el.value));
           }
         });
         var url = bookbar.getAttribute('action') + (params.length ? '?' + params.join('&') : '');
-        openModal(url, 'Available properties');
+        var s = document.getElementById('f-start'), e = document.getElementById('f-end');
+        var title = (s && s.value && e && e.value)
+          ? 'Available ' + s.value + ' to ' + e.value
+          : 'Available properties';
+        openModal(url, title);
         guardLoader();
       });
     }
