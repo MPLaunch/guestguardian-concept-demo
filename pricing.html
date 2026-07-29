@@ -281,18 +281,25 @@
 </footer>
 
 <script src="assets/app.js?v=d4cb3f49"></script>
-<!-- Preview open beacon: texts Peter when the prospect opens this. JS-driven so
-     link-unfurling crawlers (iMessage/WhatsApp/Outlook) don't trigger a false alarm;
-     the endpoint throttles server-side to at most one text per 6h. -->
+<!-- Preview open beacon: texts Peter when the prospect opens this.
+     JS-driven so link-unfurling crawlers (iMessage/WhatsApp/Outlook) don't cause
+     a false alarm. sessionStorage stops one visit firing 12 times as they browse.
+     ?v=<tag> splits the SLUG as well as the label, so the server-side 6h throttle
+     is per-audience: Peter testing can never suppress the prospect's alert. -->
 <script>
 (function(){
   try {
-    var k = 'gg_pv_seen';
+    var tag = (location.search.match(/[?&]v=([\w-]{1,24})/) || [])[1] || '';
+    var k = 'gg_pv_seen_' + (tag || 'self');
     if (sessionStorage.getItem(k)) return;
     sessionStorage.setItem(k, '1');
+    var slug = 'guestguardian-concept-demo' + (tag ? '-' + tag : '');
+    var label = tag
+      ? 'Guest Guardian PROSPECT OPENED (' + tag + ')'
+      : 'Guest Guardian preview (untagged, likely internal)';
     new Image().src = 'https://mplaunch.com.au/api/preview-view'
-      + '?slug=guestguardian-concept-demo'
-      + '&label=' + encodeURIComponent('Nick S + Nick D — Guest Guardian')
+      + '?slug=' + encodeURIComponent(slug)
+      + '&label=' + encodeURIComponent(label)
       + '&t=' + Date.now();
   } catch (e) {}
 })();
