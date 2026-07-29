@@ -232,6 +232,54 @@ em.accent { font-style: italic; color: var(--sage-deep); }
   .bookbar .btn { grid-column: 1 / -1; width: 100%; }
 }
 @media (max-width: 460px) { .bookbar { grid-template-columns: 1fr; } }
+
+/* ==========================================================================
+   Booking modal — the real listing page opens over the site, so the guest
+   books without ever leaving guestguardian.com.au.
+   ========================================================================== */
+.bmodal {
+  position: fixed; inset: 0; z-index: 200;
+  display: none; align-items: center; justify-content: center;
+  padding: clamp(.5rem, 2.5vw, 2rem);
+  background: rgba(20,21,20,.72);
+  backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+}
+.bmodal.open { display: flex; }
+.bmodal-panel {
+  position: relative; width: min(1180px, 100%); height: min(92vh, 980px);
+  background: var(--paper-2); border-radius: var(--rad-lg);
+  overflow: hidden; box-shadow: var(--shadow-lg);
+  display: flex; flex-direction: column;
+}
+.bmodal-bar {
+  display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+  padding: .85rem 1rem .85rem 1.35rem;
+  background: var(--ink); color: #fff; flex: none;
+}
+.bmodal-title { font-family: var(--serif); font-size: 1.05rem; letter-spacing: -.015em; }
+.bmodal-sub { font-size: .7rem; letter-spacing: .1em; text-transform: uppercase; color: rgba(255,255,255,.5); margin-top: .15rem; }
+.bmodal-actions { display: flex; align-items: center; gap: .5rem; flex: none; }
+.bmodal-actions a, .bmodal-close {
+  border: 1px solid rgba(255,255,255,.25); background: transparent; color: #fff;
+  border-radius: 100px; padding: .45rem .9rem; font-size: .72rem;
+  letter-spacing: .1em; text-transform: uppercase; line-height: 1;
+  display: inline-flex; align-items: center; gap: .4rem;
+  transition: background .3s var(--ease), color .3s var(--ease);
+}
+.bmodal-actions a:hover, .bmodal-close:hover { background: #fff; color: var(--ink); }
+.bmodal-body { position: relative; flex: 1; background: var(--paper); }
+.bmodal-body iframe { display: block; width: 100%; height: 100%; border: 0; }
+.bmodal-load {
+  position: absolute; inset: 0; display: grid; place-items: center;
+  background: var(--paper); color: var(--muted); font-size: .88rem;
+  transition: opacity .4s var(--ease);
+}
+.bmodal-load.gone { opacity: 0; pointer-events: none; }
+body.bmodal-lock { overflow: hidden; }
+@media (max-width: 620px) {
+  .bmodal-panel { height: 94vh; }
+  .bmodal-actions .bm-newtab { display: none; }
+}
 .book-note {
   display: flex; align-items: flex-start; gap: .7rem;
   background: rgba(167,171,161,.14); border-left: 2px solid var(--sage-deep);

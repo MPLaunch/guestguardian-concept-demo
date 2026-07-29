@@ -254,14 +254,61 @@
     t.innerHTML = t.innerHTML + t.innerHTML;
   });
 
-  /* ---- Booking engine iframe: hide the loading panel once it renders ---- */
-  var bookFrame = document.getElementById('book-frame');
-  var bookLoad = document.getElementById('book-loading');
-  if (bookFrame && bookLoad) {
-    var hideLoader = function () { bookLoad.classList.add('gone'); };
-    bookFrame.addEventListener('load', hideLoader);
-    // Fail open: never leave a loading panel covering the engine.
-    setTimeout(hideLoader, 6000);
+  /* ---- Booking modal.
+     Opens the REAL listing page over the site so the guest books without ever
+     leaving guestguardian. The iframe src is only set on open, so we don't pay
+     for four hidden page loads up front. ---- */
+  var bmodal = document.getElementById('bmodal');
+  if (bmodal) {
+    var bmFrame = bmodal.querySelector('iframe');
+    var bmLoad = bmodal.querySelector('.bmodal-load');
+    var bmTitle = bmodal.querySelector('.bmodal-title');
+    var bmNewTab = bmodal.querySelector('.bm-newtab');
+    var lastFocus = null;
+
+    var closeModal = function () {
+      bmodal.classList.remove('open');
+      document.body.classList.remove('bmodal-lock');
+      bmFrame.src = 'about:blank';
+      if (lastFocus) { try { lastFocus.focus(); } catch (e) {} }
+    };
+    var openModal = function (url, title) {
+      lastFocus = document.activeElement;
+      bmTitle.textContent = title || 'Book your stay';
+      if (bmNewTab) bmNewTab.href = url;
+      bmLoad.classList.remove('gone');
+      bmFrame.src = url;
+      bmodal.classList.add('open');
+      document.body.classList.add('bmodal-lock');
+      var closeBtn = bmodal.querySelector('.bmodal-close');
+      if (closeBtn) closeBtn.focus();
+    };
+
+    bmFrame.addEventListener('load', function () {
+      if (bmFrame.src && bmFrame.src !== 'about:blank') bmLoad.classList.add('gone');
+    });
+    // Fail open: never leave a loading panel stuck over the engine.
+    var loadGuard;
+    bmodal.addEventListener('transitionend', function () {});
+
+    document.querySelectorAll('[data-book-url]').forEach(function (card) {
+      card.addEventListener('click', function (ev) {
+        // Let modified clicks (new tab / middle click) behave normally.
+        if (ev.metaKey || ev.ctrlKey || ev.shiftKey || ev.button !== 0) return;
+        ev.preventDefault();
+        openModal(card.getAttribute('data-book-url'), card.getAttribute('data-book-title'));
+        clearTimeout(loadGuard);
+        loadGuard = setTimeout(function () { bmLoad.classList.add('gone'); }, 7000);
+      });
+    });
+
+    bmodal.querySelectorAll('.bmodal-close').forEach(function (b) {
+      b.addEventListener('click', closeModal);
+    });
+    bmodal.addEventListener('click', function (ev) { if (ev.target === bmodal) closeModal(); });
+    document.addEventListener('keydown', function (ev) {
+      if (ev.key === 'Escape' && bmodal.classList.contains('open')) closeModal();
+    });
   }
 
   /* Footer year */
