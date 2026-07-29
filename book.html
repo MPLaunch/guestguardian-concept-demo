@@ -19,7 +19,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500&family=Outfit:wght@200;300;400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/style.css?v=644db7d3">
+<link rel="stylesheet" href="assets/style.css?v=1fec035d">
 <script type="application/ld+json">[
  {
   "@context": "https://schema.org",
@@ -182,26 +182,42 @@
 
 <section class="pad-sm">
   <div class="wrap">
-    <!-- Guests only. Verified 29 Jul: the Holiday Future search accepts
-         numberOfGuests via the URL but IGNORES date params under every naming
-         tried, so offering date fields here would silently drop them. Dates are
-         chosen in the booking window, which does work. -->
-    <form class="bookbar bookbar-2 rv" action="https://guestguardian.holidayfuture.com/search" method="get">
+    <!-- Filters the cards below instantly on real property attributes (sleeps,
+         bedrooms, pool) read from their booking engine. Deliberately NO date
+         field: verified 29 Jul that the Holiday Future search ignores date
+         params, so a date filter here would be a lie. Dates are chosen on the
+         live calendar inside the booking window, where they work. -->
+    <div class="bookbar bookbar-filter rv" id="propfilter">
       <label class="bb-field">
-        <span class="bb-label">How many guests?</span>
-        <select name="numberOfGuests">
-          <option value="1">1 guest</option>
-          <option value="2">2 guests</option>
-          <option value="4" selected>4 guests</option>
-          <option value="5">5 guests</option>
-          <option value="7">7 guests</option>
-          <option value="10">10 guests</option>
-          <option value="12">12 guests</option>
+        <span class="bb-label">Guests</span>
+        <select id="f-guests">
+          <option value="0" selected>Any</option>
+          <option value="2">2+</option>
+          <option value="5">5+</option>
+          <option value="7">7+</option>
+          <option value="10">10+</option>
+          <option value="12">12</option>
         </select>
       </label>
-      <button class="btn btn-primary" type="submit">See what's available <svg class="arw" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 12h13M12 5l7 7-7 7"/></svg></button>
-      <p class="bb-hint">Pick your dates in the next step, on the live calendar.</p>
-    </form>
+      <label class="bb-field">
+        <span class="bb-label">Bedrooms</span>
+        <select id="f-beds">
+          <option value="0" selected>Any</option>
+          <option value="2">2+</option>
+          <option value="3">3+</option>
+          <option value="5">5</option>
+        </select>
+      </label>
+      <label class="bb-field">
+        <span class="bb-label">Pool</span>
+        <select id="f-pool">
+          <option value="any" selected>Any</option>
+          <option value="yes">With a pool</option>
+        </select>
+      </label>
+      <div class="bb-count"><strong id="f-count">4</strong> of 4 homes</div>
+      <p class="bb-hint">Filters our homes instantly. Choose your dates on the live calendar in the next step.</p>
+    </div>
 
     <div class="sec-head split rv mt-3" style="margin-bottom:1.75rem">
       <div>
@@ -211,33 +227,34 @@
       <p class="lede">Every property here is managed end to end by us, so what you see is what you get. Pick one to check dates and book.</p>
     </div>
 
-    <div class="grid-4">
-      <a class="jcard rv" href="https://guestguardian.holidayfuture.com/listings/472310" data-book-url="https://guestguardian.holidayfuture.com/listings/472310" data-book-title="The Bungalow" rel="noopener">
+    <div class="grid-4" id="proplist">
+      <a class="jcard rv prop" href="https://guestguardian.holidayfuture.com/listings/472310" data-book-url="https://guestguardian.holidayfuture.com/listings/472310" data-book-title="The Bungalow" data-sleeps="7" data-beds="3" data-pool="false" rel="noopener">
         <div class="jcard-img"><img src="https://bookingenginecdn.hostaway.com/listing/179273-472310-mdLS2PR8--9qDCkDj1B--87D6N4d9lesKLtJddjGktk04-695c087b43b9a?width=1200&height=630&quality=70&format=jpeg&v=2" alt="The Bungalow, Adelaide" loading="lazy" decoding="async"></div>
-        <div class="jcard-meta"><span>Adelaide</span><span>Book direct</span></div>
+        <div class="jcard-meta"><span>Sleeps 7</span><span>3 bed &middot; 2 bath</span></div>
         <h3 class="h3" style="font-size:1.2rem">The Bungalow</h3>
         <p>3 bedroom · BBQ · games room</p>
         <span class="tlink mt-1" style="font-size:.84rem">Check dates &amp; book <svg class="arw" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 12h13M12 5l7 7-7 7"/></svg></span>
-      </a><a class="jcard rv" data-d="80" href="https://guestguardian.holidayfuture.com/listings/472311" data-book-url="https://guestguardian.holidayfuture.com/listings/472311" data-book-title="The Cabana" rel="noopener">
+      </a><a class="jcard rv prop" data-d="80" href="https://guestguardian.holidayfuture.com/listings/472311" data-book-url="https://guestguardian.holidayfuture.com/listings/472311" data-book-title="The Cabana" data-sleeps="5" data-beds="2" data-pool="true" rel="noopener">
         <div class="jcard-img"><img src="https://bookingenginecdn.hostaway.com/listing/179273-472311-7GdLxE4s5MHnS05leY1a--twCPHZeNzlXkdf--v6bwNH8-695b580d28636?width=1200&height=630&quality=70&format=jpeg&v=2" alt="The Cabana, Adelaide" loading="lazy" decoding="async"></div>
-        <div class="jcard-meta"><span>Adelaide</span><span>Book direct</span></div>
+        <div class="jcard-meta"><span>Sleeps 5</span><span>2 bed &middot; 1 bath</span></div>
         <h3 class="h3" style="font-size:1.2rem">The Cabana</h3>
         <p>2 bedroom · private pool · spa</p>
         <span class="tlink mt-1" style="font-size:.84rem">Check dates &amp; book <svg class="arw" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 12h13M12 5l7 7-7 7"/></svg></span>
-      </a><a class="jcard rv" data-d="160" href="https://guestguardian.holidayfuture.com/listings/472312" data-book-url="https://guestguardian.holidayfuture.com/listings/472312" data-book-title="The Bungalow &amp; The Cabana" rel="noopener">
+      </a><a class="jcard rv prop" data-d="160" href="https://guestguardian.holidayfuture.com/listings/472312" data-book-url="https://guestguardian.holidayfuture.com/listings/472312" data-book-title="The Bungalow &amp; The Cabana" data-sleeps="12" data-beds="5" data-pool="true" rel="noopener">
         <div class="jcard-img"><img src="https://bookingenginecdn.hostaway.com/listing/179273-472312-WHckDgCCL6WwgMiCBrzBdivjz7uEJKQgdoM-QNSJ-cU-695b57ce8756e?width=1200&height=630&quality=70&format=jpeg&v=2" alt="The Bungalow and The Cabana, Adelaide" loading="lazy" decoding="async"></div>
-        <div class="jcard-meta"><span>Adelaide</span><span>Book direct</span></div>
+        <div class="jcard-meta"><span>Sleeps 12</span><span>5 bed &middot; 3 bath</span></div>
         <h3 class="h3" style="font-size:1.2rem">The Bungalow &amp; The Cabana</h3>
         <p>Both together · sleeps up to 12</p>
         <span class="tlink mt-1" style="font-size:.84rem">Check dates &amp; book <svg class="arw" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 12h13M12 5l7 7-7 7"/></svg></span>
-      </a><a class="jcard rv" data-d="240" href="https://guestguardian.holidayfuture.com/listings/495920" data-book-url="https://guestguardian.holidayfuture.com/listings/495920" data-book-title="Victoria House" rel="noopener">
+      </a><a class="jcard rv prop" data-d="240" href="https://guestguardian.holidayfuture.com/listings/495920" data-book-url="https://guestguardian.holidayfuture.com/listings/495920" data-book-title="Victoria House" data-sleeps="7" data-beds="3" data-pool="false" rel="noopener">
         <div class="jcard-img"><img src="https://bookingenginecdn.hostaway.com/listing/179273-495920-xl2qjZGiS7Zeppe2rz77atkHgkbXaXUM--37l7gzQz8U-69b1528e8af7f?width=1200&height=630&quality=70&format=jpeg&v=2" alt="Victoria House, Adelaide" loading="lazy" decoding="async"></div>
-        <div class="jcard-meta"><span>Adelaide</span><span>Book direct</span></div>
+        <div class="jcard-meta"><span>Sleeps 7</span><span>3 bed &middot; 1 bath</span></div>
         <h3 class="h3" style="font-size:1.2rem">Victoria House</h3>
         <p>3 bedroom · BBQ · sunroom</p>
         <span class="tlink mt-1" style="font-size:.84rem">Check dates &amp; book <svg class="arw" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 12h13M12 5l7 7-7 7"/></svg></span>
       </a>
     </div>
+    <p class="small muted center mt-2" id="f-empty" style="display:none">No homes match that combination. Try widening the filters.</p>
 
     <div class="book-note">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 3l7 3v6c0 4.5-3 8-7 9-4-1-7-4.5-7-9V6l7-3z"/></svg>
@@ -362,7 +379,7 @@
   </div>
 </footer>
 
-<script src="assets/app.js?v=644db7d3"></script>
+<script src="assets/app.js?v=1fec035d"></script>
 <!-- Preview open beacon: texts Peter when the prospect opens this. JS-driven so
      link-unfurling crawlers (iMessage/WhatsApp/Outlook) don't trigger a false alarm;
      the endpoint throttles server-side to at most one text per 6h. -->

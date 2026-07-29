@@ -254,6 +254,40 @@
     t.innerHTML = t.innerHTML + t.innerHTML;
   });
 
+  /* ---- Property filter.
+     Filters on real attributes (sleeps / bedrooms / pool) read off their
+     booking engine. Deliberately no date filter: their engine ignores date
+     params, so a date control here would silently do nothing. ---- */
+  var pf = document.getElementById('propfilter');
+  if (pf) {
+    var fGuests = document.getElementById('f-guests');
+    var fBeds = document.getElementById('f-beds');
+    var fPool = document.getElementById('f-pool');
+    var fCount = document.getElementById('f-count');
+    var fEmpty = document.getElementById('f-empty');
+    var props = document.querySelectorAll('#proplist .prop');
+
+    var applyFilter = function () {
+      var g = parseInt(fGuests.value, 10) || 0;
+      var b = parseInt(fBeds.value, 10) || 0;
+      var p = fPool.value;
+      var shown = 0;
+      props.forEach(function (el) {
+        var ok = parseInt(el.getAttribute('data-sleeps'), 10) >= g
+              && parseInt(el.getAttribute('data-beds'), 10) >= b
+              && (p === 'any' || el.getAttribute('data-pool') === 'true');
+        el.style.display = ok ? '' : 'none';
+        if (ok) shown++;
+      });
+      if (fCount) fCount.textContent = shown;
+      if (fEmpty) fEmpty.style.display = shown ? 'none' : '';
+    };
+    [fGuests, fBeds, fPool].forEach(function (el) {
+      if (el) el.addEventListener('change', applyFilter);
+    });
+    applyFilter();
+  }
+
   /* ---- Booking modal.
      Opens the REAL listing page over the site so the guest books without ever
      leaving guestguardian. The iframe src is only set on open, so we don't pay
