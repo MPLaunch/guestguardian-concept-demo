@@ -291,16 +291,39 @@
     var loadGuard;
     bmodal.addEventListener('transitionend', function () {});
 
+    var guardLoader = function () {
+      clearTimeout(loadGuard);
+      loadGuard = setTimeout(function () { bmLoad.classList.add('gone'); }, 7000);
+    };
+
     document.querySelectorAll('[data-book-url]').forEach(function (card) {
       card.addEventListener('click', function (ev) {
         // Let modified clicks (new tab / middle click) behave normally.
         if (ev.metaKey || ev.ctrlKey || ev.shiftKey || ev.button !== 0) return;
         ev.preventDefault();
         openModal(card.getAttribute('data-book-url'), card.getAttribute('data-book-title'));
-        clearTimeout(loadGuard);
-        loadGuard = setTimeout(function () { bmLoad.classList.add('gone'); }, 7000);
+        guardLoader();
       });
     });
+
+    /* The date/guest search opens in the SAME modal, so checking availability
+       never bounces the guest off the site either. The plain form action stays
+       as the no-JS fallback. */
+    var bookbar = document.querySelector('form.bookbar');
+    if (bookbar) {
+      bookbar.addEventListener('submit', function (ev) {
+        ev.preventDefault();
+        var params = [];
+        Array.prototype.forEach.call(bookbar.elements, function (el) {
+          if (el.name && el.value) {
+            params.push(encodeURIComponent(el.name) + '=' + encodeURIComponent(el.value));
+          }
+        });
+        var url = bookbar.getAttribute('action') + (params.length ? '?' + params.join('&') : '');
+        openModal(url, 'Available properties');
+        guardLoader();
+      });
+    }
 
     bmodal.querySelectorAll('.bmodal-close').forEach(function (b) {
       b.addEventListener('click', closeModal);
