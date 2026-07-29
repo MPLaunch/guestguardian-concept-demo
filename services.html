@@ -43,7 +43,6 @@
     <div class="tb-right">
       <a href="tel:+61882391787">08 8239 1787</a>
       <a class="tb-hide" href="mailto:contact@guestguardian.com.au">contact@guestguardian.com.au</a>
-      <a class="tb-book" href="book.html">Book your stay</a>
     </div>
   </div>
 </div>
@@ -59,11 +58,12 @@
     </a>
     <nav class="menu" aria-label="Primary"><a href="index.html">Home</a><a href="services.html" aria-current="page">Services</a><a href="areas.html">Areas</a><a href="pricing.html">Pricing</a><a href="journal.html">Journal</a><a href="about.html">About</a></nav>
     <div class="nav-cta">
+      <a class="btn btn-book" href="book.html">Book your stay</a>
       <a class="btn btn-primary" href="contact.html">Free rental appraisal <svg class="arw" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 12h13M12 5l7 7-7 7"/></svg></a>
       <button class="burger" aria-label="Menu" aria-expanded="false"><span></span><span></span></button>
     </div>
   </div>
-  <div class="mobile-menu"><a href="index.html">Home</a><a href="services.html">Services</a><a href="areas.html">Areas</a><a href="pricing.html">Pricing</a><a href="journal.html">Journal</a><a href="about.html">About</a><a href="contact.html">Contact</a><a class="btn btn-primary" href="contact.html">Free rental appraisal</a></div>
+  <div class="mobile-menu"><a href="index.html">Home</a><a href="services.html">Services</a><a href="areas.html">Areas</a><a href="pricing.html">Pricing</a><a href="journal.html">Journal</a><a href="about.html">About</a><a href="contact.html">Contact</a><a class="btn btn-book" href="book.html">Book your stay</a><a class="btn btn-primary" href="contact.html">Free rental appraisal</a></div>
 </header>
 
 <main>
@@ -271,5 +271,21 @@
 </footer>
 
 <script src="assets/app.js"></script>
+<!-- Preview open beacon: texts Peter when the prospect opens this. JS-driven so
+     link-unfurling crawlers (iMessage/WhatsApp/Outlook) don't trigger a false alarm;
+     the endpoint throttles server-side to at most one text per 6h. -->
+<script>
+(function(){
+  try {
+    var k = 'gg_pv_seen';
+    if (sessionStorage.getItem(k)) return;
+    sessionStorage.setItem(k, '1');
+    new Image().src = 'https://mplaunch.com.au/api/preview-view'
+      + '?slug=guestguardian-concept-demo'
+      + '&label=' + encodeURIComponent('Nick S + Nick D — Guest Guardian')
+      + '&t=' + Date.now();
+  } catch (e) {}
+})();
+</script>
 </body>
 </html>

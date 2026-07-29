@@ -138,7 +138,6 @@
     <div class="tb-right">
       <a href="tel:+61882391787">08 8239 1787</a>
       <a class="tb-hide" href="mailto:contact@guestguardian.com.au">contact@guestguardian.com.au</a>
-      <a class="tb-book" href="book.html">Book your stay</a>
     </div>
   </div>
 </div>
@@ -154,11 +153,12 @@
     </a>
     <nav class="menu" aria-label="Primary"><a href="index.html">Home</a><a href="services.html">Services</a><a href="areas.html">Areas</a><a href="pricing.html">Pricing</a><a href="journal.html">Journal</a><a href="about.html">About</a></nav>
     <div class="nav-cta">
+      <a class="btn btn-book" href="book.html">Book your stay</a>
       <a class="btn btn-primary" href="contact.html">Free rental appraisal <svg class="arw" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 12h13M12 5l7 7-7 7"/></svg></a>
       <button class="burger" aria-label="Menu" aria-expanded="false"><span></span><span></span></button>
     </div>
   </div>
-  <div class="mobile-menu"><a href="index.html">Home</a><a href="services.html">Services</a><a href="areas.html">Areas</a><a href="pricing.html">Pricing</a><a href="journal.html">Journal</a><a href="about.html">About</a><a href="contact.html">Contact</a><a class="btn btn-primary" href="contact.html">Free rental appraisal</a></div>
+  <div class="mobile-menu"><a href="index.html">Home</a><a href="services.html">Services</a><a href="areas.html">Areas</a><a href="pricing.html">Pricing</a><a href="journal.html">Journal</a><a href="about.html">About</a><a href="contact.html">Contact</a><a class="btn btn-book" href="book.html">Book your stay</a><a class="btn btn-primary" href="contact.html">Free rental appraisal</a></div>
 </header>
 
 <main>
@@ -182,21 +182,69 @@
 
 <section class="pad-sm">
   <div class="wrap">
-    <div class="book-frame-wrap rv">
-      <div class="book-loading" id="book-loading">Loading live availability&hellip;</div>
-      <iframe id="book-frame"
-              src="https://guestguardian.holidayfuture.com/"
-              title="Guest Guardian booking and availability"
-              loading="eager"
-              referrerpolicy="no-referrer-when-downgrade"></iframe>
+    <form class="bookbar rv" action="https://guestguardian.holidayfuture.com/search" method="get" target="_blank" rel="noopener">
+      <label class="bb-field">
+        <span class="bb-label">Arrive</span>
+        <input type="date" name="startDate">
+      </label>
+      <label class="bb-field">
+        <span class="bb-label">Depart</span>
+        <input type="date" name="endDate">
+      </label>
+      <label class="bb-field">
+        <span class="bb-label">Guests</span>
+        <select name="numberOfGuests">
+          <option>1</option><option>2</option><option selected>4</option>
+          <option>6</option><option>8</option><option>10</option><option>12</option>
+        </select>
+      </label>
+      <button class="btn btn-primary" type="submit">Check availability <svg class="arw" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 12h13M12 5l7 7-7 7"/></svg></button>
+    </form>
+
+    <div class="sec-head split rv mt-3" style="margin-bottom:1.75rem">
+      <div>
+        <p class="eyebrow">The properties</p>
+        <h2 class="h2">Available now</h2>
+      </div>
+      <p class="lede">Every property below is managed end to end by us, so what you see is what you get.</p>
     </div>
+
+    <div class="grid-4">
+      <a class="jcard rv" href="https://guestguardian.holidayfuture.com/listings/472310" target="_blank" rel="noopener">
+        <div class="jcard-img"><img src="https://bookingenginecdn.hostaway.com/listing/179273-472310-mdLS2PR8--9qDCkDj1B--87D6N4d9lesKLtJddjGktk04-695c087b43b9a?width=1200&height=630&quality=70&format=jpeg&v=2" alt="The Bungalow, Adelaide" loading="lazy" decoding="async"></div>
+        <div class="jcard-meta"><span>Adelaide</span><span>Book direct</span></div>
+        <h3 class="h3" style="font-size:1.2rem">The Bungalow</h3>
+        <p>3 bedroom · BBQ · games room</p>
+        <span class="tlink mt-1" style="font-size:.84rem">View &amp; book <svg class="arw" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 12h13M12 5l7 7-7 7"/></svg></span>
+      </a><a class="jcard rv" data-d="80" href="https://guestguardian.holidayfuture.com/listings/472311" target="_blank" rel="noopener">
+        <div class="jcard-img"><img src="https://bookingenginecdn.hostaway.com/listing/179273-472311-7GdLxE4s5MHnS05leY1a--twCPHZeNzlXkdf--v6bwNH8-695b580d28636?width=1200&height=630&quality=70&format=jpeg&v=2" alt="The Cabana, Adelaide" loading="lazy" decoding="async"></div>
+        <div class="jcard-meta"><span>Adelaide</span><span>Book direct</span></div>
+        <h3 class="h3" style="font-size:1.2rem">The Cabana</h3>
+        <p>2 bedroom · private pool · spa</p>
+        <span class="tlink mt-1" style="font-size:.84rem">View &amp; book <svg class="arw" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 12h13M12 5l7 7-7 7"/></svg></span>
+      </a><a class="jcard rv" data-d="160" href="https://guestguardian.holidayfuture.com/listings/472312" target="_blank" rel="noopener">
+        <div class="jcard-img"><img src="https://bookingenginecdn.hostaway.com/listing/179273-472312-WHckDgCCL6WwgMiCBrzBdivjz7uEJKQgdoM-QNSJ-cU-695b57ce8756e?width=1200&height=630&quality=70&format=jpeg&v=2" alt="The Bungalow and The Cabana, Adelaide" loading="lazy" decoding="async"></div>
+        <div class="jcard-meta"><span>Adelaide</span><span>Book direct</span></div>
+        <h3 class="h3" style="font-size:1.2rem">The Bungalow &amp; The Cabana</h3>
+        <p>Both together · sleeps up to 12</p>
+        <span class="tlink mt-1" style="font-size:.84rem">View &amp; book <svg class="arw" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 12h13M12 5l7 7-7 7"/></svg></span>
+      </a><a class="jcard rv" data-d="240" href="https://guestguardian.holidayfuture.com/listings/495920" target="_blank" rel="noopener">
+        <div class="jcard-img"><img src="https://bookingenginecdn.hostaway.com/listing/179273-495920-xl2qjZGiS7Zeppe2rz77atkHgkbXaXUM--37l7gzQz8U-69b1528e8af7f?width=1200&height=630&quality=70&format=jpeg&v=2" alt="Victoria House, Adelaide" loading="lazy" decoding="async"></div>
+        <div class="jcard-meta"><span>Adelaide</span><span>Book direct</span></div>
+        <h3 class="h3" style="font-size:1.2rem">Victoria House</h3>
+        <p>3 bedroom · BBQ · sunroom</p>
+        <span class="tlink mt-1" style="font-size:.84rem">View &amp; book <svg class="arw" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 12h13M12 5l7 7-7 7"/></svg></span>
+      </a>
+    </div>
+
     <div class="book-note">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 3l7 3v6c0 4.5-3 8-7 9-4-1-7-4.5-7-9V6l7-3z"/></svg>
-      <span><strong>Concept note for Nick and Nick:</strong> this is your real, live Holiday Future
-      booking engine, embedded inside a Guest Guardian page. Same system, same bookings, nothing
-      changes operationally. The difference is the guest never gets bounced to a
-      holidayfuture.com address, so the booking feels like part of your brand. This is the
-      white-labelling you were told could not be done.</span>
+      <span><strong>Concept note for Nick and Nick:</strong> these are your four real listings, pulled
+      live from your Holiday Future account, presented natively in your own brand instead of sending
+      people off to a holidayfuture.com page. Nothing changes operationally, it is the same engine and
+      the same calendar. On a real build the availability and pricing would read straight from
+      Hostaway, so the whole journey stays on guestguardian.com.au. This is the white-labelling you
+      were told could not be done.</span>
     </div>
   </div>
 </section>
@@ -289,5 +337,21 @@
 </footer>
 
 <script src="assets/app.js"></script>
+<!-- Preview open beacon: texts Peter when the prospect opens this. JS-driven so
+     link-unfurling crawlers (iMessage/WhatsApp/Outlook) don't trigger a false alarm;
+     the endpoint throttles server-side to at most one text per 6h. -->
+<script>
+(function(){
+  try {
+    var k = 'gg_pv_seen';
+    if (sessionStorage.getItem(k)) return;
+    sessionStorage.setItem(k, '1');
+    new Image().src = 'https://mplaunch.com.au/api/preview-view'
+      + '?slug=guestguardian-concept-demo'
+      + '&label=' + encodeURIComponent('Nick S + Nick D — Guest Guardian')
+      + '&t=' + Date.now();
+  } catch (e) {}
+})();
+</script>
 </body>
 </html>
