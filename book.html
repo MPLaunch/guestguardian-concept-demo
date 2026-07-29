@@ -19,7 +19,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500&family=Outfit:wght@200;300;400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/style.css?v=fcfd07e2">
+<link rel="stylesheet" href="assets/style.css?v=644db7d3">
 <script type="application/ld+json">[
  {
   "@context": "https://schema.org",
@@ -182,23 +182,25 @@
 
 <section class="pad-sm">
   <div class="wrap">
-    <form class="bookbar rv" action="https://guestguardian.holidayfuture.com/search" method="get">
+    <!-- Guests only. Verified 29 Jul: the Holiday Future search accepts
+         numberOfGuests via the URL but IGNORES date params under every naming
+         tried, so offering date fields here would silently drop them. Dates are
+         chosen in the booking window, which does work. -->
+    <form class="bookbar bookbar-2 rv" action="https://guestguardian.holidayfuture.com/search" method="get">
       <label class="bb-field">
-        <span class="bb-label">Arrive</span>
-        <input type="date" name="startDate">
-      </label>
-      <label class="bb-field">
-        <span class="bb-label">Depart</span>
-        <input type="date" name="endDate">
-      </label>
-      <label class="bb-field">
-        <span class="bb-label">Guests</span>
+        <span class="bb-label">How many guests?</span>
         <select name="numberOfGuests">
-          <option>1</option><option>2</option><option selected>4</option>
-          <option>6</option><option>8</option><option>10</option><option>12</option>
+          <option value="1">1 guest</option>
+          <option value="2">2 guests</option>
+          <option value="4" selected>4 guests</option>
+          <option value="5">5 guests</option>
+          <option value="7">7 guests</option>
+          <option value="10">10 guests</option>
+          <option value="12">12 guests</option>
         </select>
       </label>
-      <button class="btn btn-primary" type="submit">Check availability <svg class="arw" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 12h13M12 5l7 7-7 7"/></svg></button>
+      <button class="btn btn-primary" type="submit">See what's available <svg class="arw" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 12h13M12 5l7 7-7 7"/></svg></button>
+      <p class="bb-hint">Pick your dates in the next step, on the live calendar.</p>
     </form>
 
     <div class="sec-head split rv mt-3" style="margin-bottom:1.75rem">
@@ -360,7 +362,7 @@
   </div>
 </footer>
 
-<script src="assets/app.js?v=fcfd07e2"></script>
+<script src="assets/app.js?v=644db7d3"></script>
 <!-- Preview open beacon: texts Peter when the prospect opens this. JS-driven so
      link-unfurling crawlers (iMessage/WhatsApp/Outlook) don't trigger a false alarm;
      the endpoint throttles server-side to at most one text per 6h. -->

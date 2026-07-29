@@ -233,6 +233,17 @@ em.accent { font-style: italic; color: var(--sage-deep); }
 }
 @media (max-width: 460px) { .bookbar { grid-template-columns: 1fr; } }
 
+/* Guests-only variant */
+.bookbar-2 { grid-template-columns: minmax(220px, 1fr) auto; align-items: end; }
+.bookbar-2 .bb-hint {
+  grid-column: 1 / -1; margin: .35rem 0 0;
+  font-size: .78rem; color: var(--muted);
+}
+@media (max-width: 560px) {
+  .bookbar-2 { grid-template-columns: 1fr; }
+  .bookbar-2 .btn { width: 100%; }
+}
+
 /* ==========================================================================
    Booking modal — the real listing page opens over the site, so the guest
    books without ever leaving guestguardian.com.au.
