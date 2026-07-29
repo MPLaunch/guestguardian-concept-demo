@@ -19,7 +19,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500&family=Outfit:wght@200;300;400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/style.css?v=98242652">
+<link rel="stylesheet" href="assets/style.css?v=c7a5590b">
 <script type="application/ld+json">[
  {
   "@context": "https://schema.org",
@@ -155,8 +155,8 @@
     <div class="grid-2 rv" style="align-items:center;gap:clamp(2rem,5vw,4rem)">
       <div class="form-card" style="background:rgba(255,255,255,.05);border-color:rgba(255,255,255,.12)">
         <div class="field">
-          <label for="est-area" style="color:#fff">Area</label>
-          <select id="est-area" style="background:rgba(255,255,255,.06);color:#fff;border-color:rgba(255,255,255,.18)">
+          <label for="est-area">Area</label>
+          <select id="est-area">
             <option value="coastal">Coastal — Glenelg, Henley, Brighton</option>
             <option value="city" selected>City — CBD, North Adelaide</option>
             <option value="inner">Inner — Norwood, Unley, Prospect</option>
@@ -164,8 +164,8 @@
           </select>
         </div>
         <div class="field">
-          <label for="est-beds" style="color:#fff">Bedrooms</label>
-          <select id="est-beds" style="background:rgba(255,255,255,.06);color:#fff;border-color:rgba(255,255,255,.18)">
+          <label for="est-beds">Bedrooms</label>
+          <select id="est-beds">
             <option value="1">1 bedroom</option>
             <option value="2" selected>2 bedrooms</option>
             <option value="3">3 bedrooms</option>
@@ -173,7 +173,7 @@
           </select>
         </div>
         <div class="field">
-          <label for="est-occ" style="color:#fff">Occupancy &mdash; <span id="est-occ-out">65%</span></label>
+          <label for="est-occ">Occupancy &mdash; <span id="est-occ-out">65%</span></label>
           <input type="range" id="est-occ" min="35" max="90" value="65" step="1" style="padding:0;background:transparent;border:none">
         </div>
       </div>
@@ -183,7 +183,7 @@
           <div class="stat"><div class="n" id="est-month">$4,446</div><div class="l">Indicative gross per month</div></div>
           <div class="stat"><div class="n" id="est-year">$53,352</div><div class="l">Indicative gross per year</div></div>
         </div>
-        <p class="small mt-2" style="color:rgba(255,255,255,.5)">Indicative only, before management fees and costs. Concept figures for demonstration — not a forecast or a guarantee.</p>
+        <p class="small mt-2" style="color:rgba(255,255,255,.5)">Indicative only, before management fees and running costs. Scaled around a median Adelaide nightly rate of $237 across all tracked short-stay listings (Airbtics market snapshot, June 2026). Not a forecast or a guarantee. A written appraisal uses your actual property, position and presentation.</p>
       </div>
     </div>
   </div>
@@ -280,7 +280,7 @@
   </div>
 </footer>
 
-<script src="assets/app.js?v=98242652"></script>
+<script src="assets/app.js?v=c7a5590b"></script>
 <!-- Preview open beacon: texts Peter when the prospect opens this. JS-driven so
      link-unfurling crawlers (iMessage/WhatsApp/Outlook) don't trigger a false alarm;
      the endpoint throttles server-side to at most one text per 6h. -->

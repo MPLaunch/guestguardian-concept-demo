@@ -632,6 +632,28 @@ table.cmp tbody tr:hover { background: rgba(167,171,161,.08); }
 @media (max-width: 560px) { .field-row { grid-template-columns: 1fr; } }
 .form-note { font-size: .78rem; color: var(--muted); margin-top: 1rem; text-align: center; }
 
+/* Form controls on a DARK band (the estimator).
+   `color-scheme: dark` is the key: without it the browser paints the native
+   dropdown list light-on-light and the options are unreadable. */
+.dark .field label { color: #fff; }
+.dark .field select,
+.dark .field input {
+  color-scheme: dark;
+  background-color: rgba(255,255,255,.07);
+  color: #fff;
+  border-color: rgba(255,255,255,.2);
+}
+.dark .field select option { background-color: #1C1D1C; color: #fff; }
+.dark .field select:focus,
+.dark .field input:focus {
+  background-color: rgba(255,255,255,.12);
+  border-color: var(--sage);
+  box-shadow: 0 0 0 3px rgba(167,171,161,.25);
+}
+/* Range slider on dark */
+.dark input[type=range] { color-scheme: dark; accent-color: var(--sage); }
+input[type=range] { accent-color: var(--sage-deep); }
+
 /* ==========================================================================
    CTA band
    ========================================================================== */
@@ -831,18 +853,24 @@ html.js .marquee-track { animation: slide 46s linear infinite; }
 .jcard:hover h3 { opacity: .62; }
 .jcard p { font-size: .93rem; color: var(--muted); }
 
-/* ---- Oversized footer wordmark ---- */
+/* ---- Oversized footer wordmark ----
+   Sits BEHIND the footer content as a watermark rather than below it, and is
+   sized in vw so the full name always fits without being clipped mid-letter. */
+.foot { position: relative; overflow: hidden; }
+.foot > .wrap { position: relative; z-index: 1; }
 .foot-mark {
-  overflow: hidden; padding-top: clamp(1.5rem, 4vw, 3rem);
-  border-top: 1px solid rgba(255,255,255,.1); margin-top: 1rem;
+  position: absolute; left: 0; right: 0; bottom: 0; z-index: 0;
+  pointer-events: none; overflow: hidden; text-align: center;
 }
 .foot-mark span {
   display: block; font-family: var(--serif); font-weight: 400;
-  font-size: clamp(3.2rem, 15.2vw, 15rem); line-height: .78;
+  font-size: 13.2vw; line-height: .8;
   letter-spacing: -.045em; white-space: nowrap;
-  color: rgba(255,255,255,.07);
-  transform: translateY(.1em);
+  color: rgba(255,255,255,.055);
+  transform: translateY(.16em);
 }
+/* Room for the watermark to breathe under the content */
+.foot .foot-bottom { padding-bottom: clamp(4rem, 11vw, 9rem); border-bottom: 0; }
 
 /* ---- Staggered word reveal on headings ---- */
 .rw .w { display: inline-block; overflow: hidden; vertical-align: bottom; }

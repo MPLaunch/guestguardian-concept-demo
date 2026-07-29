@@ -147,7 +147,14 @@
     var outYear = document.getElementById('est-year');
     var occOut = document.getElementById('est-occ-out');
 
-    /* Indicative nightly rates by area band and bedroom count. Concept figures. */
+    /* Indicative nightly rates by area band and bedroom count.
+       ANCHOR: Adelaide's median nightly rate across all tracked short-stay
+       listings was $237 (Airbtics market snapshot, June 2026). A 2-bedroom in
+       the city sits close to that median, and the rest of the grid is scaled
+       around it by bedroom count and area.
+       ⚠️ These are ILLUSTRATIVE, not a forecast. A production version would be
+       driven by Guest Guardian's own Hostaway booking history, or by a licensed
+       market data feed, so the numbers are defensible per property. */
     var BASE = { coastal: [155, 215, 310, 430], city: [165, 225, 315, 425], inner: [140, 190, 265, 360], hills: [150, 205, 285, 380] };
 
     var calc = function () {
