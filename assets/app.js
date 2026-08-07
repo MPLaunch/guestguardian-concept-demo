@@ -157,6 +157,22 @@
        market data feed, so the numbers are defensible per property. */
     var BASE = { coastal: [155, 215, 310, 430], city: [165, 225, 315, 425], inner: [140, 190, 265, 360], hills: [150, 205, 285, 380] };
 
+    /* ---- The gate (Nick's wishlist item 1) ----
+       The figures are only WRITTEN INTO THE PAGE once the form is submitted.
+       Masking them in CSS alone would leave the real numbers sitting in the DOM
+       for anyone who opened dev tools, which is not a lock, it is a curtain.
+       On a production build the sum itself moves to the server so the numbers
+       never reach the browser until a lead exists. */
+    var wrap = document.getElementById('estwrap');
+    var gate = document.getElementById('estform');
+    var done = document.getElementById('estdone');
+    var doneEmail = document.getElementById('estdone-email');
+    var unlocked = false;
+
+    /* The locked class is already on the element from the build, so there is no
+       unlocked flash and no dependency on this script running at all. */
+    if (wrap && !gate) wrap.classList.remove('is-locked');
+
     var calc = function () {
       var b = Math.max(1, Math.min(4, parseInt(beds.value, 10) || 1));
       var a = area.value in BASE ? area.value : 'city';
@@ -165,6 +181,7 @@
       var month = Math.round(nightly * 30.4 * (o / 100));
       var year = month * 12;
       occOut.textContent = o + '%';
+      if (!unlocked) return;
       outNight.textContent = '$' + nightly.toLocaleString('en-AU');
       outMonth.textContent = '$' + month.toLocaleString('en-AU');
       outYear.textContent = '$' + year.toLocaleString('en-AU');
@@ -172,6 +189,38 @@
     [beds, area, occ].forEach(function (el) {
       if (el) { el.addEventListener('input', calc); el.addEventListener('change', calc); }
     });
+
+    if (gate) {
+      gate.addEventListener('submit', function (ev) {
+        ev.preventDefault();
+        var ok = true;
+        var email = '';
+        ['eg-name', 'eg-phone', 'eg-email', 'eg-suburb'].forEach(function (id) {
+          var f = document.getElementById(id);
+          if (!f) return;
+          var v = f.value.trim();
+          var bad = !v || (f.type === 'email' && v.indexOf('@') < 1);
+          f.classList.toggle('is-bad', bad);
+          if (bad) ok = false;
+          if (id === 'eg-email') email = v;
+        });
+        if (!ok) return;
+
+        unlocked = true;
+        wrap.classList.remove('is-locked');
+        calc();
+        if (done) {
+          if (doneEmail && email) doneEmail.textContent = email;
+          done.hidden = false;
+        }
+      });
+      /* Clear the error outline as soon as they start fixing it. */
+      gate.addEventListener('input', function (ev) {
+        if (ev.target && ev.target.classList) ev.target.classList.remove('is-bad');
+      });
+    } else {
+      unlocked = true;
+    }
     calc();
   }
 
@@ -382,6 +431,26 @@
       });
     }
 
+    /* Single-property booking form — same modal, but the deep link is already
+       pinned to one listing id, so the guest only ever sees that home. */
+    var pbook = document.querySelector('form.propbook');
+    if (pbook) {
+      pbook.addEventListener('submit', function (ev) {
+        ev.preventDefault();
+        var params = [];
+        Array.prototype.forEach.call(pbook.elements, function (el) {
+          if (el.name && el.value) {
+            params.push(encodeURIComponent(el.name) + '=' + encodeURIComponent(el.value));
+          }
+        });
+        openModal(
+          pbook.getAttribute('action') + (params.length ? '?' + params.join('&') : ''),
+          pbook.getAttribute('data-book-title') || 'Book your stay'
+        );
+        guardLoader();
+      });
+    }
+
     bmodal.querySelectorAll('.bmodal-close').forEach(function (b) {
       b.addEventListener('click', closeModal);
     });
@@ -389,6 +458,146 @@
     document.addEventListener('keydown', function (ev) {
       if (ev.key === 'Escape' && bmodal.classList.contains('open')) closeModal();
     });
+  }
+
+  /* ==========================================================================
+     Copy-to-clipboard buttons (direct property links + the embed snippet)
+     ========================================================================== */
+
+  /* The markup carries the production domain, which is the right thing to show
+     on a real build but does not resolve while this is a preview. Rewrite the
+     copyable links onto whatever host we are actually served from, so a link
+     Nick copies out of the demo genuinely opens. */
+  var pageBase = location.origin + location.pathname.replace(/[^/]*$/, '');
+  document.querySelectorAll('.copyrow input').forEach(function (inp) {
+    var abs = pageBase + inp.value.split('/').pop();
+    inp.value = abs;
+    var b = inp.parentNode.querySelector('.btn-copy[data-copy]');
+    if (b) b.setAttribute('data-copy', abs);
+  });
+
+  document.querySelectorAll('.btn-copy').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var from = btn.getAttribute('data-copy-from');
+      var src = from ? document.querySelector(from) : null;
+      var text = src ? src.value : (btn.getAttribute('data-copy') || '');
+      if (!text) return;
+
+      var flash = function () {
+        var label = btn.querySelector('span');
+        if (!label) return;
+        var was = label.textContent;
+        label.textContent = 'Copied';
+        btn.classList.add('is-done');
+        setTimeout(function () { label.textContent = was; btn.classList.remove('is-done'); }, 1800);
+      };
+
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(flash, flash);
+      } else {
+        /* Fallback for older browsers and any non-secure context. */
+        var t = document.createElement('textarea');
+        t.value = text;
+        t.setAttribute('readonly', '');
+        t.style.cssText = 'position:absolute;left:-9999px';
+        document.body.appendChild(t);
+        t.select();
+        try { document.execCommand('copy'); } catch (e) {}
+        document.body.removeChild(t);
+        flash();
+      }
+    });
+  });
+
+  /* ==========================================================================
+     Embed builder (share.html) — writes the snippet and drives the live preview
+     ========================================================================== */
+  var embProp = document.getElementById('emb-prop');
+  var embCode = document.getElementById('emb-code');
+  if (embProp && embCode) {
+    var embTheme = document.getElementById('emb-theme');
+    var embFrame = document.getElementById('emb-frame');
+    /* Absolute origin, because the snippet is going onto someone else's site
+       where a relative path would resolve against THEIR domain. */
+    var base = location.origin + location.pathname.replace(/[^/]*$/, '');
+
+    var render = function () {
+      var slug = embProp.value;
+      var theme = embTheme ? embTheme.value : 'light';
+      var src = base + 'embed.html?p=' + encodeURIComponent(slug) +
+                (theme === 'dark' ? '&theme=dark' : '');
+      embCode.value =
+        '<iframe\n' +
+        '  src="' + src + '"\n' +
+        '  title="Guest Guardian property"\n' +
+        '  style="width:100%;max-width:560px;height:470px;border:0"\n' +
+        '  loading="lazy">\n' +
+        '</iframe>';
+      if (embFrame) embFrame.src = src;
+    };
+    embProp.addEventListener('change', render);
+    if (embTheme) embTheme.addEventListener('change', render);
+    render();
+  }
+
+  /* ==========================================================================
+     Owner portal (owners.html)
+     ========================================================================== */
+  var ownerForm = document.getElementById('ownerform');
+  var ownerApp = document.getElementById('owner-app');
+  var ownerLogin = document.getElementById('owner-login');
+  if (ownerForm && ownerApp && ownerLogin) {
+    var showApp = function (on) {
+      ownerApp.hidden = !on;
+      ownerLogin.hidden = on;
+      try { sessionStorage.setItem('gg_owner_in', on ? '1' : ''); } catch (e) {}
+    };
+    /* Demo only: no credentials are checked and nothing is sent anywhere. */
+    ownerForm.addEventListener('submit', function (ev) {
+      ev.preventDefault();
+      showApp(true);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+    var signout = document.getElementById('ow-signout');
+    if (signout) signout.addEventListener('click', function () {
+      showApp(false);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+    /* Survive a refresh, and let the installed app icon land straight in. */
+    try { if (sessionStorage.getItem('gg_owner_in')) showApp(true); } catch (e) {}
+    if (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) showApp(true);
+    if (navigator.standalone) showApp(true);
+
+    /* Tabs */
+    var tabs = document.querySelectorAll('.owner-tab');
+    tabs.forEach(function (tab) {
+      tab.addEventListener('click', function () {
+        var want = tab.getAttribute('data-tab');
+        tabs.forEach(function (t) { t.classList.toggle('is-on', t === tab); });
+        document.querySelectorAll('.owner-panel').forEach(function (p) {
+          p.hidden = p.getAttribute('data-panel') !== want;
+        });
+      });
+    });
+
+    /* Add to home screen. Chrome/Android hands us a real install prompt to
+       fire. iOS never does, so there we explain the Share-sheet steps instead
+       of pretending a button can do it. */
+    var installBtn = document.getElementById('ow-install');
+    var deferred = null;
+    window.addEventListener('beforeinstallprompt', function (ev) {
+      ev.preventDefault();
+      deferred = ev;
+    });
+    if (installBtn) {
+      installBtn.addEventListener('click', function () {
+        if (deferred) { deferred.prompt(); deferred = null; return; }
+        var ios = /iPad|iPhone|iPod/.test(navigator.userAgent);
+        alert(ios
+          ? 'To add Guest Guardian to your home screen:\n\n1. Tap the Share button at the bottom of Safari\n2. Scroll down and tap "Add to Home Screen"\n3. Tap Add\n\nIt will open straight into this dashboard, with no browser bar.'
+          : 'To add Guest Guardian to your home screen, open your browser menu and choose "Install app" or "Add to Home screen".\n\nIt will open straight into this dashboard, with no browser bar.');
+      });
+    }
   }
 
   /* Footer year */

@@ -16,10 +16,20 @@
 <meta property="og:url" content="https://guestguardian-concept.mplaunch.com.au/book.html">
 <meta property="og:locale" content="en_AU">
 <meta name="theme-color" content="#1C1D1C">
+<!-- Installable-app plumbing (the "home screen shortcut" Nick asked for).
+     iOS reads apple-mobile-web-app-* and IGNORES the manifest's display mode,
+     so both are required. start_url points at the owner portal, so the icon
+     on an owner's phone opens straight into their reporting. -->
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Guest Guardian">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500&family=Outfit:wght@200;300;400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/style.css?v=d4cb3f49">
+<link rel="stylesheet" href="assets/style.css?v=c79c679a">
 <script type="application/ld+json">[
  {
   "@context": "https://schema.org",
@@ -138,6 +148,7 @@
     <div class="tb-right">
       <a href="tel:+61882391787">08 8239 1787</a>
       <a class="tb-hide" href="mailto:contact@guestguardian.com.au">contact@guestguardian.com.au</a>
+      <a class="tb-owner" href="owners.html"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 018 0v3"/></svg><span>Owner login</span></a>
     </div>
   </div>
 </div>
@@ -158,7 +169,7 @@
       <button class="burger" aria-label="Menu" aria-expanded="false"><span></span><span></span></button>
     </div>
   </div>
-  <div class="mobile-menu"><a href="index.html">Home</a><a href="services.html">Services</a><a href="areas.html">Areas</a><a href="pricing.html">Pricing</a><a href="journal.html">Journal</a><a href="about.html">About</a><a href="contact.html">Contact</a><a class="btn btn-book" href="book.html">Book your stay</a><a class="btn btn-primary" href="contact.html">Free rental appraisal</a></div>
+  <div class="mobile-menu"><a href="index.html">Home</a><a href="services.html">Services</a><a href="areas.html">Areas</a><a href="pricing.html">Pricing</a><a href="journal.html">Journal</a><a href="about.html">About</a><a href="contact.html">Contact</a><a href="owners.html">Owner login</a><a class="btn btn-book" href="book.html">Book your stay</a><a class="btn btn-primary" href="contact.html">Free rental appraisal</a></div>
 </header>
 
 <main>
@@ -236,33 +247,42 @@
     </div>
 
     <div class="grid-4" id="proplist">
-      <a class="jcard rv prop" href="https://guestguardian.holidayfuture.com/listings/472310" data-book-url="https://guestguardian.holidayfuture.com/listings/472310" data-book-title="The Bungalow" data-sleeps="7" data-beds="3" data-pool="false" rel="noopener">
+      <a class="jcard rv prop" href="stay-the-bungalow.html" data-sleeps="7" data-beds="3" data-pool="false">
         <div class="jcard-img"><img src="https://bookingenginecdn.hostaway.com/listing/179273-472310-mdLS2PR8--9qDCkDj1B--87D6N4d9lesKLtJddjGktk04-695c087b43b9a?width=1200&height=630&quality=70&format=jpeg&v=2" alt="The Bungalow, Adelaide" loading="lazy" decoding="async"></div>
         <div class="jcard-meta"><span>Sleeps 7</span><span>3 bed &middot; 2 bath</span></div>
         <h3 class="h3" style="font-size:1.2rem">The Bungalow</h3>
         <p>3 bedroom · BBQ · games room</p>
-        <span class="tlink mt-1" style="font-size:.84rem">Check dates &amp; book <svg class="arw" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 12h13M12 5l7 7-7 7"/></svg></span>
-      </a><a class="jcard rv prop" data-d="80" href="https://guestguardian.holidayfuture.com/listings/472311" data-book-url="https://guestguardian.holidayfuture.com/listings/472311" data-book-title="The Cabana" data-sleeps="5" data-beds="2" data-pool="true" rel="noopener">
+        <span class="tlink mt-1" style="font-size:.84rem">View home &amp; book <svg class="arw" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 12h13M12 5l7 7-7 7"/></svg></span>
+      </a><a class="jcard rv prop" data-d="80" href="stay-the-cabana.html" data-sleeps="5" data-beds="2" data-pool="true">
         <div class="jcard-img"><img src="https://bookingenginecdn.hostaway.com/listing/179273-472311-7GdLxE4s5MHnS05leY1a--twCPHZeNzlXkdf--v6bwNH8-695b580d28636?width=1200&height=630&quality=70&format=jpeg&v=2" alt="The Cabana, Adelaide" loading="lazy" decoding="async"></div>
         <div class="jcard-meta"><span>Sleeps 5</span><span>2 bed &middot; 1 bath</span></div>
         <h3 class="h3" style="font-size:1.2rem">The Cabana</h3>
         <p>2 bedroom · private pool · spa</p>
-        <span class="tlink mt-1" style="font-size:.84rem">Check dates &amp; book <svg class="arw" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 12h13M12 5l7 7-7 7"/></svg></span>
-      </a><a class="jcard rv prop" data-d="160" href="https://guestguardian.holidayfuture.com/listings/472312" data-book-url="https://guestguardian.holidayfuture.com/listings/472312" data-book-title="The Bungalow &amp; The Cabana" data-sleeps="12" data-beds="5" data-pool="true" rel="noopener">
+        <span class="tlink mt-1" style="font-size:.84rem">View home &amp; book <svg class="arw" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 12h13M12 5l7 7-7 7"/></svg></span>
+      </a><a class="jcard rv prop" data-d="160" href="stay-the-bungalow-and-the-cabana.html" data-sleeps="12" data-beds="5" data-pool="true">
         <div class="jcard-img"><img src="https://bookingenginecdn.hostaway.com/listing/179273-472312-WHckDgCCL6WwgMiCBrzBdivjz7uEJKQgdoM-QNSJ-cU-695b57ce8756e?width=1200&height=630&quality=70&format=jpeg&v=2" alt="The Bungalow and The Cabana, Adelaide" loading="lazy" decoding="async"></div>
         <div class="jcard-meta"><span>Sleeps 12</span><span>5 bed &middot; 3 bath</span></div>
         <h3 class="h3" style="font-size:1.2rem">The Bungalow &amp; The Cabana</h3>
         <p>Both together · sleeps up to 12</p>
-        <span class="tlink mt-1" style="font-size:.84rem">Check dates &amp; book <svg class="arw" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 12h13M12 5l7 7-7 7"/></svg></span>
-      </a><a class="jcard rv prop" data-d="240" href="https://guestguardian.holidayfuture.com/listings/495920" data-book-url="https://guestguardian.holidayfuture.com/listings/495920" data-book-title="Victoria House" data-sleeps="7" data-beds="3" data-pool="false" rel="noopener">
+        <span class="tlink mt-1" style="font-size:.84rem">View home &amp; book <svg class="arw" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 12h13M12 5l7 7-7 7"/></svg></span>
+      </a><a class="jcard rv prop" data-d="240" href="stay-victoria-house.html" data-sleeps="7" data-beds="3" data-pool="false">
         <div class="jcard-img"><img src="https://bookingenginecdn.hostaway.com/listing/179273-495920-xl2qjZGiS7Zeppe2rz77atkHgkbXaXUM--37l7gzQz8U-69b1528e8af7f?width=1200&height=630&quality=70&format=jpeg&v=2" alt="Victoria House, Adelaide" loading="lazy" decoding="async"></div>
         <div class="jcard-meta"><span>Sleeps 7</span><span>3 bed &middot; 1 bath</span></div>
         <h3 class="h3" style="font-size:1.2rem">Victoria House</h3>
         <p>3 bedroom · BBQ · sunroom</p>
-        <span class="tlink mt-1" style="font-size:.84rem">Check dates &amp; book <svg class="arw" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 12h13M12 5l7 7-7 7"/></svg></span>
+        <span class="tlink mt-1" style="font-size:.84rem">View home &amp; book <svg class="arw" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 12h13M12 5l7 7-7 7"/></svg></span>
       </a>
     </div>
     <p class="small muted center mt-2" id="f-empty" style="display:none">No homes match that combination. Try widening the filters.</p>
+
+    <div class="share-strip rv">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M10 13a5 5 0 007 0l3-3a5 5 0 00-7-7l-1.5 1.5"/><path d="M14 11a5 5 0 00-7 0l-3 3a5 5 0 007 7l1.5-1.5"/></svg>
+      <div>
+        <b>Each home now has its own page and its own link.</b>
+        <span>Send one property on its own, or drop it onto another business's website.</span>
+      </div>
+      <a class="btn btn-ghost" href="share.html">Links &amp; embed code <svg class="arw" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 12h13M12 5l7 7-7 7"/></svg></a>
+    </div>
 
     <div class="book-note">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 3l7 3v6c0 4.5-3 8-7 9-4-1-7-4.5-7-9V6l7-3z"/></svg>
@@ -369,6 +389,7 @@
         <ul>
           <li><a href="about.html">About us</a></li>
           <li><a href="pricing.html">Pricing</a></li>
+          <li><a href="owners.html">Owner login</a></li>
           <li><a href="contact.html">Contact</a></li>
           <li><a href="tel:+61882391787">08 8239 1787</a></li>
           <li><a href="mailto:contact@guestguardian.com.au">contact@guestguardian.com.au</a></li>
@@ -387,7 +408,18 @@
   </div>
 </footer>
 
-<script src="assets/app.js?v=d4cb3f49"></script>
+<script src="assets/app.js?v=c79c679a"></script>
+<!-- Service worker: required before Android/Chrome will offer "Install app".
+     Deliberately a pure network passthrough with NO caching — a caching SW on a
+     demo means stale pages survive every redeploy, which is exactly the trap we
+     already fingerprint the CSS/JS to avoid. -->
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', function () {
+    navigator.serviceWorker.register('sw.js').catch(function () {});
+  });
+}
+</script>
 <!-- Preview open beacon: texts Peter when the prospect opens this.
      JS-driven so link-unfurling crawlers (iMessage/WhatsApp/Outlook) don't cause
      a false alarm. sessionStorage stops one visit firing 12 times as they browse.

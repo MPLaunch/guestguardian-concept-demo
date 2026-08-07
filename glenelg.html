@@ -16,10 +16,20 @@
 <meta property="og:url" content="https://guestguardian-concept.mplaunch.com.au/glenelg.html">
 <meta property="og:locale" content="en_AU">
 <meta name="theme-color" content="#1C1D1C">
+<!-- Installable-app plumbing (the "home screen shortcut" Nick asked for).
+     iOS reads apple-mobile-web-app-* and IGNORES the manifest's display mode,
+     so both are required. start_url points at the owner portal, so the icon
+     on an owner's phone opens straight into their reporting. -->
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Guest Guardian">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500&family=Outfit:wght@200;300;400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/style.css?v=d4cb3f49">
+<link rel="stylesheet" href="assets/style.css?v=c79c679a">
 <script type="application/ld+json">[
  {
   "@context": "https://schema.org",
@@ -99,6 +109,7 @@
     <div class="tb-right">
       <a href="tel:+61882391787">08 8239 1787</a>
       <a class="tb-hide" href="mailto:contact@guestguardian.com.au">contact@guestguardian.com.au</a>
+      <a class="tb-owner" href="owners.html"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 018 0v3"/></svg><span>Owner login</span></a>
     </div>
   </div>
 </div>
@@ -119,7 +130,7 @@
       <button class="burger" aria-label="Menu" aria-expanded="false"><span></span><span></span></button>
     </div>
   </div>
-  <div class="mobile-menu"><a href="index.html">Home</a><a href="services.html">Services</a><a href="areas.html">Areas</a><a href="pricing.html">Pricing</a><a href="journal.html">Journal</a><a href="about.html">About</a><a href="contact.html">Contact</a><a class="btn btn-book" href="book.html">Book your stay</a><a class="btn btn-primary" href="contact.html">Free rental appraisal</a></div>
+  <div class="mobile-menu"><a href="index.html">Home</a><a href="services.html">Services</a><a href="areas.html">Areas</a><a href="pricing.html">Pricing</a><a href="journal.html">Journal</a><a href="about.html">About</a><a href="contact.html">Contact</a><a href="owners.html">Owner login</a><a class="btn btn-book" href="book.html">Book your stay</a><a class="btn btn-primary" href="contact.html">Free rental appraisal</a></div>
 </header>
 
 <main>
@@ -266,6 +277,7 @@
         <ul>
           <li><a href="about.html">About us</a></li>
           <li><a href="pricing.html">Pricing</a></li>
+          <li><a href="owners.html">Owner login</a></li>
           <li><a href="contact.html">Contact</a></li>
           <li><a href="tel:+61882391787">08 8239 1787</a></li>
           <li><a href="mailto:contact@guestguardian.com.au">contact@guestguardian.com.au</a></li>
@@ -284,7 +296,18 @@
   </div>
 </footer>
 
-<script src="assets/app.js?v=d4cb3f49"></script>
+<script src="assets/app.js?v=c79c679a"></script>
+<!-- Service worker: required before Android/Chrome will offer "Install app".
+     Deliberately a pure network passthrough with NO caching — a caching SW on a
+     demo means stale pages survive every redeploy, which is exactly the trap we
+     already fingerprint the CSS/JS to avoid. -->
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', function () {
+    navigator.serviceWorker.register('sw.js').catch(function () {});
+  });
+}
+</script>
 <!-- Preview open beacon: texts Peter when the prospect opens this.
      JS-driven so link-unfurling crawlers (iMessage/WhatsApp/Outlook) don't cause
      a false alarm. sessionStorage stops one visit firing 12 times as they browse.
