@@ -1520,3 +1520,22 @@ b.tag-auto, b.tag-web { font-weight: 500; padding: .1rem .45rem; border-radius: 
 .src-booking { background: rgba(124,131,119,.18); color: var(--sage-deep); }
 .src-phone { background: rgba(28,29,28,.07); color: var(--muted); }
 .pill-mute { background: rgba(28,29,28,.07); color: var(--muted); }
+
+/* ---- photo picker on Add a property ---- */
+.dropzone { display:flex; flex-direction:column; align-items:center; gap:.25rem; cursor:pointer;
+  padding:1.4rem 1rem; border:1.5px dashed var(--line); border-radius:var(--rad-lg);
+  background:rgba(28,29,28,.02); text-align:center; transition:all .2s var(--ease); }
+.dropzone:hover, .dropzone.is-over { border-color:var(--sage-deep); background:rgba(167,171,161,.12); }
+.dropzone svg { color:var(--sage-deep); margin-bottom:.2rem; }
+.dz-main { font-size:.88rem; font-weight:500; color:var(--ink); }
+.dz-sub { font-size:.76rem; color:var(--muted); }
+.dz-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(84px,1fr)); gap:.5rem; margin-top:.7rem; }
+.dz-item { position:relative; margin:0; aspect-ratio:4/3; border-radius:var(--rad); overflow:hidden; background:var(--sand); }
+.dz-item img { width:100%; height:100%; object-fit:cover; }
+.dz-item figcaption { position:absolute; left:4px; bottom:4px; padding:.1rem .4rem; border-radius:100px;
+  background:rgba(28,29,28,.78); color:#fff; font-size:.62rem; letter-spacing:.05em; text-transform:uppercase; }
+.dz-item button { position:absolute; top:3px; right:3px; width:20px; height:20px; border:0; border-radius:50%;
+  background:rgba(28,29,28,.72); color:#fff; font-size:14px; line-height:1; cursor:pointer; }
+.dz-item button:hover { background:var(--rust); }
+.ap-cover { width:100%; aspect-ratio:16/9; object-fit:cover; border-radius:var(--rad); margin:.6rem 0 .4rem; }
+.ap-photocount { font-size:.78rem; color:var(--muted); margin:0 0 .3rem !important; }

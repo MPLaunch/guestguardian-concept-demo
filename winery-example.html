@@ -73,10 +73,20 @@
       welcome by arrangement. No schoolies, no bucks or hens groups.</p>
     </div>
     <div>
-      <iframe src="embed.html?p=the-cabana&theme=light"
+      <iframe id="stay-embed" src="embed.html?p=the-cabana&theme=light"
               title="Book the cottage"
               style="width:100%;max-width:560px;height:470px;border:0"
               loading="lazy"></iframe>
+      <script>
+        /* Lets the back office hand this page a property to preview, so adding
+           one and pressing "see it on a winery's site" shows that property
+           rather than always the same house. */
+        (function () {
+          var p = new URLSearchParams(location.search).get('p');
+          if (p) document.getElementById('stay-embed').src =
+            'embed.html?p=' + encodeURIComponent(p) + '&theme=light';
+        })();
+      </script>
     </div>
   </div>
 </div></main>

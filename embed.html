@@ -100,6 +100,19 @@
     <p class="gge-foot">Booked direct with <a href="https://guestguardian-concept.mplaunch.com.au/" target="_blank" rel="noopener">Guest Guardian</a>, Adelaide</p>
   </div>
 </div>
+<div class="gge" id="gge-placeholder" hidden>
+  <div class="gge-body" style="padding:22px">
+    <div class="gge-brand">
+      <svg viewBox="0 0 50 50" fill="none" aria-hidden="true"><path d="M25 0a25 25 0 000 50z" fill="currentColor"/><path d="M34.6 50V29.5L25 24.9 48.2 14.1v29z" fill="currentColor" opacity=".55"/></svg>
+      <span>Managed by Guest Guardian</span>
+    </div>
+    <h2 class="gge-name" data-slugname>This property</h2>
+    <p class="gge-blurb">Not published yet, so there is nothing to show here. Once this home is live
+    on the website, this card fills in on its own with the photo, the details and a working
+    booking button. Nothing on the partner's site needs changing when that happens.</p>
+    <p class="gge-foot" style="text-align:left">Preview only &middot; <a href="https://guestguardian-concept.mplaunch.com.au/" target="_blank" rel="noopener">Guest Guardian</a></p>
+  </div>
+</div>
 <script>
 (function () {
   var q = new URLSearchParams(location.search);
@@ -110,7 +123,20 @@
   cards.forEach(function (c) {
     if (c.getAttribute('data-slug') === slug) { c.hidden = false; shown = true; }
   });
-  if (!shown && cards[0]) cards[0].hidden = false;
+  /* An unknown slug means a property that has not been published yet, which is
+     exactly what happens when you add one in practice mode. Say so. Silently
+     falling back to a different house would look like it worked and send the
+     partner a card for the wrong property. */
+  if (!shown) {
+    var ph = document.getElementById('gge-placeholder');
+    if (ph) {
+      ph.hidden = false;
+      var n = ph.querySelector('[data-slugname]');
+      /* \b, not  — this whole file is written out of a template literal, and
+         a bare  there is a backspace character rather than a word boundary. */
+      if (n) n.textContent = slug.replace(/-/g, ' ').replace(/\b\w/g, function (m) { return m.toUpperCase(); });
+    } else if (cards[0]) { cards[0].hidden = false; }
+  }
   /* Point the links at whichever host is actually serving this card, so the
      embed keeps working on the preview as well as on the production domain. */
   var base = location.origin + location.pathname.replace(/[^/]*$/, '');

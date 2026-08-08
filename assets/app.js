@@ -694,6 +694,56 @@
       var submitBtn = document.getElementById('ap-submit');
       var safebar = document.getElementById('safebar');
 
+      /* Photo picker.
+         🚨 Nothing is uploaded. The thumbnails are drawn from the file the
+         browser already has, via FileReader, and never leave the machine — a
+         static preview has nowhere to put them and no business holding a
+         client's photos. Real uploads need a server and storage. */
+      var photoInput = document.getElementById('ap-photos');
+      var photoGrid = document.getElementById('ap-photogrid');
+      var photos = [];
+      var drawPhotos = function () {
+        photoGrid.innerHTML = photos.map(function (p, i) {
+          return '<figure class="dz-item"><img src="' + p.src + '" alt="">' +
+                 (i === 0 ? '<figcaption>Cover</figcaption>' : '') +
+                 '<button type="button" data-rm="' + i + '" aria-label="Remove photo">&times;</button></figure>';
+        }).join('');
+      };
+      if (photoInput && photoGrid) {
+        photoInput.addEventListener('change', function () {
+          [].slice.call(photoInput.files).slice(0, 12).forEach(function (f) {
+            if (!/^image\//.test(f.type)) return;
+            var fr = new FileReader();
+            fr.onload = function () { photos.push({ name: f.name, src: fr.result }); drawPhotos(); };
+            fr.readAsDataURL(f);
+          });
+          photoInput.value = '';
+        });
+        photoGrid.addEventListener('click', function (ev) {
+          var b = ev.target.closest('[data-rm]');
+          if (!b) return;
+          photos.splice(+b.getAttribute('data-rm'), 1);
+          drawPhotos();
+        });
+        var dz = document.querySelector('.dropzone');
+        ['dragenter', 'dragover'].forEach(function (e) {
+          dz.addEventListener(e, function (ev) { ev.preventDefault(); dz.classList.add('is-over'); });
+        });
+        ['dragleave', 'drop'].forEach(function (e) {
+          dz.addEventListener(e, function (ev) { ev.preventDefault(); dz.classList.remove('is-over'); });
+        });
+        dz.addEventListener('drop', function (ev) {
+          var files = ev.dataTransfer && ev.dataTransfer.files;
+          if (!files) return;
+          [].slice.call(files).slice(0, 12).forEach(function (f) {
+            if (!/^image\//.test(f.type)) return;
+            var fr = new FileReader();
+            fr.onload = function () { photos.push({ name: f.name, src: fr.result }); drawPhotos(); };
+            fr.readAsDataURL(f);
+          });
+        });
+      }
+
       var slugify = function (s) {
         return s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'new-property';
       };
@@ -730,6 +780,8 @@
         document.getElementById('ap-created').innerHTML =
           '<div class="ap-badge">' + (liveTick && liveTick.checked ? 'Would go live' : 'Practice only') + '</div>' +
           '<h3>' + name.replace(/[<>]/g, '') + '</h3>' +
+          (photos.length ? '<img class="ap-cover" src="' + photos[0].src + '" alt="">' : '') +
+          (photos.length ? '<p class="ap-photocount">' + photos.length + ' photo' + (photos.length > 1 ? 's' : '') + ' attached</p>' : '') +
           '<p>' + [document.getElementById('ap-beds').value + ' bedroom',
                    document.getElementById('ap-baths').value + ' bathroom',
                    'sleeps ' + document.getElementById('ap-sleeps').value,
@@ -745,6 +797,10 @@
           '  loading="lazy">\n' +
           '</iframe>';
         document.getElementById('ap-copyembed').setAttribute('data-copy-from', '#ap-embed');
+
+        /* Point the "see it on a winery's site" link at THIS property. */
+        var wl = document.querySelector('#ap-result a[href^="winery-example"]');
+        if (wl) wl.setAttribute('href', 'winery-example.html?p=' + encodeURIComponent(slug));
 
         document.getElementById('ap-result').hidden = false;
         document.getElementById('ap-result').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
