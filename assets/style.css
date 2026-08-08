@@ -1433,3 +1433,16 @@ b.tag-auto, b.tag-web { font-weight: 500; padding: .1rem .45rem; border-radius: 
 .role-btns .btn svg { color: var(--sage-deep); }
 .role-btns .btn span { font-size: .86rem; }
 .role-btns .btn em { font-style: normal; font-size: .72rem; color: var(--muted); line-height: 1.35; }
+
+/* ---- one login page, three destinations ---- */
+.nav-signin { display:inline-flex; align-items:center; gap:.4rem; font-size:.86rem; color:var(--muted); padding:.45rem .8rem; border-radius:100px; transition:color .2s, background .2s; }
+.nav-signin:hover { color:var(--ink); background:rgba(28,29,28,.05); }
+.nav-signin svg { opacity:.7; }
+@media (max-width:1040px){ .nav-signin { display:none; } }
+.demo-roles { margin-top:1.15rem; padding-top:1.15rem; border-top:1px solid var(--line); }
+.demo-roles-lab { display:block; text-align:center; font-size:.72rem; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); margin-bottom:.65rem; }
+.demo-roles-btns { display:grid; grid-template-columns:repeat(3,1fr); gap:.4rem; }
+@media (max-width:420px){ .demo-roles-btns { grid-template-columns:1fr; } }
+.demo-roles-btns button { display:flex; flex-direction:column; align-items:center; gap:.3rem; padding:.6rem .4rem; font-size:.76rem; line-height:1.3; text-align:center; color:var(--muted); background:rgba(28,29,28,.03); border:1px solid var(--line); border-radius:var(--rad); transition:all .18s var(--ease); }
+.demo-roles-btns button:hover { color:var(--ink); border-color:var(--sage-deep); background:rgba(167,171,161,.14); }
+.demo-roles-btns svg { color:var(--sage-deep); }

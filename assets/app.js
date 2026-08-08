@@ -611,27 +611,33 @@
   var ownerApp = document.getElementById('owner-app');
   var ownerLogin = document.getElementById('owner-login');
   var managerApp = document.getElementById('manager-app');
+  var guestApp = document.getElementById('guest-app');
   if (ownerForm && ownerApp && ownerLogin) {
-    /* Three states: signed out, signed in as an owner, signed in as Guest
-       Guardian. Kept in one place so they can never both be visible. */
+    /* ONE login, three destinations. On a real build the account decides where
+       you land; here the view is chosen for the preview. Kept in a single
+       function so two portals can never be on screen at once. */
+    var VIEWS = { out: ownerLogin, owner: ownerApp, manager: managerApp, guest: guestApp };
     var show = function (view) {
-      ownerLogin.hidden = view !== 'out';
-      ownerApp.hidden = view !== 'owner';
-      if (managerApp) managerApp.hidden = view !== 'manager';
+      Object.keys(VIEWS).forEach(function (k) {
+        if (VIEWS[k]) VIEWS[k].hidden = (k !== view);
+      });
       try { sessionStorage.setItem('gg_portal_view', view); } catch (e) {}
       if (view !== 'out') window.scrollTo({ top: 0, behavior: 'smooth' });
     };
-    /* Demo only: no credentials are checked and nothing is sent anywhere. */
+
+    /* Demo only: no credentials are checked and nothing is sent anywhere.
+       A plain sign-in lands on the property-owner view, since that is who most
+       people signing in would be. */
     ownerForm.addEventListener('submit', function (ev) {
       ev.preventDefault();
       show('owner');
     });
-    var asManager = document.getElementById('ow-as-manager');
-    if (asManager) asManager.addEventListener('click', function () { show('manager'); });
-    var asOwner = document.getElementById('ow-as-owner');
-    if (asOwner) asOwner.addEventListener('click', function () { show('owner'); });
 
-    ['ow-signout', 'mg-signout'].forEach(function (id) {
+    document.querySelectorAll('.demo-roles-btns [data-role]').forEach(function (b) {
+      b.addEventListener('click', function () { show(b.getAttribute('data-role')); });
+    });
+
+    ['ow-signout', 'mg-signout', 'gu-signout'].forEach(function (id) {
       var b = document.getElementById(id);
       if (b) b.addEventListener('click', function () {
         show('out');
@@ -642,15 +648,17 @@
     /* Survive a refresh, and let the installed app icon land straight in. */
     try {
       var saved = sessionStorage.getItem('gg_portal_view');
-      if (saved === 'owner' || saved === 'manager') show(saved);
+      if (saved && saved !== 'out' && VIEWS[saved]) show(saved);
     } catch (e) {}
     var standalone = (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) || navigator.standalone;
-    if (standalone && ownerApp.hidden && (!managerApp || managerApp.hidden)) show('owner');
+    if (standalone && ownerLogin.hidden === false) show('owner');
 
     /* Tabs — owner side and manager side share the look and the behaviour, so
        both are scoped to their own container. Selecting on `.owner-tab` alone
        would let an owner-tab click strip the highlight off the manager tabs. */
-    [[ownerApp, 'data-tab', 'data-panel'], [managerApp, 'data-mtab', 'data-mpanel']].forEach(function (set) {
+    [[ownerApp, 'data-tab', 'data-panel'],
+     [managerApp, 'data-mtab', 'data-mpanel'],
+     [guestApp, 'data-gtab', 'data-gpanel']].forEach(function (set) {
       var root = set[0];
       if (!root) return;
       var tabs = root.querySelectorAll('[' + set[1] + ']');
@@ -763,13 +771,14 @@
     /* Add to home screen. Chrome/Android hands us a real install prompt to
        fire. iOS never does, so there we explain the Share-sheet steps instead
        of pretending a button can do it. */
-    var installBtn = document.getElementById('ow-install');
     var deferred = null;
     window.addEventListener('beforeinstallprompt', function (ev) {
       ev.preventDefault();
       deferred = ev;
     });
-    if (installBtn) {
+    ['ow-install', 'gu-install'].forEach(function (id) {
+      var installBtn = document.getElementById(id);
+      if (!installBtn) return;
       installBtn.addEventListener('click', function () {
         if (deferred) { deferred.prompt(); deferred = null; return; }
         var ios = /iPad|iPhone|iPod/.test(navigator.userAgent);
@@ -777,7 +786,7 @@
           ? 'To add Guest Guardian to your home screen:\n\n1. Tap the Share button at the bottom of Safari\n2. Scroll down and tap "Add to Home Screen"\n3. Tap Add\n\nIt will open straight into this dashboard, with no browser bar.'
           : 'To add Guest Guardian to your home screen, open your browser menu and choose "Install app" or "Add to Home screen".\n\nIt will open straight into this dashboard, with no browser bar.');
       });
-    }
+    });
   }
 
   /* Footer year */
