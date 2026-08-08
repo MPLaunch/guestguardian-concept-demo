@@ -622,13 +622,34 @@
        you land; here the view is chosen for the preview. Kept in a single
        function so two portals can never be on screen at once. */
     var VIEWS = { out: ownerLogin, owner: ownerApp, manager: managerApp, guest: guestApp };
+
+    /* The header button is the ONLY way in or out. Having a Sign in up top and a
+       separate Sign out inside each portal meant two controls for one job, in
+       two different places depending which portal you were in. */
+    var navBtn = document.querySelector('.nav-signin');
+    var navLabel = navBtn && navBtn.querySelector('span');
+    var navHome = navBtn && navBtn.getAttribute('href');
+
     var show = function (view) {
       Object.keys(VIEWS).forEach(function (k) {
         if (VIEWS[k]) VIEWS[k].hidden = (k !== view);
       });
+      if (navBtn && navLabel) {
+        var inside = view !== 'out';
+        navLabel.textContent = inside ? 'Sign out' : 'Sign in';
+        navBtn.classList.toggle('is-out', inside);
+        navBtn.setAttribute('href', inside ? '#' : navHome);
+      }
       try { sessionStorage.setItem('gg_portal_view', view); } catch (e) {}
       if (view !== 'out') window.scrollTo({ top: 0, behavior: 'smooth' });
     };
+
+    if (navBtn) navBtn.addEventListener('click', function (ev) {
+      if (!navBtn.classList.contains('is-out')) return;   // signed out: normal link
+      ev.preventDefault();
+      show('out');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
 
     /* Demo only: no credentials are checked and nothing is sent anywhere.
        A plain sign-in lands on the property-owner view, since that is who most
@@ -642,13 +663,6 @@
       b.addEventListener('click', function () { show(b.getAttribute('data-role')); });
     });
 
-    ['ow-signout', 'mg-signout', 'gu-signout'].forEach(function (id) {
-      var b = document.getElementById(id);
-      if (b) b.addEventListener('click', function () {
-        show('out');
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      });
-    });
 
     /* Survive a refresh, and let the installed app icon land straight in. */
     try {
@@ -777,7 +791,16 @@
         var slug = slugify(name);
         var base = location.origin + location.pathname.replace(/[^/]*$/, '');
         var url = base + 'stay-' + slug + '.html';
-        var embedSrc = base + 'embed.html?p=' + encodeURIComponent(slug);
+        /* The snippet carries the property's details in the link itself. A
+           practice property exists nowhere on the server, so the card builds
+           itself from what travels in the URL — no publish, nothing invented,
+           and the partner sees the actual property that was typed in. */
+        var embedSrc = base + 'embed.html?p=' + encodeURIComponent(slug) +
+          '&name=' + encodeURIComponent(name) +
+          '&beds=' + encodeURIComponent(document.getElementById('ap-beds').value) +
+          '&baths=' + encodeURIComponent(document.getElementById('ap-baths').value) +
+          '&sleeps=' + encodeURIComponent(document.getElementById('ap-sleeps').value) +
+          '&price=' + encodeURIComponent(document.getElementById('ap-price').value);
 
         document.getElementById('ap-created').innerHTML =
           '<div class="ap-badge">' + (liveTick && liveTick.checked ? 'Would go live' : 'Practice only') + '</div>' +

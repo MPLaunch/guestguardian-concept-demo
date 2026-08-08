@@ -1449,9 +1449,18 @@ b.tag-auto, b.tag-web { font-weight: 500; padding: .1rem .45rem; border-radius: 
 /* ---- one login page, three destinations ---- */
 /* Pushed to the far right and separated, so it reads as a different kind of
    action to the two calls-to-action rather than a third button. */
-.nav-signin { margin-left:.9rem; padding-left:1.15rem; border-left:1px solid var(--line);
-  display:inline-flex; align-items:center; gap:.35rem; font-size:.85rem; color:var(--muted); padding:.4rem .6rem; white-space:nowrap; border-radius:100px; transition:color .2s, background .2s; }
-.nav-signin:hover { color:var(--ink); background:rgba(28,29,28,.05); }
+.nav-signin {
+  display:inline-flex; align-items:center; gap:.4rem; white-space:nowrap;
+  margin-left:1.1rem; padding:.45rem .95rem; font-size:.85rem; font-weight:500;
+  /* Had only a hairline left-divider, so it read as loose text rather than
+     something you press. Given its own outline. */
+  color:var(--ink-2); border:1px solid rgba(28,29,28,.28); border-radius:100px;
+  transition:color .2s, background .2s, border-color .2s; }
+.nav-signin:hover { color:var(--ink); background:rgba(28,29,28,.06); border-color:var(--ink-2); }
+.nav-signin svg { opacity:.85; }
+/* Signed in, the same control becomes the way out, and says so in red. */
+.nav-signin.is-out { color:var(--rust); border-color:rgba(192,43,10,.45); }
+.nav-signin.is-out:hover { color:#fff; background:var(--rust); border-color:var(--rust); }
 .nav-signin svg { opacity:.7; }
 @media (max-width:1040px){ .nav-signin { display:none; } }
 .demo-roles { margin-top:1.15rem; padding-top:1.15rem; border-top:1px solid var(--line); }
