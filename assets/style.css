@@ -551,8 +551,8 @@ html.js .hc-scroll::after { animation: scrollhint 2.4s var(--ease) infinite; }
 .srow:first-child { border-top: 1px solid var(--line-soft); }
 .srow:hover { padding-left: .7rem; }
 .srow .n { font-family: var(--serif); color: var(--sage-deep); font-size: 1rem; }
-.srow .t { font-family: var(--serif); font-size: clamp(1.2rem,2vw,1.55rem); letter-spacing: -.02em; }
-.srow .d { font-size: .92rem; color: var(--muted); margin-top: .3rem; max-width: 62ch; }
+.srow .t { display: block; font-family: var(--serif); font-size: clamp(1.2rem,2vw,1.55rem); letter-spacing: -.02em; }
+.srow .d { display: block; font-size: .92rem; color: var(--muted); margin-top: .3rem; max-width: 62ch; }
 .srow .go { color: var(--sage-deep); transition: transform .4s var(--ease), color .4s var(--ease); }
 .srow:hover .go { transform: translateX(5px); color: var(--ink); }
 @media (max-width: 700px) {
@@ -899,7 +899,7 @@ html.js .marquee-track { animation: slide 46s linear infinite; }
 /* ---- Pull quote. Magazine device. ---- */
 .pullquote { position: relative; padding-left: clamp(2.5rem, 6vw, 5rem); }
 .pullquote::before {
-  content: "\201C"; position: absolute; left: 0; top: -.32em;
+  content: "\201C"; position: absolute; left: 0; top: -.04em;
   font-family: var(--serif); font-size: clamp(5rem, 12vw, 9rem);
   line-height: 1; color: var(--sage); opacity: .34;
 }
@@ -938,7 +938,9 @@ html.js .marquee-track { animation: slide 46s linear infinite; }
 }
 .foot-mark span {
   display: block; font-family: var(--serif); font-weight: 400;
-  font-size: 13.2vw; line-height: .8;
+  /* Sized to FIT. 13.2vw pushed 'Guest Guardian' wider than the page and
+     overflow:hidden then sliced the final letter off. */
+  font-size: min(11.2vw, 190px); line-height: .8;
   letter-spacing: -.045em; white-space: nowrap;
   color: rgba(255,255,255,.055);
   transform: translateY(.16em);
@@ -947,7 +949,13 @@ html.js .marquee-track { animation: slide 46s linear infinite; }
 .foot .foot-bottom { padding-bottom: clamp(4rem, 11vw, 9rem); border-bottom: 0; }
 
 /* ---- Staggered word reveal on headings ---- */
-.rw .w { display: inline-block; overflow: hidden; vertical-align: bottom; }
+.rw .w {
+  display: inline-block; overflow: hidden; vertical-align: bottom;
+  /* The mask is needed for the slide-up, but a 1.08 line-height box cuts
+     the tails off y, g and p. Extend below the baseline and take the space
+     back, so nothing clips and nothing shifts. */
+  padding-bottom: .18em; margin-bottom: -.18em;
+}
 .rw .w > i {
   display: inline-block; font-style: inherit;
   transform: translateY(105%); transition: transform .85s var(--ease);
