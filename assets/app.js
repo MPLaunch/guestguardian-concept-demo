@@ -275,7 +275,12 @@
           Area: areaSel ? areaSel.textContent.trim() : area.value,
           Bedrooms: beds.value,
           Occupancy: occ.value + '%',
-          'Estimate shown': outNight.textContent + '/night, ' + outYear.textContent + '/year',
+          /* Sent as separate values as well as the readable line, so the
+             customer's copy of the estimate can be laid out properly rather
+             than parsed back out of a sentence. */
+          estNightly: outNight.textContent,
+          estMonthly: outMonth.textContent,
+          estYearly: outYear.textContent,
         });
       });
       /* Clear the error outline as soon as they start fixing it. */

@@ -314,7 +314,12 @@ body.bmodal-lock { overflow: hidden; }
   transition: box-shadow .35s var(--ease), background .35s var(--ease);
 }
 .nav.stuck { box-shadow: 0 1px 0 var(--line), 0 8px 30px rgba(28,29,28,.06); background: rgba(247,246,242,.94); }
-.nav .wrap { display: flex; align-items: center; justify-content: space-between; gap: 1.5rem; min-height: 76px; }
+.nav .wrap { display: flex; align-items: center; justify-content: space-between; gap: 1rem; min-height: 76px; }
+/* The header row carries brand + 6 links + Sign in + 2 buttons, which is
+   right at the limit of the container. Let the menu give ground first so
+   the row can never push the page wider than the viewport. */
+.nav .menu { min-width: 0; }
+.nav-cta { flex: none; }
 
 .brand { display: flex; align-items: center; gap: .7rem; flex: none; }
 .brand-mark { width: 30px; height: 30px; flex: none; }
@@ -1021,24 +1026,20 @@ html:not(.js) .rw .w > i { transform: none; }
    1. GATED ESTIMATOR
    ========================================================================== */
 .estwrap { position: relative; }
-.estwrap.is-locked .stats { filter: blur(7px); opacity: .5; pointer-events: none; user-select: none; }
-.estwrap .stats { transition: filter .5s var(--ease), opacity .5s var(--ease); }
+/* The gate REPLACES the figures rather than floating over them. An overlay left
+   the blurred numbers showing through behind the card, which looked like a
+   rendering fault rather than a deliberate lock. Straight swap: form, then
+   figures. */
+.estwrap.is-locked .stats { display: none; }
+.estwrap:not(.is-locked) .estgate { display: none; }
 
-.estgate {
-  position: absolute; inset: -.5rem; display: grid; place-items: center;
-  /* Opacity only. `visibility` in a transition is a DISCRETE step, so in any
-     context where transitions do not advance it can stick on hidden. */
-  transition: opacity .35s var(--ease);
-}
-.estwrap:not(.is-locked) .estgate { opacity: 0; visibility: hidden; }
+.estgate { display: block; }
 .estgate-card {
-  width: min(100%, 400px);
-  background: rgba(28,29,28,.9);
-  border: 1px solid rgba(255,255,255,.16);
+  width: 100%;
+  background: rgba(255,255,255,.05);
+  border: 1px solid rgba(255,255,255,.12);
   border-radius: var(--rad-lg);
   padding: 1.5rem 1.5rem 1.35rem;
-  backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
-  box-shadow: 0 24px 60px rgba(0,0,0,.4);
   text-align: center;
 }
 .estgate-ico {
@@ -1435,7 +1436,7 @@ b.tag-auto, b.tag-web { font-weight: 500; padding: .1rem .45rem; border-radius: 
 .role-btns .btn em { font-style: normal; font-size: .72rem; color: var(--muted); line-height: 1.35; }
 
 /* ---- one login page, three destinations ---- */
-.nav-signin { display:inline-flex; align-items:center; gap:.4rem; font-size:.86rem; color:var(--muted); padding:.45rem .8rem; border-radius:100px; transition:color .2s, background .2s; }
+.nav-signin { display:inline-flex; align-items:center; gap:.35rem; font-size:.85rem; color:var(--muted); padding:.4rem .6rem; white-space:nowrap; border-radius:100px; transition:color .2s, background .2s; }
 .nav-signin:hover { color:var(--ink); background:rgba(28,29,28,.05); }
 .nav-signin svg { opacity:.7; }
 @media (max-width:1040px){ .nav-signin { display:none; } }
@@ -1446,3 +1447,10 @@ b.tag-auto, b.tag-web { font-weight: 500; padding: .1rem .45rem; border-radius: 
 .demo-roles-btns button { display:flex; flex-direction:column; align-items:center; gap:.3rem; padding:.6rem .4rem; font-size:.76rem; line-height:1.3; text-align:center; color:var(--muted); background:rgba(28,29,28,.03); border:1px solid var(--line); border-radius:var(--rad); transition:all .18s var(--ease); }
 .demo-roles-btns button:hover { color:var(--ink); border-color:var(--sage-deep); background:rgba(167,171,161,.14); }
 .demo-roles-btns svg { color:var(--sage-deep); }
+
+/* ---- phone in the header, now the black strip above it is gone ---- */
+.nav-phone { display:inline-flex; align-items:center; gap:.4rem; font-size:.88rem; font-weight:500; color:var(--ink); padding:.45rem .8rem; border-radius:100px; transition:background .2s; }
+.nav-phone:hover { background:rgba(28,29,28,.05); }
+.nav-phone svg { color:var(--sage-deep); }
+@media (max-width:1180px){ .nav-phone span { display:none; } }
+@media (max-width:900px){ .nav-phone { display:none; } }
