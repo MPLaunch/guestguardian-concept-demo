@@ -2,6 +2,36 @@
 (function () {
   'use strict';
 
+  /* ==========================================================================
+     Concept-preview lead relay.
+     Posts a form submission to MP Launch so Peter can see the thing works.
+     🚨 TEST CHANNEL: it reaches Peter's inbox ONLY. Nothing is sent to Guest
+     Guardian, no prospect is emailed, and nothing is written to the Lead
+     Tracker. On a real build this would go to the client instead.
+     Fire-and-forget on purpose — a network failure must never stop the visitor
+     seeing their estimate.
+     ========================================================================== */
+  var LEAD_ENDPOINT = 'https://mplaunch.com.au/api/preview-lead';
+  function relayLead(form, fields, meta) {
+    try {
+      fetch(LEAD_ENDPOINT, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          site: 'guestguardian-concept',
+          form: form,
+          name: fields.name || '',
+          email: fields.email || '',
+          phone: fields.phone || '',
+          suburb: fields.suburb || '',
+          message: fields.message || '',
+          meta: meta || {},
+        }),
+        keepalive: true,
+      }).catch(function () {});
+    } catch (e) {}
+  }
+
   /* Sticky nav shadow */
   var nav = document.querySelector('.nav');
   if (nav) {
@@ -116,10 +146,27 @@
     nums.forEach(function (el) { cio.observe(el); });
   }
 
-  /* Demo form handling — concept only, nothing is sent */
+  /* Concept forms. The visible behaviour is unchanged; they now also relay the
+     submission to Peter so the round trip is provable before go-live. */
   document.querySelectorAll('form[data-demo]').forEach(function (f) {
     f.addEventListener('submit', function (ev) {
       ev.preventDefault();
+
+      var pick = function (names) {
+        for (var i = 0; i < names.length; i++) {
+          var el = f.querySelector('[name="' + names[i] + '"]');
+          if (el && el.value.trim()) return el.value.trim();
+        }
+        return '';
+      };
+      relayLead(f.getAttribute('data-demo') || 'contact form', {
+        name: pick(['name', 'fullname', 'your-name']),
+        email: pick(['email', 'your-email']),
+        phone: pick(['phone', 'tel', 'mobile']),
+        suburb: pick(['suburb', 'address', 'location']),
+        message: pick(['message', 'comments', 'enquiry', 'notes']),
+      });
+
       var btn = f.querySelector('button[type="submit"]');
       if (!btn) return;
       var original = btn.innerHTML;
@@ -213,6 +260,19 @@
           if (doneEmail && email) doneEmail.textContent = email;
           done.hidden = false;
         }
+
+        /* Send it on, including what they had the sliders set to — the numbers
+           they saw are the whole context for following the lead up. */
+        var val = function (id) { var f = document.getElementById(id); return f ? f.value.trim() : ''; };
+        var areaSel = area.options[area.selectedIndex];
+        relayLead('income estimator', {
+          name: val('eg-name'), email: email, phone: val('eg-phone'), suburb: val('eg-suburb'),
+        }, {
+          Area: areaSel ? areaSel.textContent.trim() : area.value,
+          Bedrooms: beds.value,
+          Occupancy: occ.value + '%',
+          'Estimate shown': outNight.textContent + '/night, ' + outYear.textContent + '/year',
+        });
       });
       /* Clear the error outline as soon as they start fixing it. */
       gate.addEventListener('input', function (ev) {
