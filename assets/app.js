@@ -546,37 +546,65 @@
   var ownerForm = document.getElementById('ownerform');
   var ownerApp = document.getElementById('owner-app');
   var ownerLogin = document.getElementById('owner-login');
+  var managerApp = document.getElementById('manager-app');
   if (ownerForm && ownerApp && ownerLogin) {
-    var showApp = function (on) {
-      ownerApp.hidden = !on;
-      ownerLogin.hidden = on;
-      try { sessionStorage.setItem('gg_owner_in', on ? '1' : ''); } catch (e) {}
+    /* Three states: signed out, signed in as an owner, signed in as Guest
+       Guardian. Kept in one place so they can never both be visible. */
+    var show = function (view) {
+      ownerLogin.hidden = view !== 'out';
+      ownerApp.hidden = view !== 'owner';
+      if (managerApp) managerApp.hidden = view !== 'manager';
+      try { sessionStorage.setItem('gg_portal_view', view); } catch (e) {}
+      if (view !== 'out') window.scrollTo({ top: 0, behavior: 'smooth' });
     };
     /* Demo only: no credentials are checked and nothing is sent anywhere. */
     ownerForm.addEventListener('submit', function (ev) {
       ev.preventDefault();
-      showApp(true);
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      show('owner');
     });
-    var signout = document.getElementById('ow-signout');
-    if (signout) signout.addEventListener('click', function () {
-      showApp(false);
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    });
-    /* Survive a refresh, and let the installed app icon land straight in. */
-    try { if (sessionStorage.getItem('gg_owner_in')) showApp(true); } catch (e) {}
-    if (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) showApp(true);
-    if (navigator.standalone) showApp(true);
+    var asManager = document.getElementById('ow-as-manager');
+    if (asManager) asManager.addEventListener('click', function () { show('manager'); });
 
-    /* Tabs */
-    var tabs = document.querySelectorAll('.owner-tab');
-    tabs.forEach(function (tab) {
-      tab.addEventListener('click', function () {
-        var want = tab.getAttribute('data-tab');
-        tabs.forEach(function (t) { t.classList.toggle('is-on', t === tab); });
-        document.querySelectorAll('.owner-panel').forEach(function (p) {
-          p.hidden = p.getAttribute('data-panel') !== want;
+    ['ow-signout', 'mg-signout'].forEach(function (id) {
+      var b = document.getElementById(id);
+      if (b) b.addEventListener('click', function () {
+        show('out');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+    });
+
+    /* Survive a refresh, and let the installed app icon land straight in. */
+    try {
+      var saved = sessionStorage.getItem('gg_portal_view');
+      if (saved === 'owner' || saved === 'manager') show(saved);
+    } catch (e) {}
+    var standalone = (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) || navigator.standalone;
+    if (standalone && ownerApp.hidden && (!managerApp || managerApp.hidden)) show('owner');
+
+    /* Tabs — owner side and manager side share the look and the behaviour, so
+       both are scoped to their own container. Selecting on `.owner-tab` alone
+       would let an owner-tab click strip the highlight off the manager tabs. */
+    [[ownerApp, 'data-tab', 'data-panel'], [managerApp, 'data-mtab', 'data-mpanel']].forEach(function (set) {
+      var root = set[0];
+      if (!root) return;
+      var tabs = root.querySelectorAll('[' + set[1] + ']');
+      var panels = root.querySelectorAll('[' + set[2] + ']');
+      tabs.forEach(function (tab) {
+        tab.addEventListener('click', function () {
+          var want = tab.getAttribute(set[1]);
+          tabs.forEach(function (t) { t.classList.toggle('is-on', t === tab); });
+          panels.forEach(function (p) { p.hidden = p.getAttribute(set[2]) !== want; });
         });
+      });
+    });
+
+    /* Save buttons on the manager screen — demo feedback only. */
+    document.querySelectorAll('.btn-save').forEach(function (b) {
+      b.addEventListener('click', function () {
+        var was = b.textContent;
+        b.textContent = 'Saved';
+        b.classList.add('is-done');
+        setTimeout(function () { b.textContent = was; b.classList.remove('is-done'); }, 1800);
       });
     });
 

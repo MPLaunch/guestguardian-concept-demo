@@ -29,7 +29,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500&family=Outfit:wght@200;300;400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/style.css?v=c79c679a">
+<link rel="stylesheet" href="assets/style.css?v=af31ff68">
 <script type="application/ld+json">[
  {
   "@context": "https://schema.org",
@@ -101,7 +101,11 @@
         <button class="btn btn-primary" type="submit" style="width:100%;justify-content:center">Sign in <svg class="arw" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 12h13M12 5l7 7-7 7"/></svg></button>
         <p class="form-note center mt-1"><a href="#" onclick="return false">Forgot your password?</a></p>
       </form>
-      <div class="demo-hint"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="12" r="4"/><path d="M12 12h9M18 12v3M15 12v2"/></svg><span><b>Demo:</b> the sign-in is not connected to anything. Press <b>Sign in</b> with the fields empty and it will open the dashboard.</span></div>
+      <div class="demo-hint"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="12" r="4"/><path d="M12 12h9M18 12v3M15 12v2"/></svg><span><b>Demo:</b> nothing is connected. Press <b>Sign in</b> with the fields empty and it opens as a property owner.</span></div>
+      <div class="role-switch">
+        <span>Or see the other side of it</span>
+        <button class="btn btn-ghost" type="button" id="ow-as-manager"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg><span>Sign in as Guest Guardian</span></button>
+      </div>
     </div>
   </div>
 </section>
@@ -301,6 +305,346 @@
   </section>
 </div>
 
+<!-- ============ MANAGER / BACK OFFICE (Nick's own side) ============ -->
+<div id="manager-app" hidden>
+  <section class="owner-top">
+    <div class="wrap">
+      <div class="owner-top-row">
+        <div>
+          <p class="eyebrow">Guest Guardian &middot; back office</p>
+          <h1 class="h2" style="font-size:clamp(1.6rem,3.4vw,2.2rem)">Your properties</h1>
+          <p class="small muted" style="margin:.3rem 0 0">4 listings &middot; 3 owners &middot; 2 properties under management</p>
+        </div>
+        <div class="owner-top-actions">
+          <span class="sync-pill" id="sync-pill"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 3v4M12 17v4M3 12h4M17 12h4M6 6l2.5 2.5M15.5 15.5L18 18M18 6l-2.5 2.5M8.5 15.5L6 18"/></svg><span>Synced from Hostaway 4 minutes ago</span></span>
+          <button class="btn btn-ghost" type="button" id="mg-signout">Sign out</button>
+        </div>
+      </div>
+      <div class="owner-tabs" role="tablist">
+        <button class="owner-tab is-on" type="button" data-mtab="props" role="tab">Properties</button>
+        <button class="owner-tab" type="button" data-mtab="owners" role="tab">Owners</button>
+        <button class="owner-tab" type="button" data-mtab="adding" role="tab">Adding a property</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROPERTIES -->
+  <section class="pad-sm manager-panel is-on" data-mpanel="props">
+    <div class="wrap">
+      <div class="mg-legend">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 3l7 3v6c0 4.5-3 8-7 9-4-1-7-4.5-7-9V6l7-3z"/></svg>
+        <span><b>Two kinds of information on this screen.</b>
+        The <b class="tag-auto">locked</b> fields come straight from Hostaway and can only be changed there,
+        so your calendar can never disagree with your website. The <b class="tag-web">website</b> fields are
+        ours alone. Hostaway has nowhere to put them, so this is where they live.</span>
+      </div>
+
+      <div class="mgprop">
+        <div class="mgprop-img"><img src="https://bookingenginecdn.hostaway.com/listing/179273-472310-mdLS2PR8--9qDCkDj1B--87D6N4d9lesKLtJddjGktk04-695c087b43b9a?width=1200&height=630&quality=70&format=jpeg&v=2" alt="The Bungalow" loading="lazy" decoding="async"></div>
+        <div class="mgprop-body">
+          <div class="mgprop-head">
+            <div>
+              <h3 class="h3" style="font-size:1.08rem">The Bungalow</h3>
+              <p class="small muted" style="margin:.2rem 0 0">Hostaway listing 472310</p>
+            </div>
+            <span class="tag tag-auto"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 018 0v3"/></svg><span>From Hostaway</span></span>
+          </div>
+
+          <div class="mgprop-facts">
+            <span>Sleeps 7</span><span>3 bed</span><span>2 bath</span>
+            <span>Calendar live</span><span>Pricing live</span>
+          </div>
+
+          <div class="mgfields">
+            <label class="mgtoggle">
+              <input type="checkbox" checked>
+              <span class="mgtoggle-ui"></span>
+              <span class="mgtoggle-lab">Show on the website</span>
+            </label>
+            <label class="mgtoggle">
+              <input type="checkbox">
+              <span class="mgtoggle-ui"></span>
+              <span class="mgtoggle-lab">Feature on the home page</span>
+            </label>
+          </div>
+
+          <div class="field-row" style="margin-top:.9rem">
+            <div class="field">
+              <label>Suburb page <span class="tag tag-web">website</span></label>
+              <select>
+                <option>Glenelg</option><option>Henley Beach</option>
+                <option selected>Adelaide CBD</option><option>Brighton</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>Owner who can see it <span class="tag tag-web">website</span></label>
+              <select>
+                <option selected>Sam Whitfield</option><option>Dee Patel</option><option>Marcus Hale</option>
+              </select>
+            </div>
+          </div>
+          <div class="field">
+            <label>Description shown on the website <span class="tag tag-web">website</span></label>
+            <textarea rows="2">A three bedroom home built for groups who actually want to spend time together. Full kitchen, outdoor BBQ and a games room that keeps everyone occupied when the weather turns.</textarea>
+          </div>
+          <div class="mgprop-foot">
+            <a class="tlink" href="stay-the-bungalow.html">View the live page <svg class="arw" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 12h13M12 5l7 7-7 7"/></svg></a>
+            <button class="btn btn-ghost btn-save" type="button">Save changes</button>
+          </div>
+        </div>
+      </div><div class="mgprop">
+        <div class="mgprop-img"><img src="https://bookingenginecdn.hostaway.com/listing/179273-472311-7GdLxE4s5MHnS05leY1a--twCPHZeNzlXkdf--v6bwNH8-695b580d28636?width=1200&height=630&quality=70&format=jpeg&v=2" alt="The Cabana" loading="lazy" decoding="async"></div>
+        <div class="mgprop-body">
+          <div class="mgprop-head">
+            <div>
+              <h3 class="h3" style="font-size:1.08rem">The Cabana</h3>
+              <p class="small muted" style="margin:.2rem 0 0">Hostaway listing 472311</p>
+            </div>
+            <span class="tag tag-auto"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 018 0v3"/></svg><span>From Hostaway</span></span>
+          </div>
+
+          <div class="mgprop-facts">
+            <span>Sleeps 5</span><span>2 bed</span><span>1 bath</span>
+            <span>Calendar live</span><span>Pricing live</span>
+          </div>
+
+          <div class="mgfields">
+            <label class="mgtoggle">
+              <input type="checkbox" checked>
+              <span class="mgtoggle-ui"></span>
+              <span class="mgtoggle-lab">Show on the website</span>
+            </label>
+            <label class="mgtoggle">
+              <input type="checkbox" checked>
+              <span class="mgtoggle-ui"></span>
+              <span class="mgtoggle-lab">Feature on the home page</span>
+            </label>
+          </div>
+
+          <div class="field-row" style="margin-top:.9rem">
+            <div class="field">
+              <label>Suburb page <span class="tag tag-web">website</span></label>
+              <select>
+                <option>Glenelg</option><option selected>Henley Beach</option>
+                <option>Adelaide CBD</option><option>Brighton</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>Owner who can see it <span class="tag tag-web">website</span></label>
+              <select>
+                <option>Sam Whitfield</option><option selected>Dee Patel</option><option>Marcus Hale</option>
+              </select>
+            </div>
+          </div>
+          <div class="field">
+            <label>Description shown on the website <span class="tag tag-web">website</span></label>
+            <textarea rows="2">Two bedrooms, a private pool and a spa. The one guests book when the trip is the point rather than the base, and the one that holds its nightly rate hardest through summer.</textarea>
+          </div>
+          <div class="mgprop-foot">
+            <a class="tlink" href="stay-the-cabana.html">View the live page <svg class="arw" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 12h13M12 5l7 7-7 7"/></svg></a>
+            <button class="btn btn-ghost btn-save" type="button">Save changes</button>
+          </div>
+        </div>
+      </div><div class="mgprop">
+        <div class="mgprop-img"><img src="https://bookingenginecdn.hostaway.com/listing/179273-472312-WHckDgCCL6WwgMiCBrzBdivjz7uEJKQgdoM-QNSJ-cU-695b57ce8756e?width=1200&height=630&quality=70&format=jpeg&v=2" alt="The Bungalow and The Cabana" loading="lazy" decoding="async"></div>
+        <div class="mgprop-body">
+          <div class="mgprop-head">
+            <div>
+              <h3 class="h3" style="font-size:1.08rem">The Bungalow &amp; The Cabana</h3>
+              <p class="small muted" style="margin:.2rem 0 0">Hostaway listing 472312</p>
+            </div>
+            <span class="tag tag-auto"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 018 0v3"/></svg><span>From Hostaway</span></span>
+          </div>
+
+          <div class="mgprop-facts">
+            <span>Sleeps 12</span><span>5 bed</span><span>3 bath</span>
+            <span>Calendar live</span><span>Pricing live</span>
+          </div>
+
+          <div class="mgfields">
+            <label class="mgtoggle">
+              <input type="checkbox" checked>
+              <span class="mgtoggle-ui"></span>
+              <span class="mgtoggle-lab">Show on the website</span>
+            </label>
+            <label class="mgtoggle">
+              <input type="checkbox">
+              <span class="mgtoggle-ui"></span>
+              <span class="mgtoggle-lab">Feature on the home page</span>
+            </label>
+          </div>
+
+          <div class="field-row" style="margin-top:.9rem">
+            <div class="field">
+              <label>Suburb page <span class="tag tag-web">website</span></label>
+              <select>
+                <option>Glenelg</option><option>Henley Beach</option>
+                <option selected>Adelaide CBD</option><option>Brighton</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>Owner who can see it <span class="tag tag-web">website</span></label>
+              <select>
+                <option>Sam Whitfield</option><option>Dee Patel</option><option selected>Marcus Hale</option>
+              </select>
+            </div>
+          </div>
+          <div class="field">
+            <label>Description shown on the website <span class="tag tag-web">website</span></label>
+            <textarea rows="2">Both homes taken together for up to twelve guests, with the pool and spa included. This is the booking for a wedding party, a milestone birthday or two families travelling as one.</textarea>
+          </div>
+          <div class="mgprop-foot">
+            <a class="tlink" href="stay-the-bungalow-and-the-cabana.html">View the live page <svg class="arw" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 12h13M12 5l7 7-7 7"/></svg></a>
+            <button class="btn btn-ghost btn-save" type="button">Save changes</button>
+          </div>
+        </div>
+      </div><div class="mgprop">
+        <div class="mgprop-img"><img src="https://bookingenginecdn.hostaway.com/listing/179273-495920-xl2qjZGiS7Zeppe2rz77atkHgkbXaXUM--37l7gzQz8U-69b1528e8af7f?width=1200&height=630&quality=70&format=jpeg&v=2" alt="Victoria House" loading="lazy" decoding="async"></div>
+        <div class="mgprop-body">
+          <div class="mgprop-head">
+            <div>
+              <h3 class="h3" style="font-size:1.08rem">Victoria House</h3>
+              <p class="small muted" style="margin:.2rem 0 0">Hostaway listing 495920</p>
+            </div>
+            <span class="tag tag-auto"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 018 0v3"/></svg><span>From Hostaway</span></span>
+          </div>
+
+          <div class="mgprop-facts">
+            <span>Sleeps 7</span><span>3 bed</span><span>1 bath</span>
+            <span>Calendar live</span><span>Pricing live</span>
+          </div>
+
+          <div class="mgfields">
+            <label class="mgtoggle">
+              <input type="checkbox" checked>
+              <span class="mgtoggle-ui"></span>
+              <span class="mgtoggle-lab">Show on the website</span>
+            </label>
+            <label class="mgtoggle">
+              <input type="checkbox">
+              <span class="mgtoggle-ui"></span>
+              <span class="mgtoggle-lab">Feature on the home page</span>
+            </label>
+          </div>
+
+          <div class="field-row" style="margin-top:.9rem">
+            <div class="field">
+              <label>Suburb page <span class="tag tag-web">website</span></label>
+              <select>
+                <option>Glenelg</option><option selected>Henley Beach</option>
+                <option>Adelaide CBD</option><option>Brighton</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>Owner who can see it <span class="tag tag-web">website</span></label>
+              <select>
+                <option selected>Sam Whitfield</option><option>Dee Patel</option><option>Marcus Hale</option>
+              </select>
+            </div>
+          </div>
+          <div class="field">
+            <label>Description shown on the website <span class="tag tag-web">website</span></label>
+            <textarea rows="2">Three bedrooms, a sunroom and a BBQ area, set up for families and longer stays. Comfortable, well presented and easy to settle into for a week rather than a weekend.</textarea>
+          </div>
+          <div class="mgprop-foot">
+            <a class="tlink" href="stay-victoria-house.html">View the live page <svg class="arw" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 12h13M12 5l7 7-7 7"/></svg></a>
+            <button class="btn btn-ghost btn-save" type="button">Save changes</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- OWNERS -->
+  <section class="pad-sm manager-panel" data-mpanel="owners" hidden>
+    <div class="wrap">
+      <div class="ocard">
+        <div class="ocard-head">
+          <h2 class="h3">Who can log in</h2>
+          <button class="btn btn-primary" type="button" style="padding:.5rem .9rem;font-size:.84rem">Invite an owner <svg class="arw" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 12h13M12 5l7 7-7 7"/></svg></button>
+        </div>
+        <div class="tbl-wrap">
+          <table class="otbl otbl-wide">
+            <thead><tr><th>Owner</th><th>Can see</th><th>Status</th><th>Last activity</th><th></th></tr></thead>
+            <tbody>
+              <tr>
+                <td><b>Sam Whitfield</b><br><span class="small muted">sam.w@example.com</span></td>
+                <td><span class="chip">The Cabana</span></td>
+                <td><span class="pill pill-ok">Active</span></td>
+                <td class="small muted">Signed in 2 days ago</td>
+                <td class="num"><a class="tlink" href="#" onclick="return false">Manage</a></td>
+              </tr><tr>
+                <td><b>Dee Patel</b><br><span class="small muted">d.patel@example.com</span></td>
+                <td><span class="chip">Victoria House</span></td>
+                <td><span class="pill pill-ok">Active</span></td>
+                <td class="small muted">Signed in 6 hours ago</td>
+                <td class="num"><a class="tlink" href="#" onclick="return false">Manage</a></td>
+              </tr><tr>
+                <td><b>Marcus Hale</b><br><span class="small muted">m.hale@example.com</span></td>
+                <td><span class="chip">The Bungalow</span> <span class="chip">The Bungalow &amp; The Cabana</span></td>
+                <td><span class="pill">Invited</span></td>
+                <td class="small muted">Not signed in yet</td>
+                <td class="num"><a class="tlink" href="#" onclick="return false">Manage</a></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="small muted mt-2" style="margin-bottom:0">An owner only ever sees the properties ticked against their name. They cannot see each other, and they cannot see anything about your business.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ADDING A PROPERTY -->
+  <section class="pad-sm manager-panel" data-mpanel="adding" hidden>
+    <div class="wrap">
+      <div class="sec-head rv" style="margin-bottom:1.25rem">
+        <p class="eyebrow">The short answer</p>
+        <h2 class="h2">You add it in Hostaway. It appears here.</h2>
+        <p class="lede">You should never type a property into two systems. Whichever way this ends up working, that rule does not change.</p>
+      </div>
+
+      <div class="grid-2" style="gap:1.25rem;align-items:start">
+        <div class="ocard mgroute mgroute-a">
+          <span class="mgroute-tag">Preferred</span>
+          <h3 class="h3" style="font-size:1.05rem;margin-bottom:.5rem">If we can connect to Hostaway</h3>
+          <ol class="mgsteps">
+            <li>You add the property in Hostaway, exactly as you do today.</li>
+            <li>It appears on this screen on its own, usually within minutes.</li>
+            <li>You tick "show on the website", pick a suburb page and write the description.</li>
+            <li>Its own page goes live, with live availability and live pricing.</li>
+          </ol>
+          <p class="small muted" style="margin-bottom:0"><b>Nothing is typed twice.</b> Photos, bedrooms, prices and the calendar all stay in Hostaway, which stays the single source of truth for anything a guest could book.</p>
+        </div>
+
+        <div class="ocard mgroute mgroute-b">
+          <span class="mgroute-tag mgroute-tag-b">Fallback</span>
+          <h3 class="h3" style="font-size:1.05rem;margin-bottom:.5rem">If we cannot</h3>
+          <ol class="mgsteps">
+            <li>You add the property in Hostaway as usual.</li>
+            <li>You add it here once too: name, photos, sleeps, bedrooms.</li>
+            <li>The booking button still points at your real booking engine.</li>
+          </ol>
+          <p class="small muted" style="margin-bottom:0">Still perfectly workable, and it is how the site runs right now. The cost is that a property you rename or re-photograph has to be updated in both places. At four listings that is a minor annoyance. At forty it is a job.</p>
+        </div>
+      </div>
+
+      <div class="book-note mt-3">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 3l7 3v6c0 4.5-3 8-7 9-4-1-7-4.5-7-9V6l7-3z"/></svg>
+        <span><strong>And the one thing we would not do, even though it sounds appealing.</strong>
+        <br><br>We would not take the bookings ourselves and retire your current engine. Your homes
+        are on Airbnb and Stayz as well as direct, and something has to make a night vanish from all
+        of them the instant it sells anywhere. That job is the entire reason your booking platform
+        exists, and if we took it on and our sync ran a few minutes late, the same night sells twice
+        and two families arrive at one house on a Friday evening.
+        <br><br>So the split we would recommend is this. <strong>Anything a guest can book stays with
+        the platform that already does it.</strong> Everything else, which is how it looks, what it
+        says, who it reaches and what your owners can see, is ours. You already have the guest side
+        working. It just currently looks like somebody else's.</span>
+      </div>
+    </div>
+  </section>
+</div>
+
 </main>
 
 <section class="cta-band pad grain">
@@ -372,7 +716,7 @@
   </div>
 </footer>
 
-<script src="assets/app.js?v=c79c679a"></script>
+<script src="assets/app.js?v=af31ff68"></script>
 <!-- Service worker: required before Android/Chrome will offer "Install app".
      Deliberately a pure network passthrough with NO caching — a caching SW on a
      demo means stale pages survive every redeploy, which is exactly the trap we

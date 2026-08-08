@@ -1247,3 +1247,109 @@ html:not(.js) .rw .w > i { transform: none; }
 .embed-preview-fake:last-child { margin: .9rem 0 0; }
 .embed-preview iframe { width: 100%; height: 470px; border: 0; display: block; }
 @media (max-width: 520px) { .embed-preview iframe { height: 430px; } }
+
+/* ==========================================================================
+   MANAGER / BACK OFFICE — added 7 Aug 2026.
+   Guest Guardian's own side: what they control vs what Hostaway owns.
+   ========================================================================== */
+
+.role-switch {
+  margin-top: 1.1rem; padding-top: 1.1rem; border-top: 1px solid var(--line);
+  text-align: center;
+}
+.role-switch > span { display: block; font-size: .78rem; color: var(--muted); margin-bottom: .6rem; }
+.role-switch .btn { width: 100%; justify-content: center; gap: .45rem; }
+
+.sync-pill {
+  display: inline-flex; align-items: center; gap: .45rem;
+  padding: .5rem .9rem; border-radius: 100px; font-size: .8rem;
+  background: rgba(167,171,161,.16); color: var(--sage);
+  border: 1px solid rgba(167,171,161,.28);
+}
+.sync-pill svg { flex: none; }
+
+/* ---- the two-kinds-of-data legend ---- */
+.mg-legend {
+  display: flex; align-items: flex-start; gap: .7rem; margin-bottom: 1.5rem;
+  padding: 1rem 1.25rem; border-radius: var(--rad-lg);
+  background: rgba(167,171,161,.14); border-left: 2px solid var(--sage-deep);
+  font-size: .87rem; color: var(--muted); line-height: 1.6;
+}
+.mg-legend > svg { flex: none; color: var(--sage-deep); margin-top: .15rem; }
+.mg-legend b { color: var(--ink); font-weight: 500; }
+
+.tag {
+  display: inline-flex; align-items: center; gap: .3rem; vertical-align: middle;
+  padding: .12rem .5rem; border-radius: 100px;
+  font-size: .68rem; font-weight: 500; letter-spacing: .04em; text-transform: uppercase;
+}
+.tag svg { width: 11px; height: 11px; }
+.tag-auto { background: rgba(28,29,28,.08); color: var(--muted); }
+.tag-web  { background: rgba(192,43,10,.1); color: var(--rust); }
+b.tag-auto, b.tag-web { font-weight: 500; padding: .1rem .45rem; border-radius: 100px; }
+
+/* ---- one property row ---- */
+.mgprop {
+  display: grid; grid-template-columns: 200px 1fr; gap: 1.4rem;
+  background: var(--paper-2); border: 1px solid var(--line);
+  border-radius: var(--rad-lg); padding: 1.25rem; margin-bottom: 1rem;
+}
+@media (max-width: 760px) { .mgprop { grid-template-columns: 1fr; } }
+.mgprop-img { border-radius: var(--rad); overflow: hidden; aspect-ratio: 4/3; background: var(--sand); }
+.mgprop-img img { width: 100%; height: 100%; object-fit: cover; }
+.mgprop-body { min-width: 0; }
+.mgprop-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+.mgprop-facts { display: flex; flex-wrap: wrap; gap: .4rem; margin: .8rem 0 1rem; }
+.mgprop-facts span {
+  font-size: .74rem; padding: .2rem .6rem; border-radius: 100px;
+  background: rgba(28,29,28,.05); color: var(--muted);
+}
+.mgprop .field { margin-bottom: .8rem; }
+.mgprop .field label { display: flex; align-items: center; gap: .45rem; flex-wrap: wrap; }
+.mgprop textarea {
+  width: 100%; padding: .6rem .8rem; font: inherit; font-size: .88rem;
+  border: 1px solid var(--line); border-radius: var(--rad);
+  background: var(--paper); color: var(--ink); resize: vertical;
+}
+.mgprop textarea:focus, .mgprop select:focus { outline: 2px solid var(--sage); outline-offset: 1px; }
+.mgprop-foot { display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; margin-top: .3rem; }
+.btn-save { padding: .45rem .9rem; font-size: .82rem; }
+.btn-save.is-done { border-color: var(--sage-deep); color: var(--sage-deep); }
+
+/* ---- toggles ---- */
+.mgfields { display: flex; flex-wrap: wrap; gap: 1.25rem; }
+.mgtoggle { display: inline-flex; align-items: center; gap: .55rem; cursor: pointer; }
+.mgtoggle input { position: absolute; opacity: 0; width: 0; height: 0; }
+.mgtoggle-ui {
+  width: 38px; height: 22px; border-radius: 100px; flex: none;
+  background: rgba(28,29,28,.16); position: relative; transition: background .2s var(--ease);
+}
+.mgtoggle-ui::after {
+  content: ''; position: absolute; top: 3px; left: 3px;
+  width: 16px; height: 16px; border-radius: 100px; background: #fff;
+  transition: transform .2s var(--ease); box-shadow: 0 1px 3px rgba(0,0,0,.25);
+}
+.mgtoggle input:checked + .mgtoggle-ui { background: var(--sage-deep); }
+.mgtoggle input:checked + .mgtoggle-ui::after { transform: translateX(16px); }
+.mgtoggle input:focus-visible + .mgtoggle-ui { outline: 2px solid var(--sage); outline-offset: 2px; }
+.mgtoggle-lab { font-size: .86rem; }
+
+.chip {
+  display: inline-block; padding: .14rem .55rem; margin: .1rem .15rem .1rem 0;
+  border-radius: 100px; font-size: .74rem;
+  background: rgba(167,171,161,.22); color: var(--ink-2);
+}
+
+/* ---- the two routes ---- */
+.mgroute { position: relative; padding-top: 1.6rem; }
+.mgroute-tag {
+  position: absolute; top: -.7rem; left: 1.35rem;
+  padding: .2rem .7rem; border-radius: 100px;
+  font-size: .7rem; font-weight: 500; letter-spacing: .06em; text-transform: uppercase;
+  background: var(--sage-deep); color: #fff;
+}
+.mgroute-tag-b { background: var(--muted); }
+.mgroute-a { border-color: rgba(124,131,119,.45); }
+.mgsteps { margin: 0 0 1rem; padding-left: 1.1rem; font-size: .89rem; }
+.mgsteps li { margin-bottom: .45rem; padding-left: .2rem; }
+.mgsteps li::marker { color: var(--sage-deep); font-weight: 500; }
