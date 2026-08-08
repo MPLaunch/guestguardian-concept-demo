@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Stay With Us | Kirrihill Estate</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{box-sizing:border-box}
+  :root{ --wine:#5B1A2B; --wine-dk:#3A0F1C; --cream:#FBF7F0; --gold:#B08D57; --ink:#2A2320; }
+  body{margin:0;background:var(--cream);color:var(--ink);font:400 17px/1.7 "Jost",system-ui,sans-serif}
+  img{max-width:100%;display:block}
+  .bar{background:var(--wine-dk);color:#EBDDD0;font-size:.78rem;letter-spacing:.14em;text-transform:uppercase;padding:.6rem 0;text-align:center}
+  header{background:var(--wine);color:#fff;padding:1.1rem 0}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 1.6rem}
+  header .wrap{display:flex;align-items:center;justify-content:space-between;gap:1.5rem;flex-wrap:wrap}
+  .logo{font-family:"Cormorant Garamond",Georgia,serif;font-size:1.7rem;letter-spacing:.02em}
+  .logo span{display:block;font-family:"Jost",sans-serif;font-size:.6rem;letter-spacing:.3em;text-transform:uppercase;opacity:.75;margin-top:.1rem}
+  nav a{color:#F0E4DA;text-decoration:none;margin-left:1.7rem;font-size:.85rem;letter-spacing:.08em;text-transform:uppercase}
+  nav a:hover{color:#fff}
+  .hero{background:linear-gradient(rgba(58,15,28,.62),rgba(58,15,28,.62)),url('https://images.unsplash.com/photo-1560493676-04071c5f467b?w=1600&q=70') center/cover;color:#fff;padding:6rem 0 5.5rem;text-align:center}
+  .hero h1{font-family:"Cormorant Garamond",Georgia,serif;font-weight:300;font-size:clamp(2.4rem,6vw,4rem);margin:0 0 .6rem;line-height:1.1}
+  .hero p{max-width:600px;margin:0 auto;opacity:.9;font-weight:300}
+  main{padding:4.5rem 0}
+  h2{font-family:"Cormorant Garamond",Georgia,serif;font-weight:400;font-size:clamp(1.9rem,4vw,2.6rem);margin:0 0 .5rem;color:var(--wine)}
+  .kicker{font-size:.72rem;letter-spacing:.24em;text-transform:uppercase;color:var(--gold);margin:0 0 .5rem}
+  .lede{max-width:640px;color:#5E524C;font-weight:300}
+  .split{display:grid;grid-template-columns:1.1fr .9fr;gap:3.5rem;align-items:start;margin-top:2.5rem}
+  @media(max-width:860px){.split{grid-template-columns:1fr;gap:2.5rem}}
+  .rule{width:44px;height:1px;background:var(--gold);margin:1.6rem 0}
+  footer{background:var(--wine-dk);color:#C9B4A6;padding:2.5rem 0;font-size:.82rem;text-align:center}
+  .demo{background:#FFF4D6;border:1px solid #E4CE8A;border-left:3px solid var(--gold);
+        border-radius:5px;padding:1rem 1.25rem;font-size:.86rem;color:#6B5828;margin-bottom:2.5rem;line-height:1.6}
+  .demo b{color:#4A3C15}
+</style>
+</head>
+<body>
+<div class="bar">Cellar door open daily &middot; 10am &ndash; 5pm</div>
+<header><div class="wrap">
+  <div class="logo">Kirrihill Estate<span>Barossa Valley</span></div>
+  <nav><a href="#">Our Wines</a><a href="#">Cellar Door</a><a href="#">Stay</a><a href="#">Contact</a></nav>
+</div></header>
+
+<div class="hero"><div class="wrap">
+  <h1>Stay among the vines</h1>
+  <p>Wake up to rows of shiraz and a valley still catching the morning light. Our cottage sleeps four, two minutes from the cellar door.</p>
+</div></div>
+
+<main><div class="wrap">
+  <div class="demo">
+    <b>Demonstration page, built by MP Launch.</b> Kirrihill Estate is not a real business, and this
+    page exists only to show what a partner's website would look like. Everything above and below the
+    booking card is deliberately in someone else's branding. The card itself is the embed &mdash; one
+    line of code, pasted once, showing a Guest Guardian property inside their page with a booking
+    button that comes back to Guest Guardian.
+  </div>
+
+  <p class="kicker">Accommodation</p>
+  <h2>The cottage</h2>
+  <div class="split">
+    <div>
+      <p class="lede">Two bedrooms, a wood heater and a long table made for lingering. Breakfast
+      provisions from the estate kitchen are left in the fridge before you arrive, and the cellar
+      door is a short walk through the vines rather than a drive.</p>
+      <div class="rule"></div>
+      <p class="lede">Managed for us by a local short-stay team, so check-in is looked after
+      properly and there is always someone to call. Availability and pricing on the right are live.</p>
+      <div class="rule"></div>
+      <p class="lede" style="font-size:.9rem">Minimum two nights over weekends. Well-behaved dogs
+      welcome by arrangement. No schoolies, no bucks or hens groups.</p>
+    </div>
+    <div>
+      <iframe src="embed.html?p=the-cabana&theme=light"
+              title="Book the cottage"
+              style="width:100%;max-width:560px;height:470px;border:0"
+              loading="lazy"></iframe>
+    </div>
+  </div>
+</div></main>
+
+<footer><div class="wrap">
+  &copy; <span id="y">2026</span> Kirrihill Estate, Barossa Valley &middot; Fictional business, demonstration only
+</div></footer>
+<script>document.getElementById('y').textContent=new Date().getFullYear();</script>
+</body>
+</html>

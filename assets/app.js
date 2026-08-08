@@ -202,7 +202,11 @@
        ⚠️ These are ILLUSTRATIVE, not a forecast. A production version would be
        driven by Guest Guardian's own Hostaway booking history, or by a licensed
        market data feed, so the numbers are defensible per property. */
-    var BASE = { coastal: [155, 215, 310, 430], city: [165, 225, 315, 425], inner: [140, 190, 265, 360], hills: [150, 205, 285, 380] };
+    /* Guest Guardian's REAL achieved nightly rates, injected by the build from
+       their own Hostaway bookings. The literals below are only the fallback for
+       a page built before that data existed. */
+    var BASE = window.GG_RATES ||
+      { coastal: [155, 215, 310, 430], city: [165, 225, 315, 425], inner: [140, 190, 265, 360], hills: [150, 205, 285, 380] };
 
     /* ---- The gate (Nick's wishlist item 1) ----
        The figures are only WRITTEN INTO THE PAGE once the form is submitted.
@@ -624,6 +628,8 @@
     });
     var asManager = document.getElementById('ow-as-manager');
     if (asManager) asManager.addEventListener('click', function () { show('manager'); });
+    var asOwner = document.getElementById('ow-as-owner');
+    if (asOwner) asOwner.addEventListener('click', function () { show('owner'); });
 
     ['ow-signout', 'mg-signout'].forEach(function (id) {
       var b = document.getElementById(id);
@@ -657,6 +663,92 @@
         });
       });
     });
+
+    /* ---------------------------------------------------------------------
+       ADD A PROPERTY.
+
+       🚨 SAFE BY DESIGN. There is no code path in this file that writes to
+       Hostaway. The form builds a preview and an embed snippet locally and
+       nothing else. The "publish live" tick only changes what the page SAYS
+       would happen, so a mis-click cannot create a listing on a live booking
+       system, cannot reach a channel, and cannot be seen by a guest.
+       Wiring the real POST is a deliberate, separate job for the production
+       build, behind a server that holds the key.
+       --------------------------------------------------------------------- */
+    var addForm = document.getElementById('addprop');
+    if (addForm) {
+      var liveTick = document.getElementById('ap-live');
+      var submitBtn = document.getElementById('ap-submit');
+      var safebar = document.getElementById('safebar');
+
+      var slugify = function (s) {
+        return s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'new-property';
+      };
+
+      var reflectMode = function () {
+        var live = liveTick && liveTick.checked;
+        submitBtn.innerHTML = live
+          ? 'Publish to my live account'
+          : 'Add in practice mode';
+        submitBtn.classList.toggle('btn-danger', !!live);
+        if (safebar) safebar.classList.toggle('is-live', !!live);
+      };
+      if (liveTick) liveTick.addEventListener('change', reflectMode);
+      reflectMode();
+
+      addForm.addEventListener('submit', function (ev) {
+        ev.preventDefault();
+        var name = (document.getElementById('ap-name').value || '').trim();
+        if (!name) { document.getElementById('ap-name').classList.add('is-bad'); return; }
+
+        if (liveTick && liveTick.checked) {
+          var ok = window.confirm(
+            'This would publish "' + name + '" to your live Hostaway account.\n\n' +
+            'It would sync to your channels and become bookable by the public.\n\n' +
+            'In this preview nothing is actually sent anywhere. Continue?');
+          if (!ok) return;
+        }
+
+        var slug = slugify(name);
+        var base = location.origin + location.pathname.replace(/[^/]*$/, '');
+        var url = base + 'stay-' + slug + '.html';
+        var embedSrc = base + 'embed.html?p=' + encodeURIComponent(slug);
+
+        document.getElementById('ap-created').innerHTML =
+          '<div class="ap-badge">' + (liveTick && liveTick.checked ? 'Would go live' : 'Practice only') + '</div>' +
+          '<h3>' + name.replace(/[<>]/g, '') + '</h3>' +
+          '<p>' + [document.getElementById('ap-beds').value + ' bedroom',
+                   document.getElementById('ap-baths').value + ' bathroom',
+                   'sleeps ' + document.getElementById('ap-sleeps').value,
+                   '$' + document.getElementById('ap-price').value + ' a night'].join(' &middot; ') + '</p>';
+
+        document.getElementById('ap-url').value = url;
+        document.getElementById('ap-copyurl').setAttribute('data-copy', url);
+        document.getElementById('ap-embed').value =
+          '<iframe\n' +
+          '  src="' + embedSrc + '"\n' +
+          '  title="Book this property"\n' +
+          '  style="width:100%;max-width:560px;height:470px;border:0"\n' +
+          '  loading="lazy">\n' +
+          '</iframe>';
+        document.getElementById('ap-copyembed').setAttribute('data-copy-from', '#ap-embed');
+
+        document.getElementById('ap-result').hidden = false;
+        document.getElementById('ap-result').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      });
+
+      addForm.addEventListener('input', function (ev) {
+        if (ev.target && ev.target.classList) ev.target.classList.remove('is-bad');
+      });
+
+      var del = document.getElementById('ap-delete');
+      if (del) del.addEventListener('click', function () {
+        document.getElementById('ap-result').hidden = true;
+        addForm.reset();
+        if (liveTick) liveTick.checked = false;
+        reflectMode();
+      });
+    }
 
     /* Save buttons on the manager screen — demo feedback only. */
     document.querySelectorAll('.btn-save').forEach(function (b) {

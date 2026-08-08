@@ -1353,3 +1353,83 @@ b.tag-auto, b.tag-web { font-weight: 500; padding: .1rem .45rem; border-radius: 
 .mgsteps { margin: 0 0 1rem; padding-left: 1.1rem; font-size: .89rem; }
 .mgsteps li { margin-bottom: .45rem; padding-left: .2rem; }
 .mgsteps li::marker { color: var(--sage-deep); font-weight: 500; }
+
+/* ==========================================================================
+   ADD A PROPERTY — safe-mode form, 8 Aug 2026
+   ========================================================================== */
+
+.safebar {
+  display: flex; align-items: flex-start; gap: .8rem;
+  padding: 1rem 1.25rem; border-radius: var(--rad-lg);
+  background: rgba(167,171,161,.16); border-left: 3px solid var(--sage-deep);
+  transition: background .3s var(--ease), border-color .3s var(--ease);
+}
+.safebar > svg { flex: none; color: var(--sage-deep); margin-top: .15rem; }
+.safebar > div { flex: 1; min-width: 0; font-size: .87rem; line-height: 1.6; }
+.safebar b { display: block; color: var(--ink); font-weight: 500; margin-bottom: .2rem; }
+.safebar span { color: var(--muted); }
+.safebar-pill {
+  flex: none; align-self: center; padding: .25rem .75rem; border-radius: 100px;
+  background: var(--sage-deep); color: #fff; font-size: .72rem;
+  font-weight: 500; letter-spacing: .06em; text-transform: uppercase;
+}
+.safebar.is-live { background: rgba(192,43,10,.09); border-left-color: var(--rust); }
+.safebar.is-live > svg { color: var(--rust); }
+.safebar.is-live .safebar-pill { background: var(--rust); }
+.safebar.is-live .safebar-pill::after { content: ' mode off'; }
+
+/* ---- the live switch ---- */
+.livecheck {
+  display: flex; align-items: flex-start; gap: .75rem; cursor: pointer;
+  padding: .9rem 1rem; border-radius: var(--rad);
+  border: 1px solid var(--line); background: rgba(28,29,28,.02);
+  transition: border-color .2s, background .2s;
+}
+.livecheck:hover { border-color: rgba(192,43,10,.4); }
+.livecheck input { position: absolute; opacity: 0; width: 0; height: 0; }
+.livecheck-ui {
+  flex: none; width: 20px; height: 20px; margin-top: .1rem; border-radius: 4px;
+  border: 2px solid var(--muted); position: relative; transition: all .18s var(--ease);
+}
+.livecheck input:checked + .livecheck-ui { background: var(--rust); border-color: var(--rust); }
+.livecheck input:checked + .livecheck-ui::after {
+  content: ''; position: absolute; left: 5px; top: 1px;
+  width: 5px; height: 10px; border: solid #fff; border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+.livecheck input:focus-visible + .livecheck-ui { outline: 2px solid var(--sage); outline-offset: 2px; }
+.livecheck-txt { font-size: .87rem; line-height: 1.55; }
+.livecheck-txt b { display: block; margin-bottom: .15rem; }
+.livecheck-txt span { color: var(--muted); font-size: .82rem; }
+.livecheck input:checked ~ .livecheck-txt b { color: var(--rust); }
+
+.btn-danger { background: var(--rust); border-color: var(--rust); color: #fff; }
+.btn-danger:hover { background: #A32409; border-color: #A32409; }
+
+/* ---- what you get back ---- */
+.ap-created {
+  padding: 1rem 1.15rem; border-radius: var(--rad);
+  background: rgba(167,171,161,.14); margin-bottom: 1.25rem;
+}
+.ap-created h3 { font-family: var(--serif); font-size: 1.2rem; margin: .35rem 0 .3rem; }
+.ap-created p { margin: 0; font-size: .84rem; color: var(--muted); }
+.ap-badge {
+  display: inline-block; padding: .16rem .6rem; border-radius: 100px;
+  background: var(--sage-deep); color: #fff;
+  font-size: .68rem; font-weight: 500; letter-spacing: .07em; text-transform: uppercase;
+}
+.embed-code-light {
+  background: rgba(28,29,28,.04); border-color: var(--line); color: var(--ink-2);
+}
+.ap-actions {
+  display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+  flex-wrap: wrap; margin-top: 1.25rem; padding-top: 1rem; border-top: 1px solid var(--line-soft);
+}
+.ap-actions .btn { padding: .45rem .9rem; font-size: .82rem; }
+
+.role-btns { display: grid; grid-template-columns: 1fr 1fr; gap: .6rem; }
+@media (max-width: 460px) { .role-btns { grid-template-columns: 1fr; } }
+.role-btns .btn { flex-direction: column; align-items: center; gap: .3rem; padding: .85rem .7rem; text-align: center; height: 100%; }
+.role-btns .btn svg { color: var(--sage-deep); }
+.role-btns .btn span { font-size: .86rem; }
+.role-btns .btn em { font-style: normal; font-size: .72rem; color: var(--muted); line-height: 1.35; }

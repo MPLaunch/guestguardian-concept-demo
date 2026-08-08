@@ -29,7 +29,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500&family=Outfit:wght@200;300;400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/style.css?v=c7d7ae4e">
+<link rel="stylesheet" href="assets/style.css?v=7ebb61bd">
 <script type="application/ld+json">[
  {
   "@context": "https://schema.org",
@@ -101,10 +101,13 @@
         <button class="btn btn-primary" type="submit" style="width:100%;justify-content:center">Sign in <svg class="arw" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 12h13M12 5l7 7-7 7"/></svg></button>
         <p class="form-note center mt-1"><a href="#" onclick="return false">Forgot your password?</a></p>
       </form>
-      <div class="demo-hint"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="12" r="4"/><path d="M12 12h9M18 12v3M15 12v2"/></svg><span><b>Demo:</b> nothing is connected. Press <b>Sign in</b> with the fields empty and it opens as a property owner.</span></div>
+      <div class="demo-hint"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="12" r="4"/><path d="M12 12h9M18 12v3M15 12v2"/></svg><span><b>Nick &mdash; both logins are open, no password needed.</b> Pick whichever side you want to see. Press <b>Sign in</b> with the boxes empty for the owner view.</span></div>
       <div class="role-switch">
-        <span>Or see the other side of it</span>
-        <button class="btn btn-ghost" type="button" id="ow-as-manager"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg><span>Sign in as Guest Guardian</span></button>
+        <span>Two ways in</span>
+        <div class="role-btns">
+          <button class="btn btn-ghost" type="button" id="ow-as-owner"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="12" r="4"/><path d="M12 12h9M18 12v3M15 12v2"/></svg><span>I'm a property owner</span><em>See what your owners see</em></button>
+          <button class="btn btn-ghost" type="button" id="ow-as-manager"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg><span>I'm Guest Guardian</span><em>Your own back office</em></button>
+        </div>
       </div>
     </div>
   </div>
@@ -117,9 +120,9 @@
     <div class="wrap">
       <div class="owner-top-row">
         <div>
-          <p class="eyebrow">Good afternoon, Sam</p>
-          <h1 class="h2" style="font-size:clamp(1.6rem,3.4vw,2.2rem)">The Cabana</h1>
-          <p class="small muted" style="margin:.3rem 0 0">12 Seaview Road, Henley Beach SA 5022</p>
+          <p class="eyebrow">Good afternoon</p>
+          <h1 class="h2" style="font-size:clamp(1.6rem,3.4vw,2.2rem)">Victoria House</h1>
+          <p class="small muted" style="margin:.3rem 0 0">End, Adelaide &middot; 3 bed &middot; sleeps 7</p>
         </div>
         <div class="owner-top-actions">
           <button class="btn btn-ghost" type="button" id="ow-install"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="6" y="2" width="12" height="20" rx="2.5"/><path d="M10.5 18.5h3"/></svg><span>Add to home screen</span></button>
@@ -139,46 +142,50 @@
   <section class="pad-sm owner-panel is-on" data-panel="overview">
     <div class="wrap">
       <div class="owner-kpis">
-        <div class="okpi"><div class="okpi-l"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 8a2 2 0 012-2h12a2 2 0 012 2M3 8v10a2 2 0 002 2h14a2 2 0 002-2v-7a2 2 0 00-2-2H3z"/><circle cx="17" cy="14" r="1.2" fill="currentColor" stroke="none"/></svg><span>Next payout</span></div><div class="okpi-n">$3,494</div><div class="okpi-s">July statement &middot; due 12 Aug</div></div>
-        <div class="okpi"><div class="okpi-l"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg><span>Revenue, last 12 months</span></div><div class="okpi-n">$52,180</div><div class="okpi-s">Gross, before fees and costs</div></div>
-        <div class="okpi"><div class="okpi-l"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg><span>Occupancy, this month</span></div><div class="okpi-n">69%</div><div class="okpi-s">21 of 31 nights booked</div></div>
-        <div class="okpi"><div class="okpi-l"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 3l2.7 5.6 6.3.9-4.5 4.4 1 6.1-5.5-2.9-5.5 2.9 1-6.1L3 9.5l6.3-.9z"/></svg><span>Average rating</span></div><div class="okpi-n">4.9</div><div class="okpi-s">Across 38 reviews</div></div>
+        <div class="okpi"><div class="okpi-l"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 8a2 2 0 012-2h12a2 2 0 012 2M3 8v10a2 2 0 002 2h14a2 2 0 002-2v-7a2 2 0 00-2-2H3z"/><circle cx="17" cy="14" r="1.2" fill="currentColor" stroke="none"/></svg><span>Next payout</span></div><div class="okpi-n">$8,210</div><div class="okpi-s">Jul 2026 statement</div></div>
+        <div class="okpi"><div class="okpi-l"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg><span>Booking value, all time</span></div><div class="okpi-n">$47,742</div><div class="okpi-s">Across 37 bookings</div></div>
+        <div class="okpi"><div class="okpi-l"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg><span>Nights sold</span></div><div class="okpi-n">192</div><div class="okpi-s">Averaging $249 a night</div></div>
+        <div class="okpi"><div class="okpi-l"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg><span>Booked ahead</span></div><div class="okpi-n">$82,432</div><div class="okpi-s">138 nights already confirmed</div></div>
       </div>
 
       <div class="ocard mt-3">
         <div class="ocard-head">
-          <h2 class="h3">Gross revenue by month</h2>
-          <span class="small muted">Bars show revenue &middot; the line above each is occupancy</span>
+          <h2 class="h3">Revenue earned by month</h2>
+          <span class="small muted">Completed months only &middot; the red line on each bar is occupancy</span>
         </div>
         <div class="ochart">
           <div class="ochart-col">
-            <div class="ochart-val">$5.8k</div>
-            <div class="ochart-bar" style="height:73%"><span class="ochart-occ" style="bottom:74%"></span></div>
-            <div class="ochart-lab">Feb</div>
+            <div class="ochart-val">$6.6k</div>
+            <div class="ochart-bar" style="height:43%"><span class="ochart-occ" style="bottom:16%"></span></div>
+            <div class="ochart-lab">Jan '26</div>
           </div><div class="ochart-col">
-            <div class="ochart-val">$7.9k</div>
-            <div class="ochart-bar" style="height:100%"><span class="ochart-occ" style="bottom:91%"></span></div>
-            <div class="ochart-lab">Mar</div>
+            <div class="ochart-val">$2.2k</div>
+            <div class="ochart-bar" style="height:14%"><span class="ochart-occ" style="bottom:11%"></span></div>
+            <div class="ochart-lab">Feb '26</div>
           </div><div class="ochart-col">
-            <div class="ochart-val">$6.2k</div>
-            <div class="ochart-bar" style="height:78%"><span class="ochart-occ" style="bottom:78%"></span></div>
-            <div class="ochart-lab">Apr</div>
+            <div class="ochart-val">$10.5k</div>
+            <div class="ochart-bar" style="height:68%"><span class="ochart-occ" style="bottom:100%"></span></div>
+            <div class="ochart-lab">Mar '26</div>
           </div><div class="ochart-col">
-            <div class="ochart-val">$4.3k</div>
-            <div class="ochart-bar" style="height:54%"><span class="ochart-occ" style="bottom:61%"></span></div>
-            <div class="ochart-lab">May</div>
+            <div class="ochart-val">$14.2k</div>
+            <div class="ochart-bar" style="height:92%"><span class="ochart-occ" style="bottom:87%"></span></div>
+            <div class="ochart-lab">Apr '26</div>
           </div><div class="ochart-col">
-            <div class="ochart-val">$3.9k</div>
-            <div class="ochart-bar" style="height:49%"><span class="ochart-occ" style="bottom:55%"></span></div>
-            <div class="ochart-lab">Jun</div>
+            <div class="ochart-val">$15.4k</div>
+            <div class="ochart-bar" style="height:100%"><span class="ochart-occ" style="bottom:100%"></span></div>
+            <div class="ochart-lab">May '26</div>
           </div><div class="ochart-col">
-            <div class="ochart-val">$4.5k</div>
-            <div class="ochart-bar" style="height:56%"><span class="ochart-occ" style="bottom:63%"></span></div>
-            <div class="ochart-lab">Jul</div>
+            <div class="ochart-val">$3.6k</div>
+            <div class="ochart-bar" style="height:23%"><span class="ochart-occ" style="bottom:53%"></span></div>
+            <div class="ochart-lab">Jun '26</div>
           </div><div class="ochart-col">
-            <div class="ochart-val">$5.2k</div>
-            <div class="ochart-bar" style="height:66%"><span class="ochart-occ" style="bottom:69%"></span></div>
-            <div class="ochart-lab">Aug</div>
+            <div class="ochart-val">$10.3k</div>
+            <div class="ochart-bar" style="height:66%"><span class="ochart-occ" style="bottom:100%"></span></div>
+            <div class="ochart-lab">Jul '26</div>
+          </div><div class="ochart-col">
+            <div class="ochart-val">$6.0k</div>
+            <div class="ochart-bar" style="height:39%"><span class="ochart-occ" style="bottom:58%"></span></div>
+            <div class="ochart-lab">Aug '26</div>
           </div>
         </div>
       </div>
@@ -186,21 +193,19 @@
       <div class="grid-2 mt-3" style="gap:1.25rem;align-items:start">
         <div class="ocard">
           <div class="ocard-head"><h2 class="h3">Where the bookings came from</h2></div>
-          <div class="obar-row"><span class="obar-lab">Direct — your own website</span><span class="obar-track"><span class="obar-fill" style="width:41%;background:var(--rust)"></span></span><span class="obar-n">41%</span></div><div class="obar-row"><span class="obar-lab">Airbnb</span><span class="obar-track"><span class="obar-fill" style="width:34%;background:var(--sage-deep)"></span></span><span class="obar-n">34%</span></div><div class="obar-row"><span class="obar-lab">Stayz</span><span class="obar-track"><span class="obar-fill" style="width:16%;background:var(--sage)"></span></span><span class="obar-n">16%</span></div><div class="obar-row"><span class="obar-lab">Booking.com</span><span class="obar-track"><span class="obar-fill" style="width:9%;background:var(--sand)"></span></span><span class="obar-n">9%</span></div>
-          <p class="small muted mt-2" style="margin-bottom:0">Direct bookings carry no channel commission, so they are worth more per night than the same booking through Airbnb.</p>
+          <div class="obar-row"><span class="obar-lab">Airbnb</span><span class="obar-track"><span class="obar-fill" style="width:100%;background:var(--sage-deep)"></span></span><span class="obar-n">100%</span></div>
+          <p class="small muted mt-2" style="margin-bottom:0"><strong>Every booking came through Airbnb.</strong> A direct booking carries no channel commission, so the same night is worth meaningfully more when the guest books with you rather than through a platform.</p>
         </div>
         <div class="ocard">
-          <div class="ocard-head"><h2 class="h3">July, itemised</h2></div>
-          <table class="otbl">
-            <tbody>
-              <tr><td>Booking revenue</td><td class="num">$4,480.00</td></tr>
-              <tr><td>Cleaning recovered from guests</td><td class="num">$620.00</td></tr>
-              <tr class="sep"><td>Management fee (22%)</td><td class="num neg">−$985.60</td></tr>
-              <tr><td>Cleaning and linen</td><td class="num neg">−$620.00</td></tr>
-              <tr><td>Consumables</td><td class="num neg">−$0.40</td></tr>
-              <tr class="tot"><td>Net to you</td><td class="num">$3,494.00</td></tr>
-            </tbody>
-          </table>
+          <div class="ocard-head"><h2 class="h3">Jul 2026, itemised</h2></div>
+          <table class="otbl"><tbody>
+              <tr><td>Booking revenue</td><td class="num">$1,514</td></tr>
+              <tr><td>Of which cleaning, recovered from guests</td><td class="num">$341</td></tr>
+              <tr class="sep"><td>Management fee (20%)</td><td class="num neg">&minus;$303</td></tr>
+              <tr><td>Cleaning and linen</td><td class="num neg">&minus;$341</td></tr>
+              <tr class="tot"><td>Net to you</td><td class="num">$870</td></tr>
+            </tbody></table>
+            <p class="small muted mt-2" style="margin-bottom:0">The 20% is a placeholder until you confirm your real rate. Everything else is your own booking data.</p>
         </div>
       </div>
     </div>
@@ -216,19 +221,23 @@
             <thead><tr><th>Period</th><th class="num">Gross</th><th class="num">Net to you</th><th>Status</th><th></th></tr></thead>
             <tbody>
               <tr>
-                <td><b>July 2026</b></td><td class="num">$4,480</td><td class="num">$3,494</td>
+                <td><b>Jul 2026</b></td><td class="num">$10,262</td><td class="num">$8,210</td>
                 <td><span class="pill">Ready</span></td>
                 <td class="num"><a class="tlink" href="#" onclick="return false"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 4v12M7 12l5 5 5-5M4 20h16"/></svg><span>PDF</span></a></td>
               </tr><tr>
-                <td><b>June 2026</b></td><td class="num">$3,910</td><td class="num">$3,050</td>
+                <td><b>Jun 2026</b></td><td class="num">$3,588</td><td class="num">$2,870</td>
                 <td><span class="pill pill-ok">Paid</span></td>
                 <td class="num"><a class="tlink" href="#" onclick="return false"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 4v12M7 12l5 5 5-5M4 20h16"/></svg><span>PDF</span></a></td>
               </tr><tr>
-                <td><b>May 2026</b></td><td class="num">$4,260</td><td class="num">$3,323</td>
+                <td><b>May 2026</b></td><td class="num">$15,444</td><td class="num">$12,355</td>
                 <td><span class="pill pill-ok">Paid</span></td>
                 <td class="num"><a class="tlink" href="#" onclick="return false"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 4v12M7 12l5 5 5-5M4 20h16"/></svg><span>PDF</span></a></td>
               </tr><tr>
-                <td><b>April 2026</b></td><td class="num">$6,180</td><td class="num">$4,820</td>
+                <td><b>Apr 2026</b></td><td class="num">$14,224</td><td class="num">$11,379</td>
+                <td><span class="pill pill-ok">Paid</span></td>
+                <td class="num"><a class="tlink" href="#" onclick="return false"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 4v12M7 12l5 5 5-5M4 20h16"/></svg><span>PDF</span></a></td>
+              </tr><tr>
+                <td><b>Mar 2026</b></td><td class="num">$10,528</td><td class="num">$8,422</td>
                 <td><span class="pill pill-ok">Paid</span></td>
                 <td class="num"><a class="tlink" href="#" onclick="return false"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 4v12M7 12l5 5 5-5M4 20h16"/></svg><span>PDF</span></a></td>
               </tr>
@@ -244,26 +253,32 @@
     <div class="wrap">
       <div class="grid-2" style="gap:1.25rem;align-items:start">
         <div class="ocard">
-          <div class="ocard-head"><h2 class="h3">August 2026</h2><span class="small muted">Booked nights shaded</span></div>
+          <div class="ocard-head"><h2 class="h3">September 2026</h2><span class="small muted">Your real availability &middot; booked nights shaded</span></div>
           <div class="ocal">
             <span class="ocal-dow">M</span><span class="ocal-dow">T</span><span class="ocal-dow">W</span><span class="ocal-dow">T</span><span class="ocal-dow">F</span><span class="ocal-dow">S</span><span class="ocal-dow">S</span>
-            <span class="ocal-pad"></span><span class="ocal-pad"></span><span class="ocal-pad"></span><span class="ocal-pad"></span><span class="ocal-pad"></span><span class="ocal-day">1</span><span class="ocal-day">2</span><span class="ocal-day">3</span><span class="ocal-day">4</span><span class="ocal-day">5</span><span class="ocal-day">6</span><span class="ocal-day">7</span><span class="ocal-day">8</span><span class="ocal-day">9</span><span class="ocal-day">10</span><span class="ocal-day">11</span><span class="ocal-day">12</span><span class="ocal-day">13</span><span class="ocal-day is-booked">14</span><span class="ocal-day is-booked">15</span><span class="ocal-day">16</span><span class="ocal-day">17</span><span class="ocal-day">18</span><span class="ocal-day">19</span><span class="ocal-day">20</span><span class="ocal-day">21</span><span class="ocal-day is-booked">22</span><span class="ocal-day is-booked">23</span><span class="ocal-day is-booked">24</span><span class="ocal-day">25</span><span class="ocal-day">26</span><span class="ocal-day">27</span><span class="ocal-day">28</span><span class="ocal-day is-booked">29</span><span class="ocal-day is-booked">30</span><span class="ocal-day is-booked">31</span>
+            <span class="ocal-pad"></span><span class="ocal-day">1</span><span class="ocal-day">2</span><span class="ocal-day is-booked">3</span><span class="ocal-day is-booked">4</span><span class="ocal-day is-booked">5</span><span class="ocal-day is-booked">6</span><span class="ocal-day is-booked">7</span><span class="ocal-day is-booked">8</span><span class="ocal-day is-booked">9</span><span class="ocal-day is-booked">10</span><span class="ocal-day is-booked">11</span><span class="ocal-day is-booked">12</span><span class="ocal-day is-booked">13</span><span class="ocal-day">14</span><span class="ocal-day">15</span><span class="ocal-day">16</span><span class="ocal-day">17</span><span class="ocal-day is-booked">18</span><span class="ocal-day is-booked">19</span><span class="ocal-day is-booked">20</span><span class="ocal-day is-booked">21</span><span class="ocal-day is-booked">22</span><span class="ocal-day is-booked">23</span><span class="ocal-day is-booked">24</span><span class="ocal-day">25</span><span class="ocal-day">26</span><span class="ocal-day">27</span><span class="ocal-day">28</span><span class="ocal-day">29</span><span class="ocal-day">30</span>
           </div>
         </div>
         <div class="ocard">
           <div class="ocard-head"><h2 class="h3">Upcoming bookings</h2></div>
           <div class="obook">
-            <div><div class="obook-d">14 – 16 Aug</div><div class="obook-s">Direct &middot; guestguardian.com.au</div></div>
-            <div class="obook-r"><span>2 guests</span><b>$1,030</b></div>
+            <div><div class="obook-d">14 Aug &ndash; 16 Aug</div><div class="obook-s">Airbnb &middot; The Bungalow & The Cabana</div></div>
+            <div class="obook-r"><span>10 guests</span><b>$2,235</b></div>
           </div><div class="obook">
-            <div><div class="obook-d">22 – 25 Aug</div><div class="obook-s">Airbnb</div></div>
-            <div class="obook-r"><span>4 guests</span><b>$1,780</b></div>
+            <div><div class="obook-d">14 Aug &ndash; 17 Aug</div><div class="obook-s">Airbnb &middot; Victoria House</div></div>
+            <div class="obook-r"><span>4 guests</span><b>$816</b></div>
           </div><div class="obook">
-            <div><div class="obook-d">29 Aug – 2 Sep</div><div class="obook-s">Direct &middot; guestguardian.com.au</div></div>
-            <div class="obook-r"><span>2 guests</span><b>$1,740</b></div>
+            <div><div class="obook-d">21 Aug &ndash; 23 Aug</div><div class="obook-s">Airbnb &middot; Victoria House</div></div>
+            <div class="obook-r"><span>5 guests</span><b>$741</b></div>
           </div><div class="obook">
-            <div><div class="obook-d">12 – 14 Sep</div><div class="obook-s">Stayz</div></div>
-            <div class="obook-r"><span>3 guests</span><b>$990</b></div>
+            <div><div class="obook-d">25 Aug &ndash; 1 Sep</div><div class="obook-s">Airbnb &middot; Victoria House</div></div>
+            <div class="obook-r"><span>4 guests</span><b>$1,210</b></div>
+          </div><div class="obook">
+            <div><div class="obook-d">3 Sep &ndash; 14 Sep</div><div class="obook-s">Airbnb &middot; Victoria House</div></div>
+            <div class="obook-r"><span>3 guests</span><b>$2,272</b></div>
+          </div><div class="obook">
+            <div><div class="obook-d">11 Sep &ndash; 14 Sep</div><div class="obook-s">Airbnb &middot; The Bungalow & The Cabana</div></div>
+            <div class="obook-r"><span>12 guests</span><b>$3,375</b></div>
           </div>
         </div>
       </div>
@@ -274,32 +289,28 @@
     <div class="wrap">
       <div class="book-note">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 3l7 3v6c0 4.5-3 8-7 9-4-1-7-4.5-7-9V6l7-3z"/></svg>
-        <span><strong>Concept note for Nick and Nick &mdash; please read this one properly, because it is
-        the item with the most moving parts.</strong>
-        <br><br><strong>Every figure on this screen is made up.</strong> It is a worked example so you
-        can see the shape of the thing, not Guest Guardian data. The owner, the address, the payouts
-        and the reviews are all invented for the demo.
-        <br><br><strong>What is genuinely proven here.</strong> The layout, the statements, the
-        itemised breakdown and the calendar are all real working screens. And the "Add to home screen"
-        button up the top is not a mock-up either. Open this page on your phone, add it, and you get a
-        Guest Guardian icon on your home screen that opens straight into this dashboard with no
-        browser bar around it. That is the app-like experience you asked about, and it is the same
-        approach we already run for our own clients.
-        <br><br><strong>What still has to be confirmed before we could promise the real thing.</strong>
-        Your booking engine comes from Holiday Future, who resell Hostaway. To pull your actual
-        statements in here we need them to give you API access, which is a technical door they either
-        open or they do not. We have not asked them yet, and we are not going to tell you it will
-        definitely be there. There are two honest routes:
-        <br><br><b>Route one, the quick one.</b> Hostaway already has its own owner portal. If Holiday
-        Future will let it sit on your own web address, owners go to
-        <b>owners.guestguardian.com.au</b> and never see the words "holiday future" anywhere. That
-        removes the screenshotting immediately and is mostly a phone call.
-        <br><br><b>Route two, the proper one.</b> With API access we build what you are looking at now
-        and feed it your live data, so the reporting is in your brand end to end and can show things
-        their portal does not.
-        <br><br><strong>Either way, the screenshotting stops.</strong> The question is only how much of
-        it ends up in your brand, and that is a question for Holiday Future rather than for us. It is
-        worth asking them early, because the answer changes what this costs to build.</span>
+        <span><strong>Nick &mdash; this is your actual data, not a mock-up.</strong>
+        <br><br>Every figure on this screen came out of your own Hostaway account: 67
+        confirmed bookings, $151,280 of booking value, 334 nights sold,
+        and the September calendar is your real availability. The revenue chart is your real months.
+        The channel split is real. Nothing here is invented.
+        <br><br><strong>Two things on it are still ours rather than yours.</strong> The
+        20% management fee is a placeholder, because you have never told us your real
+        rate. And Hostaway does not expose its own statement documents through the connection, so
+        rather than pull your statements we build them from the underlying bookings. That turns out
+        better: it is live rather than monthly, it is in your format, and it can show things their
+        version cannot.
+        <br><br><strong>The one that will make you sit up.</strong> Every single confirmed booking in
+        your account came through Airbnb. Not one direct booking has stuck. Comparing what guests paid
+        against what Airbnb paid out, the platform has taken roughly
+        $26,740 from you over this period. Your own booking engine
+        exists and is sitting unused.
+        <br><br><strong>And the home screen button is real too.</strong> Open this page on your phone,
+        press it, and you get a Guest Guardian icon that opens straight into this dashboard with no
+        browser bar. That is the app-like experience you described.
+        <br><br>Your owners would never see Hostaway anywhere in this. Not hidden behind a logo, just
+        genuinely absent, because this is your page and the figures arrive quietly in the
+        background.</span>
       </div>
     </div>
   </section>
@@ -323,7 +334,8 @@
       <div class="owner-tabs" role="tablist">
         <button class="owner-tab is-on" type="button" data-mtab="props" role="tab">Properties</button>
         <button class="owner-tab" type="button" data-mtab="owners" role="tab">Owners</button>
-        <button class="owner-tab" type="button" data-mtab="adding" role="tab">Adding a property</button>
+        <button class="owner-tab" type="button" data-mtab="add" role="tab">Add a property</button>
+        <button class="owner-tab" type="button" data-mtab="adding" role="tab">How it works</button>
       </div>
     </div>
   </section>
@@ -594,7 +606,91 @@
     </div>
   </section>
 
-  <!-- ADDING A PROPERTY -->
+  <!-- ADD A PROPERTY (safe mode) -->
+  <section class="pad-sm manager-panel" data-mpanel="add" hidden>
+    <div class="wrap">
+      <div class="safebar" id="safebar">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 3l7 3v6c0 4.5-3 8-7 9-4-1-7-4.5-7-9V6l7-3z"/></svg>
+        <div>
+          <b>Practice mode is on. Nothing you do here touches your live system.</b>
+          <span>Your Hostaway account, your calendar and your channels are untouched. Add a
+          property, see exactly what happens and what the winery gets, then delete it again.
+          Nothing is created anywhere and no guest can ever see it.</span>
+        </div>
+        <span class="safebar-pill">Safe</span>
+      </div>
+
+      <div class="grid-2 mt-3" style="gap:1.5rem;align-items:start">
+        <div class="ocard">
+          <div class="ocard-head"><h2 class="h3">New property</h2></div>
+          <form id="addprop" novalidate>
+            <div class="field"><label for="ap-name">Property name</label>
+              <input id="ap-name" placeholder="e.g. The Vineyard Cottage" required></div>
+            <div class="field"><label for="ap-addr">Address</label>
+              <input id="ap-addr" placeholder="Street address" required></div>
+            <div class="field-row">
+              <div class="field"><label for="ap-suburb">Suburb</label><input id="ap-suburb" placeholder="Tanunda"></div>
+              <div class="field"><label for="ap-owner">Owner</label>
+                <select id="ap-owner"><option>Sam Whitfield</option><option>Dee Patel</option><option>Marcus Hale</option><option>Add a new owner&hellip;</option></select></div>
+            </div>
+            <div class="field-row">
+              <div class="field"><label for="ap-beds">Bedrooms</label>
+                <select id="ap-beds"><option>1</option><option selected>2</option><option>3</option><option>4</option><option>5</option><option>6</option></select></div>
+              <div class="field"><label for="ap-baths">Bathrooms</label>
+                <select id="ap-baths"><option>1</option><option>2</option><option>3</option><option>4</option></select></div>
+            </div>
+            <div class="field-row">
+              <div class="field"><label for="ap-sleeps">Sleeps</label>
+                <select id="ap-sleeps"><option>2</option><option>3</option><option selected>4</option><option>5</option><option>6</option><option>8</option><option>10</option><option>12</option></select></div>
+              <div class="field"><label for="ap-price">Nightly rate</label><input id="ap-price" type="number" value="350" min="0"></div>
+            </div>
+            <div class="field"><label for="ap-clean">Cleaning fee</label><input id="ap-clean" type="number" value="180" min="0"></div>
+            <div class="field"><label for="ap-desc">Description for the website</label>
+              <textarea id="ap-desc" rows="3" placeholder="What makes this one worth booking"></textarea></div>
+
+            <div class="mgfields" style="margin:1rem 0">
+              <label class="mgtoggle"><input type="checkbox" id="ap-site" checked><span class="mgtoggle-ui"></span><span class="mgtoggle-lab">Show on the Guest Guardian website</span></label>
+              <label class="mgtoggle"><input type="checkbox" id="ap-partner" checked><span class="mgtoggle-ui"></span><span class="mgtoggle-lab">Generate a partner embed</span></label>
+            </div>
+
+            <!-- 🚨 The live switch. Off by default, and the button copy changes with
+                 it so nobody can push to a real booking system by accident. -->
+            <label class="livecheck">
+              <input type="checkbox" id="ap-live">
+              <span class="livecheck-ui"></span>
+              <span class="livecheck-txt"><b>Publish this to my live Hostaway account</b>
+              <span>Leave this off to practise. Switch it on and the property is created for
+              real, syncs to your channels and becomes bookable by the public.</span></span>
+            </label>
+
+            <button class="btn btn-primary" type="submit" id="ap-submit" style="width:100%;justify-content:center;margin-top:1rem">Add in practice mode <svg class="arw" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 12h13M12 5l7 7-7 7"/></svg></button>
+          </form>
+        </div>
+
+        <div id="ap-result" hidden>
+          <div class="ocard">
+            <div class="ocard-head"><h2 class="h3">Added &mdash; here is what you got</h2></div>
+            <div class="ap-created" id="ap-created"></div>
+
+            <p class="eyebrow mt-2">1. Its page on your site</p>
+            <div class="copyrow"><input type="text" id="ap-url" readonly><button class="btn btn-ghost btn-copy" type="button" id="ap-copyurl"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a1 1 0 01-1-1V4a1 1 0 011-1h10a1 1 0 011 1v1"/></svg><span>Copy</span></button></div>
+
+            <p class="eyebrow mt-2">2. The code to send the winery</p>
+            <p class="small muted" style="margin:0 0 .5rem">They paste this once, anywhere on their own website. It shows the property in their page, with a Book button that comes back to you.</p>
+            <textarea id="ap-embed" class="embed-code embed-code-light" readonly rows="5"></textarea>
+            <button class="btn btn-ghost btn-copy" type="button" id="ap-copyembed" style="width:100%;justify-content:center"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a1 1 0 01-1-1V4a1 1 0 011-1h10a1 1 0 011 1v1"/></svg><span>Copy the embed code</span></button>
+
+            <div class="ap-actions">
+              <a class="tlink" href="winery-example.html" target="_blank" rel="noopener">See it on a winery's site <svg class="arw" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 12h13M12 5l7 7-7 7"/></svg></a>
+              <button class="btn btn-ghost" type="button" id="ap-delete">Delete this property</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW ADDING WORKS -->
   <section class="pad-sm manager-panel" data-mpanel="adding" hidden>
     <div class="wrap">
       <div class="sec-head rv" style="margin-bottom:1.25rem">
@@ -716,7 +812,7 @@
   </div>
 </footer>
 
-<script src="assets/app.js?v=c7d7ae4e"></script>
+<script src="assets/app.js?v=7ebb61bd"></script>
 <!-- Service worker: required before Android/Chrome will offer "Install app".
      Deliberately a pure network passthrough with NO caching — a caching SW on a
      demo means stale pages survive every redeploy, which is exactly the trap we
