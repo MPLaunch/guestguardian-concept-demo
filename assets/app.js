@@ -766,9 +766,11 @@
 
         if (liveTick && liveTick.checked) {
           var ok = window.confirm(
-            'This would publish "' + name + '" to your live Hostaway account.\n\n' +
-            'It would sync to your channels and become bookable by the public.\n\n' +
-            'In this preview nothing is actually sent anywhere. Continue?');
+            'On a real build this would create "' + name + '" in your Hostaway account, ' +
+            'where it would pick up a calendar and become bookable.\n\n' +
+            'THIS PREVIEW SENDS NOTHING. Your Hostaway account is not touched, ' +
+            'no listing is created and no channel is contacted.\n\n' +
+            'Continue?');
           if (!ok) return;
         }
 
