@@ -399,8 +399,11 @@ html.js .hc-bg { animation: kenburns 16s var(--ease) forwards; }
 @keyframes kenburns { from { transform: scale(1.14); } to { transform: scale(1.03); } }
 .hc-veil {
   position: absolute; inset: 0;
+  /* The kicker sits high in the frame where the old gradient was almost
+     clear, so it fell onto whatever the photo was doing. Darkened the top
+     band and the midtones enough to read against any image. */
   background:
-    linear-gradient(to top, rgba(20,21,20,.94) 0%, rgba(20,21,20,.55) 38%, rgba(20,21,20,.18) 70%, rgba(20,21,20,.30) 100%);
+    linear-gradient(to top, rgba(20,21,20,.94) 0%, rgba(20,21,20,.72) 38%, rgba(20,21,20,.52) 70%, rgba(20,21,20,.62) 100%);
 }
 .hc-content {
   position: relative; z-index: 2;
@@ -410,7 +413,7 @@ html.js .hc-bg { animation: kenburns 16s var(--ease) forwards; }
 .hc-content .display { color: #fff; max-width: 13ch; margin-bottom: 1.5rem; }
 .hc-content .lede { color: rgba(255,255,255,.78); max-width: 46ch; margin-bottom: 2.4rem; }
 .eyebrow.light { color: var(--sage-pale); }
-.h1-kicker.light { color: var(--sage); }
+.h1-kicker.light { color: #E8EAE5; text-shadow: 0 1px 12px rgba(0,0,0,.65); }
 .hc-content em.accent { color: var(--sage); }
 .hc-stats {
   display: flex; flex-wrap: wrap; gap: clamp(1.5rem, 4vw, 3.5rem);
@@ -1436,7 +1439,10 @@ b.tag-auto, b.tag-web { font-weight: 500; padding: .1rem .45rem; border-radius: 
 .role-btns .btn em { font-style: normal; font-size: .72rem; color: var(--muted); line-height: 1.35; }
 
 /* ---- one login page, three destinations ---- */
-.nav-signin { display:inline-flex; align-items:center; gap:.35rem; font-size:.85rem; color:var(--muted); padding:.4rem .6rem; white-space:nowrap; border-radius:100px; transition:color .2s, background .2s; }
+/* Pushed to the far right and separated, so it reads as a different kind of
+   action to the two calls-to-action rather than a third button. */
+.nav-signin { margin-left:.9rem; padding-left:1.15rem; border-left:1px solid var(--line);
+  display:inline-flex; align-items:center; gap:.35rem; font-size:.85rem; color:var(--muted); padding:.4rem .6rem; white-space:nowrap; border-radius:100px; transition:color .2s, background .2s; }
 .nav-signin:hover { color:var(--ink); background:rgba(28,29,28,.05); }
 .nav-signin svg { opacity:.7; }
 @media (max-width:1040px){ .nav-signin { display:none; } }
@@ -1454,3 +1460,55 @@ b.tag-auto, b.tag-web { font-weight: 500; padding: .1rem .45rem; border-radius: 
 .nav-phone svg { color:var(--sage-deep); }
 @media (max-width:1180px){ .nav-phone span { display:none; } }
 @media (max-width:900px){ .nav-phone { display:none; } }
+
+/* ==========================================================================
+   LEADS TABLE — Guest Guardian only
+   ========================================================================== */
+.lead-tools { display: flex; gap: .5rem; flex-wrap: wrap; align-items: center; }
+.lead-tools input[type="search"], .lead-tools select {
+  padding: .45rem .7rem; font-size: .84rem; font-family: var(--sans);
+  border: 1px solid var(--line); border-radius: var(--rad);
+  background: var(--paper); color: var(--ink);
+}
+.lead-tools input[type="search"] { min-width: 210px; }
+.lead-tools input:focus, .lead-tools select:focus { outline: 2px solid var(--sage); outline-offset: 1px; }
+.lead-tools .btn { padding: .45rem .8rem; font-size: .82rem; gap: .35rem; }
+@media (max-width: 620px) {
+  .lead-tools { width: 100%; }
+  .lead-tools input[type="search"] { flex: 1; min-width: 0; }
+}
+
+.leadtbl { min-width: 860px; }
+.leadtbl th { padding: 0; }
+.th-sort {
+  display: inline-flex; align-items: center; gap: .3rem;
+  width: 100%; padding: .7rem .6rem .7rem 0; background: none; border: 0;
+  font: inherit; font-size: .74rem; letter-spacing: .08em; text-transform: uppercase;
+  color: var(--muted); text-align: left; transition: color .18s;
+}
+.th-sort:hover { color: var(--ink); }
+.th-arrow { width: 0; height: 0; opacity: 0; transition: opacity .18s; }
+.th-sort.is-asc .th-arrow, .th-sort.is-desc .th-arrow {
+  opacity: 1; border-left: 4px solid transparent; border-right: 4px solid transparent;
+}
+.th-sort.is-asc .th-arrow { border-bottom: 5px solid var(--sage-deep); }
+.th-sort.is-desc .th-arrow { border-top: 5px solid var(--sage-deep); }
+.th-sort.is-asc, .th-sort.is-desc { color: var(--ink); }
+
+.leadtbl tbody tr:hover { background: rgba(167,171,161,.09); }
+.lead-when { display: block; font-weight: 500; font-size: .86rem; }
+.lead-time { display: block; font-size: .74rem; color: var(--muted); }
+.lead-em { display: block; font-size: .82rem; }
+.lead-ph { display: block; font-size: .78rem; color: var(--muted); font-variant-numeric: tabular-nums; }
+.lead-note { font-size: .84rem; color: var(--muted); max-width: 260px; }
+
+.src {
+  display: inline-block; padding: .16rem .55rem; border-radius: 100px;
+  font-size: .74rem; white-space: nowrap;
+  background: rgba(28,29,28,.06); color: var(--muted);
+}
+.src-estimator { background: rgba(192,43,10,.1); color: var(--rust); }
+.src-appraisal { background: rgba(167,171,161,.26); color: var(--sage-deep); }
+.src-booking { background: rgba(124,131,119,.18); color: var(--sage-deep); }
+.src-phone { background: rgba(28,29,28,.07); color: var(--muted); }
+.pill-mute { background: rgba(28,29,28,.07); color: var(--muted); }

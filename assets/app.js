@@ -763,6 +763,90 @@
       });
     }
 
+    /* ---------------------------------------------------------------------
+       LEADS TABLE — sort, search, filter, export.
+       All client-side over the rows already in the page. A live build would do
+       this on the server once there are more rows than a person wants to
+       scroll, but the behaviour a client sees is identical.
+       --------------------------------------------------------------------- */
+    var leadTbl = document.getElementById('leadtbl');
+    if (leadTbl) {
+      var tbody = leadTbl.querySelector('tbody');
+      var allRows = [].slice.call(tbody.querySelectorAll('tr'));
+      var search = document.getElementById('lead-search');
+      var filter = document.getElementById('lead-filter');
+      var countEl = document.getElementById('lead-count');
+      var sortCol = 0, sortDir = -1;   // newest first to begin with
+
+      /* Sort on the raw value where a cell provides one — the When column shows
+         "07 Aug" but sorts on the full timestamp, so months order correctly. */
+      var cellVal = function (row, i) {
+        var td = row.children[i];
+        if (!td) return '';
+        return (td.getAttribute('data-sort') || td.textContent || '').trim().toLowerCase();
+      };
+
+      var apply = function () {
+        var q = (search && search.value || '').trim().toLowerCase();
+        var src = (filter && filter.value || '');
+        var shown = 0;
+
+        var rows = allRows.slice().sort(function (a, b) {
+          var x = cellVal(a, sortCol), y = cellVal(b, sortCol);
+          return x < y ? -sortDir : x > y ? sortDir : 0;
+        });
+
+        rows.forEach(function (r) {
+          var hay = r.textContent.toLowerCase();
+          var srcCell = (r.children[3] && r.children[3].textContent) || '';
+          var ok = (!q || hay.indexOf(q) > -1) && (!src || srcCell.indexOf(src) > -1);
+          r.hidden = !ok;
+          if (ok) shown++;
+          tbody.appendChild(r);
+        });
+
+        if (countEl) {
+          countEl.textContent = (shown === allRows.length)
+            ? 'Showing all ' + allRows.length + ' enquiries. Click any heading to sort.'
+            : 'Showing ' + shown + ' of ' + allRows.length + ' enquiries.';
+        }
+      };
+
+      leadTbl.querySelectorAll('.th-sort').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          var col = +btn.getAttribute('data-col');
+          sortDir = (col === sortCol) ? -sortDir : 1;
+          sortCol = col;
+          leadTbl.querySelectorAll('.th-sort').forEach(function (b) {
+            b.classList.remove('is-asc', 'is-desc');
+          });
+          btn.classList.add(sortDir === 1 ? 'is-asc' : 'is-desc');
+          apply();
+        });
+      });
+
+      if (search) search.addEventListener('input', apply);
+      if (filter) filter.addEventListener('change', apply);
+
+      var csvBtn = document.getElementById('lead-csv');
+      if (csvBtn) csvBtn.addEventListener('click', function () {
+        var esc = function (s) { return '"' + String(s).replace(/\s+/g, ' ').trim().replace(/"/g, '""') + '"'; };
+        var head = [].slice.call(leadTbl.querySelectorAll('thead th'))
+          .map(function (th) { return esc(th.textContent); }).join(',');
+        var body = allRows.filter(function (r) { return !r.hidden; }).map(function (r) {
+          return [].slice.call(r.children).map(function (td) { return esc(td.textContent); }).join(',');
+        });
+        var blob = new Blob([[head].concat(body).join('\r\n')], { type: 'text/csv;charset=utf-8;' });
+        var a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = 'guest-guardian-enquiries.csv';
+        document.body.appendChild(a); a.click();
+        setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 400);
+      });
+
+      apply();
+    }
+
     /* Save buttons on the manager screen — demo feedback only. */
     document.querySelectorAll('.btn-save').forEach(function (b) {
       b.addEventListener('click', function () {

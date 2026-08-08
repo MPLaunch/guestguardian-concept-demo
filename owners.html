@@ -29,7 +29,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500&family=Outfit:wght@200;300;400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/style.css?v=0029fdf7">
+<link rel="stylesheet" href="assets/style.css?v=14dc76df">
 <script type="application/ld+json">[
  {
   "@context": "https://schema.org",
@@ -64,9 +64,9 @@
     </a>
     <nav class="menu" aria-label="Primary"><a href="index.html">Home</a><a href="services.html">Services</a><a href="areas.html">Areas</a><a href="pricing.html">Pricing</a><a href="journal.html">Journal</a><a href="about.html">About</a></nav>
     <div class="nav-cta">
-      <a class="nav-signin" href="owners.html"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 018 0v3"/></svg><span>Sign in</span></a>
       <a class="btn btn-book" href="book.html">Book your stay</a>
       <a class="btn btn-primary" href="contact.html">Free rental appraisal <svg class="arw" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 12h13M12 5l7 7-7 7"/></svg></a>
+      <a class="nav-signin" href="owners.html"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 018 0v3"/></svg><span>Sign in</span></a>
       <button class="burger" aria-label="Menu" aria-expanded="false"><span></span><span></span></button>
     </div>
   </div>
@@ -411,6 +411,7 @@
       </div>
       <div class="owner-tabs" role="tablist">
         <button class="owner-tab is-on" type="button" data-mtab="props" role="tab">Properties</button>
+        <button class="owner-tab" type="button" data-mtab="leads" role="tab">Leads</button>
         <button class="owner-tab" type="button" data-mtab="owners" role="tab">Owners</button>
         <button class="owner-tab" type="button" data-mtab="add" role="tab">Add a property</button>
         <button class="owner-tab" type="button" data-mtab="adding" role="tab">How it works</button>
@@ -641,6 +642,141 @@
             <button class="btn btn-ghost btn-save" type="button">Save changes</button>
           </div>
         </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- LEADS — Guest Guardian only. A property owner never sees this tab. -->
+  <section class="pad-sm manager-panel" data-mpanel="leads" hidden>
+    <div class="wrap">
+      
+      <div class="owner-kpis" style="grid-template-columns:repeat(4,1fr)">
+        <div class="okpi"><div class="okpi-l"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 3h8l4 4v14H6z"/><path d="M14 3v4h4M9 12h6M9 16h6"/></svg><span>Enquiries</span></div><div class="okpi-n">10</div><div class="okpi-s">Last 7 days</div></div>
+        <div class="okpi"><div class="okpi-l"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg><span>From the estimator</span></div><div class="okpi-n">3</div><div class="okpi-s">People who wanted a number</div></div>
+        <div class="okpi"><div class="okpi-l"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 12a8 8 0 01-8 8H7l-4 3v-5.5A8 8 0 1121 12z"/></svg><span>From a form</span></div><div class="okpi-n">4</div><div class="okpi-s">Appraisal and booking</div></div>
+        <div class="okpi"><div class="okpi-l"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="6" y="2" width="12" height="20" rx="2.5"/><path d="M10.5 18.5h3"/></svg><span>Tapped to call</span></div><div class="okpi-n">3</div><div class="okpi-s">Not the same as calls answered</div></div>
+      </div>
+
+      <div class="ocard mt-3">
+        <div class="ocard-head">
+          <h2 class="h3">Every enquiry, in one place</h2>
+          <div class="lead-tools">
+            <input type="search" id="lead-search" placeholder="Search name, email or note" aria-label="Search leads">
+            <select id="lead-filter" aria-label="Filter by source">
+              <option value="">All sources</option>
+              <option>Estimator</option><option>Appraisal form</option>
+              <option>Booking enquiry</option><option>Phone</option>
+            </select>
+            <button class="btn btn-ghost" type="button" id="lead-csv"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 4v12M7 12l5 5 5-5M4 20h16"/></svg><span>Export CSV</span></button>
+          </div>
+        </div>
+
+        <div class="tbl-wrap">
+          <table class="otbl otbl-wide leadtbl" id="leadtbl">
+            <thead><tr>
+              <th><button type="button" class="th-sort" data-col="0">When<span class="th-arrow"></span></button></th><th><button type="button" class="th-sort" data-col="1">Name<span class="th-arrow"></span></button></th><th><button type="button" class="th-sort" data-col="2">Contact<span class="th-arrow"></span></button></th><th><button type="button" class="th-sort" data-col="3">How they came<span class="th-arrow"></span></button></th><th><button type="button" class="th-sort" data-col="4">Type<span class="th-arrow"></span></button></th><th><button type="button" class="th-sort" data-col="5">What they wanted<span class="th-arrow"></span></button></th><th><button type="button" class="th-sort" data-col="6">Status<span class="th-arrow"></span></button></th>
+            </tr></thead>
+            <tbody>
+              <tr>
+                <td data-sort="2026-08-07 16:42"><span class="lead-when">07 Aug</span><span class="lead-time">16:42</span></td>
+                <td><b>Marcus Hale</b></td>
+                <td><span class="lead-em">m.hale@example.com</span><span class="lead-ph">0412 664 019</span></td>
+                <td><span class="src src-estimator">Estimator</span></td>
+                <td>Prospect</td>
+                <td class="lead-note">3 bed, Norwood, 70% &mdash; shown $128,900/yr</td>
+                <td><span class="pill">New</span></td>
+              </tr><tr>
+                <td data-sort="2026-08-07 11:08"><span class="lead-when">07 Aug</span><span class="lead-time">11:08</span></td>
+                <td><b>&mdash;</b></td>
+                <td><span class="muted">Tapped to call</span></td>
+                <td><span class="src src-phone">Phone</span></td>
+                <td>Prospect</td>
+                <td class="lead-note">From the pricing page, mobile</td>
+                <td><span class="pill pill-mute">Untracked</span></td>
+              </tr><tr>
+                <td data-sort="2026-08-06 19:20"><span class="lead-when">06 Aug</span><span class="lead-time">19:20</span></td>
+                <td><b>Priya Raman</b></td>
+                <td><span class="lead-em">p.raman@example.com</span><span class="lead-ph">0433 902 118</span></td>
+                <td><span class="src src-appraisal">Appraisal form</span></td>
+                <td>Prospect</td>
+                <td class="lead-note">Wants to switch managers, 2 properties</td>
+                <td><span class="pill pill-ok">Contacted</span></td>
+              </tr><tr>
+                <td data-sort="2026-08-06 09:55"><span class="lead-when">06 Aug</span><span class="lead-time">09:55</span></td>
+                <td><b>Tom Kelleher</b></td>
+                <td><span class="lead-em">t.kelleher@example.com</span><span class="lead-ph">0400 771 246</span></td>
+                <td><span class="src src-estimator">Estimator</span></td>
+                <td>Prospect</td>
+                <td class="lead-note">2 bed, Glenelg, 65% &mdash; shown $84,300/yr</td>
+                <td><span class="pill">New</span></td>
+              </tr><tr>
+                <td data-sort="2026-08-05 14:31"><span class="lead-when">05 Aug</span><span class="lead-time">14:31</span></td>
+                <td><b>Kirrihill Estate</b></td>
+                <td><span class="lead-em">stay@example.com</span><span class="lead-ph">0408 118 552</span></td>
+                <td><span class="src src-appraisal">Appraisal form</span></td>
+                <td>Partner</td>
+                <td class="lead-note">Winery with one cottage, wants it on their site</td>
+                <td><span class="pill pill-ok">Qualified</span></td>
+              </tr><tr>
+                <td data-sort="2026-08-05 08:14"><span class="lead-when">05 Aug</span><span class="lead-time">08:14</span></td>
+                <td><b>&mdash;</b></td>
+                <td><span class="muted">Tapped to call</span></td>
+                <td><span class="src src-phone">Phone</span></td>
+                <td>Prospect</td>
+                <td class="lead-note">From the Glenelg page, mobile</td>
+                <td><span class="pill pill-mute">Untracked</span></td>
+              </tr><tr>
+                <td data-sort="2026-08-04 21:03"><span class="lead-when">04 Aug</span><span class="lead-time">21:03</span></td>
+                <td><b>Alicia Wong</b></td>
+                <td><span class="lead-em">a.wong@example.com</span><span class="lead-ph">0421 335 807</span></td>
+                <td><span class="src src-estimator">Estimator</span></td>
+                <td>Prospect</td>
+                <td class="lead-note">4 bed, Hills, 55% &mdash; shown $141,200/yr</td>
+                <td><span class="pill pill-ok">Contacted</span></td>
+              </tr><tr>
+                <td data-sort="2026-08-04 13:47"><span class="lead-when">04 Aug</span><span class="lead-time">13:47</span></td>
+                <td><b>Dee Patel</b></td>
+                <td><span class="lead-em">d.patel@example.com</span><span class="lead-ph">0455 210 663</span></td>
+                <td><span class="src src-booking">Booking enquiry</span></td>
+                <td>Guest</td>
+                <td class="lead-note">Asked about connecting both homes</td>
+                <td><span class="pill pill-mute">Closed</span></td>
+              </tr><tr>
+                <td data-sort="2026-08-03 10:22"><span class="lead-when">03 Aug</span><span class="lead-time">10:22</span></td>
+                <td><b>Sam Whitfield</b></td>
+                <td><span class="lead-em">s.whitfield@example.com</span><span class="lead-ph">0490 004 118</span></td>
+                <td><span class="src src-appraisal">Appraisal form</span></td>
+                <td>Prospect</td>
+                <td class="lead-note">Inherited a property at Mile End</td>
+                <td><span class="pill pill-ok">Qualified</span></td>
+              </tr><tr>
+                <td data-sort="2026-08-02 17:59"><span class="lead-when">02 Aug</span><span class="lead-time">17:59</span></td>
+                <td><b>&mdash;</b></td>
+                <td><span class="muted">Tapped to call</span></td>
+                <td><span class="src src-phone">Phone</span></td>
+                <td>Prospect</td>
+                <td class="lead-note">From the home page, desktop</td>
+                <td><span class="pill pill-mute">Untracked</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="small muted mt-2" id="lead-count" style="margin-bottom:0">Showing all 10 enquiries. Click any heading to sort.</p>
+      </div>
+
+      <div class="book-note mt-3">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 3l7 3v6c0 4.5-3 8-7 9-4-1-7-4.5-7-9V6l7-3z"/></svg>
+        <span><strong>Two honest notes on this screen.</strong>
+        <br><br><strong>The enquiries above are examples.</strong> The concept site has not taken a
+        real one, and inventing convincing leads would be worse than saying so. The table, the
+        sorting, the search and the export are all real and are exactly what a live build produces.
+        <br><br><strong>A phone tap is not a phone call.</strong> Those rows show someone pressing the
+        number on their mobile, which is worth counting, but the website cannot know whether the call
+        connected or who was on the end of it. That is why they say Untracked and have no name against
+        them. The only way to close that gap is a tracked number, and that is a separate decision with
+        a monthly cost, so we have not assumed it.
+        <br><br>This tab is yours alone. A property owner signing in sees their own statements and
+        never sees this, and a guest sees neither.</span>
       </div>
     </div>
   </section>
@@ -890,7 +1026,7 @@
   </div>
 </footer>
 
-<script src="assets/app.js?v=0029fdf7"></script>
+<script src="assets/app.js?v=14dc76df"></script>
 <!-- Service worker: required before Android/Chrome will offer "Install app".
      Deliberately a pure network passthrough with NO caching — a caching SW on a
      demo means stale pages survive every redeploy, which is exactly the trap we
