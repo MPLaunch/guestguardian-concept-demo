@@ -1566,3 +1566,17 @@ b.tag-auto, b.tag-web { font-weight: 500; padding: .1rem .45rem; border-radius: 
 .wlopt-txt { font-size:.85rem; line-height:1.5; }
 .wlopt-txt b { display:block; margin-bottom:.1rem; }
 .wlopt-txt span { color:var(--muted); font-size:.79rem; }
+
+/* ---- added-confirmation + inline manage panel ---- */
+.addtoast { display:flex; align-items:flex-start; gap:.7rem; flex-wrap:wrap; margin-bottom:1.1rem;
+  padding:.9rem 1.1rem; border-radius:var(--rad); font-size:.86rem; line-height:1.55;
+  background:rgba(167,171,161,.2); border-left:3px solid var(--sage-deep); color:var(--muted); }
+.addtoast b { color:var(--ink); font-weight:500; }
+.addtoast-go { flex:none; margin-left:auto; padding:.35rem .8rem; font-size:.8rem;
+  border:1px solid var(--sage-deep); border-radius:100px; background:none; color:var(--sage-deep); cursor:pointer; }
+.addtoast-go:hover { background:var(--sage-deep); color:#fff; }
+.mgmanage { margin-top:1rem; padding-top:1rem; border-top:1px solid var(--line); }
+.mgmanage input[readonly] { background:rgba(28,29,28,.05); color:var(--muted); cursor:not-allowed; }
+.mgmanage .wlpick { margin-bottom:.7rem; }
+.mgmanage .wlopt { padding:.5rem .7rem; }
+.mgmanage .wlopt-txt { font-size:.8rem; }

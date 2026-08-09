@@ -752,6 +752,25 @@
        Wiring the real POST is a deliberate, separate job for the production
        build, behind a server that holds the key.
        --------------------------------------------------------------------- */
+    /* One snippet builder, shared by the add screen and the manage panel, so
+       the code a partner gets is identical wherever it was copied from. */
+    var buildSnippet = function (p, whiteLabel) {
+      var base = location.origin + location.pathname.replace(/[^/]*$/, '');
+      var src = base + 'embed.html?p=' + encodeURIComponent(p.slug) +
+        '&name=' + encodeURIComponent(p.name) +
+        '&beds=' + encodeURIComponent(p.beds) +
+        '&baths=' + encodeURIComponent(p.baths) +
+        '&sleeps=' + encodeURIComponent(p.sleeps) +
+        '&price=' + encodeURIComponent(p.price) +
+        (whiteLabel ? '&wl=1' : '');
+      return '<iframe\n' +
+        '  src="' + src + '"\n' +
+        '  title="' + String(p.name).replace(/"/g, '') + '"\n' +
+        '  style="width:100%;max-width:560px;height:470px;border:0"\n' +
+        '  loading="lazy">\n' +
+        '</iframe>';
+    };
+
     /* One builder for a practice row, used on add and on reload. */
     var insertPracticeRow = function (p) {
       var props = document.querySelector('#manager-app [data-mpanel="props"] .wrap');
@@ -779,14 +798,61 @@
           '</div>' +
           '<div class="mgprop-foot">' +
             '<span class="small muted">Also showing on the Book Your Stay page, in this browser. On a real build it goes live for everyone via Hostaway.</span>' +
-            '<button class="btn btn-ghost" type="button" data-practice-rm="' + p.slug + '">Remove</button>' +
+            '<span style="display:flex;gap:.5rem">' +
+              '<button class="btn btn-ghost" type="button" data-practice-manage>Manage</button>' +
+              '<button class="btn btn-ghost" type="button" data-practice-rm="' + p.slug + '">Remove</button>' +
+            '</span>' +
+          '</div>' +
+          '<div class="mgmanage" hidden>' +
+            '<div class="field"><label>Description shown on the website <span class="tag tag-web">website</span></label>' +
+              '<textarea rows="2" data-f="desc">' + String(p.desc || '').replace(/[<>]/g, '') + '</textarea></div>' +
+            '<div class="field-row">' +
+              '<div class="field"><label>Nightly rate <span class="tag tag-auto">Hostaway</span></label>' +
+                '<input value="$' + (p.price || '') + '" readonly title="Change this in Hostaway"></div>' +
+              '<div class="field"><label>Bedrooms <span class="tag tag-auto">Hostaway</span></label>' +
+                '<input value="' + (p.beds || '') + '" readonly title="Change this in Hostaway"></div>' +
+            '</div>' +
+            '<p class="small muted" style="margin:-.3rem 0 .9rem">The Hostaway fields are read-only here on purpose. Changing a price or a bed count in two places is how a calendar and a website end up disagreeing, so those stay where the booking system keeps them.</p>' +
+            '<p class="eyebrow" style="margin-bottom:.5rem">The code for a partner</p>' +
+            '<div class="wlpick" role="radiogroup" aria-label="Branding">' +
+              '<label class="wlopt"><input type="radio" name="wl-' + p.slug + '" value="0" checked><span class="wlopt-ui"></span>' +
+                '<span class="wlopt-txt"><b>Show your name</b><span>Card credits Guest Guardian.</span></span></label>' +
+              '<label class="wlopt"><input type="radio" name="wl-' + p.slug + '" value="1"><span class="wlopt-ui"></span>' +
+                '<span class="wlopt-txt"><b>White label</b><span>Reads as the partner\'s own listing.</span></span></label>' +
+            '</div>' +
+            '<textarea class="embed-code embed-code-light" rows="5" readonly data-f="embed"></textarea>' +
+            '<button class="btn btn-ghost btn-copy" type="button" data-f="copy" style="width:100%;justify-content:center">Copy the embed code</button>' +
           '</div>' +
         '</div>';
       if (legend) legend.insertAdjacentElement('afterend', row);
       else props.prepend(row);
+
       row.querySelector('[data-practice-rm]').addEventListener('click', function () {
         row.remove();
         practiceRemove(p.slug);
+      });
+
+      /* Manage opens the property in place, so its code can always be found
+         again after the add form has been cleared for the next one. */
+      var panel = row.querySelector('.mgmanage');
+      var codeBox = panel.querySelector('[data-f="embed"]');
+      var writeCode = function () {
+        var on = panel.querySelector('input[name="wl-' + p.slug + '"]:checked');
+        codeBox.value = buildSnippet(p, on && on.value === '1');
+        panel.querySelector('[data-f="copy"]').setAttribute('data-copy', codeBox.value);
+      };
+      panel.querySelectorAll('input[type="radio"]').forEach(function (r) {
+        r.addEventListener('change', writeCode);
+      });
+      writeCode();
+      row.querySelector('[data-practice-manage]').addEventListener('click', function (ev) {
+        panel.hidden = !panel.hidden;
+        ev.currentTarget.textContent = panel.hidden ? 'Manage' : 'Done';
+      });
+      panel.querySelector('[data-f="desc"]').addEventListener('input', function (e) {
+        var list = practiceAll();
+        list.forEach(function (x) { if (x.slug === p.slug) x.desc = e.target.value; });
+        practiceSave(list);
       });
     };
 
@@ -924,33 +990,50 @@
         writeSnippet();
         document.getElementById('ap-copyembed').setAttribute('data-copy-from', '#ap-embed');
 
+        /* 🚨 Capture the property BEFORE the form is cleared. Reading the
+           inputs after a reset gives you the defaults, which silently filed
+           a 6-bedroom at $850 as a 2-bedroom at $350. */
+        var record = {
+          slug: slug,
+          name: name,
+          beds: document.getElementById('ap-beds').value,
+          baths: document.getElementById('ap-baths').value,
+          sleeps: document.getElementById('ap-sleeps').value,
+          price: document.getElementById('ap-price').value,
+          desc: document.getElementById('ap-desc').value,
+          photo: (photos.length && photos[0].src.length < 250000) ? photos[0].src : '',
+        };
+
+        insertPracticeRow(record);
+        var stored = practiceAll().filter(function (p) { return p.slug !== slug; });
+        stored.push(record);
+        practiceSave(stored);
+
         /* Point the "see it on a winery's site" link at THIS property. */
         var wl = document.querySelector('#ap-result a[href^="winery-example"]');
         if (wl) wl.setAttribute('href', 'winery-example.html?p=' + encodeURIComponent(slug));
 
-        /* The property belongs in the Properties tab too — adding one and then
-           finding the list unchanged reads as the add having failed. Practice
-           rows sit at the top, clearly tagged, and delete removes them. */
-        insertPracticeRow({
-          slug: slug, name: name,
-          beds: document.getElementById('ap-beds').value,
-          baths: document.getElementById('ap-baths').value,
-          sleeps: document.getElementById('ap-sleeps').value,
-          price: document.getElementById('ap-price').value,
-          photo: (photos.length && photos[0].src.length < 250000) ? photos[0].src : '',
+        /* Confirm, then clear the form so the next one can be added straight
+           away. Nothing is lost: the property and its code live on its row in
+           Properties, under Manage. */
+        var done = document.createElement('div');
+        done.className = 'addtoast';
+        done.innerHTML = '<b>' + name.replace(/[<>]/g, '') + ' added.</b> ' +
+          'It is on your Properties tab and on Book Your Stay. Open it under ' +
+          '<b>Manage</b> any time to edit it or copy its code again.' +
+          '<button type="button" class="addtoast-go">Go to Properties</button>';
+        addForm.insertAdjacentElement('beforebegin', done);
+        done.querySelector('.addtoast-go').addEventListener('click', function () {
+          var t = document.querySelector('[data-mtab="props"]');
+          if (t) t.click();
         });
+        setTimeout(function () { done.remove(); }, 12000);
 
-        /* Persist for the public pages and for a reload of this one. */
-        var stored = practiceAll().filter(function (p) { return p.slug !== slug; });
-        stored.push({
-          slug: slug, name: name,
-          beds: document.getElementById('ap-beds').value,
-          baths: document.getElementById('ap-baths').value,
-          sleeps: document.getElementById('ap-sleeps').value,
-          price: document.getElementById('ap-price').value,
-          photo: (photos.length && photos[0].src.length < 250000) ? photos[0].src : '',
-        });
-        practiceSave(stored);
+        addForm.reset();
+        photos.length = 0;
+        if (photoGrid) photoGrid.innerHTML = '';
+        if (liveTick) liveTick.checked = false;
+        reflectMode();
 
         document.getElementById('ap-result').hidden = false;
         document.getElementById('ap-result').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
