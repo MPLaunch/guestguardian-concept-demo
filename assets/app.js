@@ -827,6 +827,45 @@
         var wl = document.querySelector('#ap-result a[href^="winery-example"]');
         if (wl) wl.setAttribute('href', 'winery-example.html?p=' + encodeURIComponent(slug));
 
+        /* The property belongs in the Properties tab too — adding one and then
+           finding the list unchanged reads as the add having failed. Practice
+           rows sit at the top, clearly tagged, and delete removes them. */
+        var props = document.querySelector('#manager-app [data-mpanel="props"] .wrap');
+        var legend = props && props.querySelector('.mg-legend');
+        if (props) {
+          var existing = props.querySelector('.mgprop[data-practice="' + slug + '"]');
+          if (existing) existing.remove();
+          var row = document.createElement('div');
+          row.className = 'mgprop';
+          row.setAttribute('data-practice', slug);
+          row.innerHTML =
+            '<div class="mgprop-img">' +
+              (photos.length
+                ? '<img src="' + photos[0].src + '" alt="">'
+                : '<div style="display:grid;place-items:center;height:100%;color:var(--muted);font-size:.78rem">Photos to come</div>') +
+            '</div>' +
+            '<div class="mgprop-body">' +
+              '<div class="mgprop-head"><div>' +
+                '<h3 class="h3" style="font-size:1.08rem">' + name.replace(/[<>]/g, '') + '</h3>' +
+                '<p class="small muted" style="margin:.2rem 0 0">Added just now &middot; practice mode</p>' +
+              '</div><span class="tag tag-web">Practice</span></div>' +
+              '<div class="mgprop-facts">' +
+                '<span>Sleeps ' + document.getElementById('ap-sleeps').value + '</span>' +
+                '<span>' + document.getElementById('ap-beds').value + ' bed</span>' +
+                '<span>' + document.getElementById('ap-baths').value + ' bath</span>' +
+                '<span>$' + document.getElementById('ap-price').value + '/night</span>' +
+                '<span>Not published</span>' +
+              '</div>' +
+              '<div class="mgprop-foot">' +
+                '<span class="small muted">Appears here the moment it is added. On a real build this row is live for owners and partners too.</span>' +
+                '<button class="btn btn-ghost" type="button" data-practice-rm="' + slug + '">Remove</button>' +
+              '</div>' +
+            '</div>';
+          if (legend) legend.insertAdjacentElement('afterend', row);
+          else props.prepend(row);
+          row.querySelector('[data-practice-rm]').addEventListener('click', function () { row.remove(); });
+        }
+
         document.getElementById('ap-result').hidden = false;
         document.getElementById('ap-result').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
       });
@@ -837,8 +876,13 @@
 
       var del = document.getElementById('ap-delete');
       if (del) del.addEventListener('click', function () {
+        /* Deleting the property also removes its row from the Properties tab,
+           so the two screens can never disagree about what exists. */
+        document.querySelectorAll('.mgprop[data-practice]').forEach(function (r) { r.remove(); });
         document.getElementById('ap-result').hidden = true;
         addForm.reset();
+        photos.length = 0;
+        if (photoGrid) photoGrid.innerHTML = '';
         if (liveTick) liveTick.checked = false;
         reflectMode();
       });
