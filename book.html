@@ -29,7 +29,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500&family=Outfit:wght@200;300;400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/style.css?v=2bf6fa93">
+<link rel="stylesheet" href="assets/style.css?v=e2a5417f">
 <script type="application/ld+json">[
  {
   "@context": "https://schema.org",
@@ -153,8 +153,12 @@
     </a>
     <nav class="menu" aria-label="Primary"><a href="index.html">Home</a><a href="services.html">Services</a><a href="areas.html">Areas</a><a href="pricing.html">Pricing</a><a href="journal.html">Journal</a><a href="about.html">About</a></nav>
     <div class="nav-cta">
-      <a class="btn btn-book" href="book.html">Book your stay</a>
-      <a class="btn btn-primary" href="contact.html">Free rental appraisal <svg class="arw" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 12h13M12 5l7 7-7 7"/></svg></a>
+      <!-- ONE button, not two. Book-your-stay and rental-appraisal speak to
+           completely different people, and giving them equal weight made the
+           header shout twice and say nothing. The appraisal is the action that
+           earns money, so it keeps the button; guests get a plain link. -->
+      <a class="nav-book" href="book.html">Book a stay</a>
+      <a class="btn btn-primary btn-nav" href="contact.html">Free rental appraisal <svg class="arw" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 12h13M12 5l7 7-7 7"/></svg></a>
       <a class="nav-signin" href="owners.html"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 018 0v3"/></svg><span>Sign in</span></a>
       <button class="burger" aria-label="Menu" aria-expanded="false"><span></span><span></span></button>
     </div>
@@ -237,25 +241,25 @@
     </div>
 
     <div class="grid-4" id="proplist">
-      <a class="jcard rv prop" href="stay-the-bungalow.html" data-sleeps="7" data-beds="3" data-pool="false">
+      <a class="jcard rv prop" href="stay-the-bungalow.html" data-listing="472310" data-sleeps="7" data-beds="3" data-pool="false">
         <div class="jcard-img"><img src="https://bookingenginecdn.hostaway.com/listing/179273-472310-mdLS2PR8--9qDCkDj1B--87D6N4d9lesKLtJddjGktk04-695c087b43b9a?width=1200&height=630&quality=70&format=jpeg&v=2" alt="The Bungalow, Adelaide" loading="lazy" decoding="async"></div>
         <div class="jcard-meta"><span>Sleeps 7</span><span>3 bed &middot; 2 bath</span></div>
         <h3 class="h3" style="font-size:1.2rem">The Bungalow</h3>
         <p>3 bedroom · BBQ · games room</p>
         <span class="tlink mt-1" style="font-size:.84rem">View home &amp; book <svg class="arw" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 12h13M12 5l7 7-7 7"/></svg></span>
-      </a><a class="jcard rv prop" data-d="80" href="stay-the-cabana.html" data-sleeps="5" data-beds="2" data-pool="true">
+      </a><a class="jcard rv prop" data-d="80" href="stay-the-cabana.html" data-listing="472311" data-sleeps="5" data-beds="2" data-pool="true">
         <div class="jcard-img"><img src="https://bookingenginecdn.hostaway.com/listing/179273-472311-7GdLxE4s5MHnS05leY1a--twCPHZeNzlXkdf--v6bwNH8-695b580d28636?width=1200&height=630&quality=70&format=jpeg&v=2" alt="The Cabana, Adelaide" loading="lazy" decoding="async"></div>
         <div class="jcard-meta"><span>Sleeps 5</span><span>2 bed &middot; 1 bath</span></div>
         <h3 class="h3" style="font-size:1.2rem">The Cabana</h3>
         <p>2 bedroom · private pool · spa</p>
         <span class="tlink mt-1" style="font-size:.84rem">View home &amp; book <svg class="arw" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 12h13M12 5l7 7-7 7"/></svg></span>
-      </a><a class="jcard rv prop" data-d="160" href="stay-the-bungalow-and-the-cabana.html" data-sleeps="12" data-beds="5" data-pool="true">
+      </a><a class="jcard rv prop" data-d="160" href="stay-the-bungalow-and-the-cabana.html" data-listing="472312" data-sleeps="12" data-beds="5" data-pool="true">
         <div class="jcard-img"><img src="https://bookingenginecdn.hostaway.com/listing/179273-472312-WHckDgCCL6WwgMiCBrzBdivjz7uEJKQgdoM-QNSJ-cU-695b57ce8756e?width=1200&height=630&quality=70&format=jpeg&v=2" alt="The Bungalow and The Cabana, Adelaide" loading="lazy" decoding="async"></div>
         <div class="jcard-meta"><span>Sleeps 12</span><span>5 bed &middot; 3 bath</span></div>
         <h3 class="h3" style="font-size:1.2rem">The Bungalow &amp; The Cabana</h3>
         <p>Both together · sleeps up to 12</p>
         <span class="tlink mt-1" style="font-size:.84rem">View home &amp; book <svg class="arw" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 12h13M12 5l7 7-7 7"/></svg></span>
-      </a><a class="jcard rv prop" data-d="240" href="stay-victoria-house.html" data-sleeps="7" data-beds="3" data-pool="false">
+      </a><a class="jcard rv prop" data-d="240" href="stay-victoria-house.html" data-listing="495920" data-sleeps="7" data-beds="3" data-pool="false">
         <div class="jcard-img"><img src="https://bookingenginecdn.hostaway.com/listing/179273-495920-xl2qjZGiS7Zeppe2rz77atkHgkbXaXUM--37l7gzQz8U-69b1528e8af7f?width=1200&height=630&quality=70&format=jpeg&v=2" alt="Victoria House, Adelaide" loading="lazy" decoding="async"></div>
         <div class="jcard-meta"><span>Sleeps 7</span><span>3 bed &middot; 1 bath</span></div>
         <h3 class="h3" style="font-size:1.2rem">Victoria House</h3>
@@ -398,7 +402,7 @@
   </div>
 </footer>
 
-<script src="assets/app.js?v=2bf6fa93"></script>
+<script src="assets/app.js?v=e2a5417f"></script>
 <!-- Service worker: required before Android/Chrome will offer "Install app".
      Deliberately a pure network passthrough with NO caching — a caching SW on a
      demo means stale pages survive every redeploy, which is exactly the trap we

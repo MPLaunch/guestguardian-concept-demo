@@ -569,33 +569,35 @@
     practiceSave(practiceAll().filter(function (p) { return p.slug !== slug; }));
   };
 
-  /* Public site: show practice properties on the Book Your Stay grid. */
-  var propGrid = document.getElementById('proplist');
-  if (propGrid) {
-    practiceAll().forEach(function (p) {
-      var card = document.createElement('div');
-      card.className = 'jcard prop';
-      card.setAttribute('data-sleeps', p.sleeps || 2);
-      card.setAttribute('data-beds', p.beds || 1);
-      card.setAttribute('data-pool', 'false');
-      card.innerHTML =
-        '<div class="jcard-img">' +
-          (p.photo ? '<img src="' + p.photo + '" alt="">' :
-            '<div style="display:grid;place-items:center;height:100%;color:var(--muted);font-size:.8rem;background:var(--sand)">Photos being added</div>') +
-        '</div>' +
-        '<div class="jcard-meta"><span>Sleeps ' + (p.sleeps || '?') + '</span><span>' + (p.beds || '?') + ' bed &middot; ' + (p.baths || '?') + ' bath</span></div>' +
-        '<h3 class="h3" style="font-size:1.2rem">' + String(p.name || '').replace(/[<>]/g, '') + '</h3>' +
-        '<p>Just added &middot; being published. Bookings open the moment it goes live.</p>' +
-        '<span class="tlink mt-1" style="font-size:.84rem;color:var(--sage-deep)">New listing</span>';
-      propGrid.appendChild(card);
+  /* Which properties the client has chosen to show on their own website.
+     Hostaway has nowhere to store "show this on our site", so the flag lives
+     on our side. Default is shown — a property nobody has touched appears. */
+  var HIDE_KEY = 'gg_hidden_listings';
+  var hiddenListings = function () {
+    try { return JSON.parse(localStorage.getItem(HIDE_KEY) || '[]').map(String); } catch (e) { return []; }
+  };
+  var setListingHidden = function (id, hidden) {
+    var list = hiddenListings().filter(function (x) { return x !== String(id); });
+    if (hidden) list.push(String(id));
+    try { localStorage.setItem(HIDE_KEY, JSON.stringify(list)); } catch (e) {}
+  };
+
+  /* Public site: honour it on the Book Your Stay grid. */
+  (function () {
+    var grid = document.getElementById('proplist');
+    if (!grid) return;
+    /* One-off cleanup: practice properties were removable only while the Add
+       screen existed, so any left behind had no way out. That screen is gone. */
+    try { localStorage.removeItem('gg_practice_props'); } catch (e) {}
+
+    var hidden = hiddenListings();
+    if (!hidden.length) return;
+    grid.querySelectorAll('[data-listing]').forEach(function (card) {
+      if (hidden.indexOf(String(card.getAttribute('data-listing'))) > -1) card.remove();
     });
-    /* The availability filter initialised before these cards existed — nudge it
-       so "N homes match" counts them. It re-queries the grid on every run. */
-    if (practiceAll().length) {
-      var fg = document.getElementById('f-guests');
-      if (fg) fg.dispatchEvent(new Event('change'));
-    }
-  }
+    var note = document.getElementById('f-count');
+    if (note) note.textContent = grid.querySelectorAll('.prop').length;
+  })();
 
   /* ==========================================================================
      Copy-to-clipboard buttons (direct property links + the embed snippet)
@@ -1210,6 +1212,31 @@
 
       apply();
     }
+
+    /* Show-on-website toggles. These are the only fields on this screen that
+       change what the public sees, so they persist rather than just animating. */
+    document.querySelectorAll('[data-show-listing]').forEach(function (box) {
+      var id = box.getAttribute('data-show-listing');
+      box.checked = hiddenListings().indexOf(String(id)) === -1;
+      box.addEventListener('change', function () {
+        setListingHidden(id, !box.checked);
+        var row = box.closest('.mgprop');
+        var lab = row && row.querySelector('.mgprop-facts');
+        if (lab) {
+          var tag = lab.querySelector('[data-hidden-tag]');
+          if (!box.checked && !tag) {
+            var s2 = document.createElement('span');
+            s2.setAttribute('data-hidden-tag', '');
+            s2.textContent = 'Hidden from the website';
+            s2.style.background = 'rgba(192,43,10,.1)';
+            s2.style.color = 'var(--rust)';
+            lab.appendChild(s2);
+          } else if (box.checked && tag) { tag.remove(); }
+        }
+      });
+      /* Reflect a saved hidden state on load. */
+      if (!box.checked) box.dispatchEvent(new Event('change'));
+    });
 
     /* Partner-link panel on each REAL property. Properties are born in
        Hostaway, so this is the only place a partner snippet can come from —

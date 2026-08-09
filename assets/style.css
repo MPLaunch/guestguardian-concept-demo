@@ -1689,3 +1689,27 @@ b.tag-auto, b.tag-web { font-weight: 500; padding: .1rem .45rem; border-radius: 
 /* The calendar was tall enough to push the price out of view. */
 .bp-day, .bp-pad { font-size: .8rem; }
 .bp-days { gap: 2px; }
+
+/* ==========================================================================
+   HEADER, tightened 9 Aug.
+   The base .btn is sized for a hero (1.05rem x 2.1rem of padding, .12em
+   letter-spacing). Two of those in a header row dominated everything and made
+   the nav links feel like an afterthought.
+   ========================================================================== */
+.btn-nav {
+  padding: .62rem 1.15rem;
+  font-size: .72rem;
+  letter-spacing: .07em;
+}
+.btn-nav .arw { width: 13px; height: 13px; }
+
+/* Guests get a link, not a button — see the note in the markup. */
+.nav-book {
+  font-size: .88rem; color: var(--muted); white-space: nowrap;
+  padding: .4rem .2rem; transition: color .2s;
+}
+.nav-book:hover { color: var(--ink); }
+@media (max-width: 1120px) { .nav-book { display: none; } }
+
+.nav .wrap { min-height: 68px; }
+.menu a { font-size: .88rem; }
