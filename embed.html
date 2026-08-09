@@ -202,6 +202,15 @@
   /* White label a PUBLISHED card too — same rule as the placeholder below. */
   if (q.get('wl') === '1') {
     document.querySelectorAll('.gge .gge-brand, .gge .gge-foot').forEach(function (el) { el.remove(); });
+    /* The button used to say "Check dates & book" and then open a differently
+       branded website in a new tab, which broke the illusion at the worst
+       possible moment. Until the booking runs inside this card, it asks rather
+       than promises, and it opens in place rather than throwing the guest out
+       to somewhere they did not expect. */
+    document.querySelectorAll('.gge .gge-cta').forEach(function (a) {
+      if (a.firstChild) a.firstChild.textContent = 'Check availability ';
+      a.removeAttribute('target');
+    });
   }
   /* Tell the parent page how tall we are, so the embed never gets a scrollbar
      or a gap. The host site opts in by listening for this message. */
