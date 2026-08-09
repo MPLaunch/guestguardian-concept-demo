@@ -383,9 +383,12 @@
     var fPool = document.getElementById('f-pool');
     var fCount = document.getElementById('f-count');
     var fEmpty = document.getElementById('f-empty');
-    var props = document.querySelectorAll('#proplist .prop');
 
     var applyFilter = function () {
+      /* Queried per run, not cached — practice properties are appended to the
+         grid after this block initialises, and a cached list would leave them
+         invisible to the filter and uncounted in "N homes match". */
+      var props = document.querySelectorAll('#proplist .prop');
       var g = parseInt(fGuests.value, 10) || 0;
       var b = parseInt(fBeds.value, 10) || 0;
       var p = fPool.value;
@@ -527,6 +530,53 @@
     document.addEventListener('keydown', function (ev) {
       if (ev.key === 'Escape' && bmodal.classList.contains('open')) closeModal();
     });
+  }
+
+  /* ==========================================================================
+     Practice properties — shared between the back office and the public site.
+
+     A property added in practice mode is stored in THIS BROWSER only
+     (localStorage) so the demo can show the whole promise: add it in the back
+     office, and it appears on the website. No server is involved and nobody
+     else can see it; a real build does this for everyone via Hostaway.
+     ========================================================================== */
+  var PRACTICE_KEY = 'gg_practice_props';
+  var practiceAll = function () {
+    try { return JSON.parse(localStorage.getItem(PRACTICE_KEY) || '[]'); } catch (e) { return []; }
+  };
+  var practiceSave = function (list) {
+    try { localStorage.setItem(PRACTICE_KEY, JSON.stringify(list)); } catch (e) {}
+  };
+  var practiceRemove = function (slug) {
+    practiceSave(practiceAll().filter(function (p) { return p.slug !== slug; }));
+  };
+
+  /* Public site: show practice properties on the Book Your Stay grid. */
+  var propGrid = document.getElementById('proplist');
+  if (propGrid) {
+    practiceAll().forEach(function (p) {
+      var card = document.createElement('div');
+      card.className = 'jcard prop';
+      card.setAttribute('data-sleeps', p.sleeps || 2);
+      card.setAttribute('data-beds', p.beds || 1);
+      card.setAttribute('data-pool', 'false');
+      card.innerHTML =
+        '<div class="jcard-img">' +
+          (p.photo ? '<img src="' + p.photo + '" alt="">' :
+            '<div style="display:grid;place-items:center;height:100%;color:var(--muted);font-size:.8rem;background:var(--sand)">Photos being added</div>') +
+        '</div>' +
+        '<div class="jcard-meta"><span>Sleeps ' + (p.sleeps || '?') + '</span><span>' + (p.beds || '?') + ' bed &middot; ' + (p.baths || '?') + ' bath</span></div>' +
+        '<h3 class="h3" style="font-size:1.2rem">' + String(p.name || '').replace(/[<>]/g, '') + '</h3>' +
+        '<p>Just added &middot; being published. Bookings open the moment it goes live.</p>' +
+        '<span class="tlink mt-1" style="font-size:.84rem;color:var(--sage-deep)">New listing</span>';
+      propGrid.appendChild(card);
+    });
+    /* The availability filter initialised before these cards existed — nudge it
+       so "N homes match" counts them. It re-queries the grid on every run. */
+    if (practiceAll().length) {
+      var fg = document.getElementById('f-guests');
+      if (fg) fg.dispatchEvent(new Event('change'));
+    }
   }
 
   /* ==========================================================================
@@ -702,7 +752,47 @@
        Wiring the real POST is a deliberate, separate job for the production
        build, behind a server that holds the key.
        --------------------------------------------------------------------- */
+    /* One builder for a practice row, used on add and on reload. */
+    var insertPracticeRow = function (p) {
+      var props = document.querySelector('#manager-app [data-mpanel="props"] .wrap');
+      if (!props) return;
+      var legend = props.querySelector('.mg-legend');
+      var existing = props.querySelector('.mgprop[data-practice="' + p.slug + '"]');
+      if (existing) existing.remove();
+      var row = document.createElement('div');
+      row.className = 'mgprop';
+      row.setAttribute('data-practice', p.slug);
+      row.innerHTML =
+        '<div class="mgprop-img">' +
+          (p.photo ? '<img src="' + p.photo + '" alt="">'
+            : '<div style="display:grid;place-items:center;height:100%;color:var(--muted);font-size:.78rem">Photos to come</div>') +
+        '</div>' +
+        '<div class="mgprop-body">' +
+          '<div class="mgprop-head"><div>' +
+            '<h3 class="h3" style="font-size:1.08rem">' + String(p.name || '').replace(/[<>]/g, '') + '</h3>' +
+            '<p class="small muted" style="margin:.2rem 0 0">Practice mode &middot; this browser only</p>' +
+          '</div><span class="tag tag-web">Practice</span></div>' +
+          '<div class="mgprop-facts">' +
+            '<span>Sleeps ' + (p.sleeps || '?') + '</span><span>' + (p.beds || '?') + ' bed</span>' +
+            '<span>' + (p.baths || '?') + ' bath</span><span>$' + (p.price || '?') + '/night</span>' +
+            '<span>Not published</span>' +
+          '</div>' +
+          '<div class="mgprop-foot">' +
+            '<span class="small muted">Also showing on the Book Your Stay page, in this browser. On a real build it goes live for everyone via Hostaway.</span>' +
+            '<button class="btn btn-ghost" type="button" data-practice-rm="' + p.slug + '">Remove</button>' +
+          '</div>' +
+        '</div>';
+      if (legend) legend.insertAdjacentElement('afterend', row);
+      else props.prepend(row);
+      row.querySelector('[data-practice-rm]').addEventListener('click', function () {
+        row.remove();
+        practiceRemove(p.slug);
+      });
+    };
+
     var addForm = document.getElementById('addprop');
+    /* Reload: anything added earlier in this browser comes back. */
+    if (addForm) practiceAll().forEach(insertPracticeRow);
     if (addForm) {
       var liveTick = document.getElementById('ap-live');
       var submitBtn = document.getElementById('ap-submit');
@@ -830,41 +920,26 @@
         /* The property belongs in the Properties tab too — adding one and then
            finding the list unchanged reads as the add having failed. Practice
            rows sit at the top, clearly tagged, and delete removes them. */
-        var props = document.querySelector('#manager-app [data-mpanel="props"] .wrap');
-        var legend = props && props.querySelector('.mg-legend');
-        if (props) {
-          var existing = props.querySelector('.mgprop[data-practice="' + slug + '"]');
-          if (existing) existing.remove();
-          var row = document.createElement('div');
-          row.className = 'mgprop';
-          row.setAttribute('data-practice', slug);
-          row.innerHTML =
-            '<div class="mgprop-img">' +
-              (photos.length
-                ? '<img src="' + photos[0].src + '" alt="">'
-                : '<div style="display:grid;place-items:center;height:100%;color:var(--muted);font-size:.78rem">Photos to come</div>') +
-            '</div>' +
-            '<div class="mgprop-body">' +
-              '<div class="mgprop-head"><div>' +
-                '<h3 class="h3" style="font-size:1.08rem">' + name.replace(/[<>]/g, '') + '</h3>' +
-                '<p class="small muted" style="margin:.2rem 0 0">Added just now &middot; practice mode</p>' +
-              '</div><span class="tag tag-web">Practice</span></div>' +
-              '<div class="mgprop-facts">' +
-                '<span>Sleeps ' + document.getElementById('ap-sleeps').value + '</span>' +
-                '<span>' + document.getElementById('ap-beds').value + ' bed</span>' +
-                '<span>' + document.getElementById('ap-baths').value + ' bath</span>' +
-                '<span>$' + document.getElementById('ap-price').value + '/night</span>' +
-                '<span>Not published</span>' +
-              '</div>' +
-              '<div class="mgprop-foot">' +
-                '<span class="small muted">Appears here the moment it is added. On a real build this row is live for owners and partners too.</span>' +
-                '<button class="btn btn-ghost" type="button" data-practice-rm="' + slug + '">Remove</button>' +
-              '</div>' +
-            '</div>';
-          if (legend) legend.insertAdjacentElement('afterend', row);
-          else props.prepend(row);
-          row.querySelector('[data-practice-rm]').addEventListener('click', function () { row.remove(); });
-        }
+        insertPracticeRow({
+          slug: slug, name: name,
+          beds: document.getElementById('ap-beds').value,
+          baths: document.getElementById('ap-baths').value,
+          sleeps: document.getElementById('ap-sleeps').value,
+          price: document.getElementById('ap-price').value,
+          photo: (photos.length && photos[0].src.length < 250000) ? photos[0].src : '',
+        });
+
+        /* Persist for the public pages and for a reload of this one. */
+        var stored = practiceAll().filter(function (p) { return p.slug !== slug; });
+        stored.push({
+          slug: slug, name: name,
+          beds: document.getElementById('ap-beds').value,
+          baths: document.getElementById('ap-baths').value,
+          sleeps: document.getElementById('ap-sleeps').value,
+          price: document.getElementById('ap-price').value,
+          photo: (photos.length && photos[0].src.length < 250000) ? photos[0].src : '',
+        });
+        practiceSave(stored);
 
         document.getElementById('ap-result').hidden = false;
         document.getElementById('ap-result').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
@@ -876,9 +951,13 @@
 
       var del = document.getElementById('ap-delete');
       if (del) del.addEventListener('click', function () {
-        /* Deleting the property also removes its row from the Properties tab,
-           so the two screens can never disagree about what exists. */
-        document.querySelectorAll('.mgprop[data-practice]').forEach(function (r) { r.remove(); });
+        /* Deleting the property also removes its row from the Properties tab
+           and from the public pages, so no screen can disagree about what
+           exists. */
+        document.querySelectorAll('.mgprop[data-practice]').forEach(function (r) {
+          practiceRemove(r.getAttribute('data-practice'));
+          r.remove();
+        });
         document.getElementById('ap-result').hidden = true;
         addForm.reset();
         photos.length = 0;
