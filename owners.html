@@ -29,7 +29,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500&family=Outfit:wght@200;300;400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/style.css?v=0efc51f0">
+<link rel="stylesheet" href="assets/style.css?v=74350a34">
 <script type="application/ld+json">[
  {
   "@context": "https://schema.org",
@@ -410,8 +410,7 @@
         <button class="owner-tab is-on" type="button" data-mtab="props" role="tab">Properties</button>
         <button class="owner-tab" type="button" data-mtab="leads" role="tab">Leads</button>
         <button class="owner-tab" type="button" data-mtab="owners" role="tab">Owners</button>
-        <button class="owner-tab" type="button" data-mtab="add" role="tab">Add a property</button>
-        <button class="owner-tab" type="button" data-mtab="adding" role="tab">How it works</button>
+        <button class="owner-tab" type="button" data-mtab="adding" role="tab">Adding a property</button>
       </div>
     </div>
   </section>
@@ -477,7 +476,28 @@
           </div>
           <div class="mgprop-foot">
             <a class="tlink" href="stay-the-bungalow.html">View the live page <svg class="arw" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 12h13M12 5l7 7-7 7"/></svg></a>
-            <button class="btn btn-ghost btn-save" type="button">Save changes</button>
+            <span style="display:flex;gap:.5rem">
+              <button class="btn btn-ghost" type="button" data-partner-toggle>Partner link</button>
+              <button class="btn btn-ghost btn-save" type="button">Save changes</button>
+            </span>
+          </div>
+
+          <!-- The code a partner pastes onto their own website. Lives on the
+               property itself, because that is the only place it can be
+               generated from something that genuinely exists. -->
+          <div class="mgmanage" data-partner-panel hidden>
+            <p class="eyebrow" style="margin-bottom:.5rem">Put this home on a partner's website</p>
+            <p class="small muted" style="margin:0 0 .7rem">A winery, a venue, a tour operator. They paste it once and it shows this property on their page, with a button that comes back to you.</p>
+            <div class="wlpick" role="radiogroup" aria-label="Branding">
+              <label class="wlopt"><input type="radio" name="wl-472310" value="0" checked><span class="wlopt-ui"></span>
+                <span class="wlopt-txt"><b>Show your name</b><span>Card credits Guest Guardian.</span></span></label>
+              <label class="wlopt"><input type="radio" name="wl-472310" value="1"><span class="wlopt-ui"></span>
+                <span class="wlopt-txt"><b>White label</b><span>Reads as the partner's own listing.</span></span></label>
+            </div>
+            <textarea class="embed-code embed-code-light" rows="5" readonly data-partner-code
+              data-slug="the-bungalow" data-name="The Bungalow" data-beds="3"
+              data-baths="2" data-sleeps="7"></textarea>
+            <button class="btn btn-ghost btn-copy" type="button" data-partner-copy style="width:100%;justify-content:center"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a1 1 0 01-1-1V4a1 1 0 011-1h10a1 1 0 011 1v1"/></svg><span>Copy the embed code</span></button>
           </div>
         </div>
       </div><div class="mgprop">
@@ -530,7 +550,28 @@
           </div>
           <div class="mgprop-foot">
             <a class="tlink" href="stay-the-cabana.html">View the live page <svg class="arw" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 12h13M12 5l7 7-7 7"/></svg></a>
-            <button class="btn btn-ghost btn-save" type="button">Save changes</button>
+            <span style="display:flex;gap:.5rem">
+              <button class="btn btn-ghost" type="button" data-partner-toggle>Partner link</button>
+              <button class="btn btn-ghost btn-save" type="button">Save changes</button>
+            </span>
+          </div>
+
+          <!-- The code a partner pastes onto their own website. Lives on the
+               property itself, because that is the only place it can be
+               generated from something that genuinely exists. -->
+          <div class="mgmanage" data-partner-panel hidden>
+            <p class="eyebrow" style="margin-bottom:.5rem">Put this home on a partner's website</p>
+            <p class="small muted" style="margin:0 0 .7rem">A winery, a venue, a tour operator. They paste it once and it shows this property on their page, with a button that comes back to you.</p>
+            <div class="wlpick" role="radiogroup" aria-label="Branding">
+              <label class="wlopt"><input type="radio" name="wl-472311" value="0" checked><span class="wlopt-ui"></span>
+                <span class="wlopt-txt"><b>Show your name</b><span>Card credits Guest Guardian.</span></span></label>
+              <label class="wlopt"><input type="radio" name="wl-472311" value="1"><span class="wlopt-ui"></span>
+                <span class="wlopt-txt"><b>White label</b><span>Reads as the partner's own listing.</span></span></label>
+            </div>
+            <textarea class="embed-code embed-code-light" rows="5" readonly data-partner-code
+              data-slug="the-cabana" data-name="The Cabana" data-beds="2"
+              data-baths="1" data-sleeps="5"></textarea>
+            <button class="btn btn-ghost btn-copy" type="button" data-partner-copy style="width:100%;justify-content:center"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a1 1 0 01-1-1V4a1 1 0 011-1h10a1 1 0 011 1v1"/></svg><span>Copy the embed code</span></button>
           </div>
         </div>
       </div><div class="mgprop">
@@ -583,7 +624,28 @@
           </div>
           <div class="mgprop-foot">
             <a class="tlink" href="stay-the-bungalow-and-the-cabana.html">View the live page <svg class="arw" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 12h13M12 5l7 7-7 7"/></svg></a>
-            <button class="btn btn-ghost btn-save" type="button">Save changes</button>
+            <span style="display:flex;gap:.5rem">
+              <button class="btn btn-ghost" type="button" data-partner-toggle>Partner link</button>
+              <button class="btn btn-ghost btn-save" type="button">Save changes</button>
+            </span>
+          </div>
+
+          <!-- The code a partner pastes onto their own website. Lives on the
+               property itself, because that is the only place it can be
+               generated from something that genuinely exists. -->
+          <div class="mgmanage" data-partner-panel hidden>
+            <p class="eyebrow" style="margin-bottom:.5rem">Put this home on a partner's website</p>
+            <p class="small muted" style="margin:0 0 .7rem">A winery, a venue, a tour operator. They paste it once and it shows this property on their page, with a button that comes back to you.</p>
+            <div class="wlpick" role="radiogroup" aria-label="Branding">
+              <label class="wlopt"><input type="radio" name="wl-472312" value="0" checked><span class="wlopt-ui"></span>
+                <span class="wlopt-txt"><b>Show your name</b><span>Card credits Guest Guardian.</span></span></label>
+              <label class="wlopt"><input type="radio" name="wl-472312" value="1"><span class="wlopt-ui"></span>
+                <span class="wlopt-txt"><b>White label</b><span>Reads as the partner's own listing.</span></span></label>
+            </div>
+            <textarea class="embed-code embed-code-light" rows="5" readonly data-partner-code
+              data-slug="the-bungalow-and-the-cabana" data-name="The Bungalow and The Cabana" data-beds="5"
+              data-baths="3" data-sleeps="12"></textarea>
+            <button class="btn btn-ghost btn-copy" type="button" data-partner-copy style="width:100%;justify-content:center"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a1 1 0 01-1-1V4a1 1 0 011-1h10a1 1 0 011 1v1"/></svg><span>Copy the embed code</span></button>
           </div>
         </div>
       </div><div class="mgprop">
@@ -636,7 +698,28 @@
           </div>
           <div class="mgprop-foot">
             <a class="tlink" href="stay-victoria-house.html">View the live page <svg class="arw" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 12h13M12 5l7 7-7 7"/></svg></a>
-            <button class="btn btn-ghost btn-save" type="button">Save changes</button>
+            <span style="display:flex;gap:.5rem">
+              <button class="btn btn-ghost" type="button" data-partner-toggle>Partner link</button>
+              <button class="btn btn-ghost btn-save" type="button">Save changes</button>
+            </span>
+          </div>
+
+          <!-- The code a partner pastes onto their own website. Lives on the
+               property itself, because that is the only place it can be
+               generated from something that genuinely exists. -->
+          <div class="mgmanage" data-partner-panel hidden>
+            <p class="eyebrow" style="margin-bottom:.5rem">Put this home on a partner's website</p>
+            <p class="small muted" style="margin:0 0 .7rem">A winery, a venue, a tour operator. They paste it once and it shows this property on their page, with a button that comes back to you.</p>
+            <div class="wlpick" role="radiogroup" aria-label="Branding">
+              <label class="wlopt"><input type="radio" name="wl-495920" value="0" checked><span class="wlopt-ui"></span>
+                <span class="wlopt-txt"><b>Show your name</b><span>Card credits Guest Guardian.</span></span></label>
+              <label class="wlopt"><input type="radio" name="wl-495920" value="1"><span class="wlopt-ui"></span>
+                <span class="wlopt-txt"><b>White label</b><span>Reads as the partner's own listing.</span></span></label>
+            </div>
+            <textarea class="embed-code embed-code-light" rows="5" readonly data-partner-code
+              data-slug="victoria-house" data-name="Victoria House" data-beds="3"
+              data-baths="1" data-sleeps="7"></textarea>
+            <button class="btn btn-ghost btn-copy" type="button" data-partner-copy style="width:100%;justify-content:center"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a1 1 0 01-1-1V4a1 1 0 011-1h10a1 1 0 011 1v1"/></svg><span>Copy the embed code</span></button>
           </div>
         </div>
       </div>
@@ -816,118 +899,6 @@
       </div>
     </div>
   </section>
-
-  <!-- ADD A PROPERTY (safe mode) -->
-  <section class="pad-sm manager-panel" data-mpanel="add" hidden>
-    <div class="wrap">
-      <div class="safebar" id="safebar">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 3l7 3v6c0 4.5-3 8-7 9-4-1-7-4.5-7-9V6l7-3z"/></svg>
-        <div>
-          <b>Practice mode is on. Nothing you do here touches your live system.</b>
-          <span>Your Hostaway account, your calendar and your channels are untouched. Add a
-          property, see exactly what happens and what the winery gets, then delete it again.
-          Nothing is created anywhere and no guest can ever see it.</span>
-        </div>
-        <span class="safebar-pill">Safe</span>
-      </div>
-
-      <div class="grid-2 mt-3" style="gap:1.5rem;align-items:start">
-        <div class="ocard">
-          <div class="ocard-head"><h2 class="h3">New property</h2></div>
-          <form id="addprop" novalidate>
-            <div class="field"><label for="ap-name">Property name</label>
-              <input id="ap-name" placeholder="e.g. The Vineyard Cottage" required></div>
-            <div class="field"><label for="ap-addr">Address</label>
-              <input id="ap-addr" placeholder="Street address" required></div>
-            <div class="field-row">
-              <div class="field"><label for="ap-suburb">Suburb</label><input id="ap-suburb" placeholder="Tanunda"></div>
-              <div class="field"><label for="ap-owner">Owner</label>
-                <select id="ap-owner"><option>Sam Whitfield</option><option>Dee Patel</option><option>Marcus Hale</option><option>Add a new owner&hellip;</option></select></div>
-            </div>
-            <div class="field-row">
-              <div class="field"><label for="ap-beds">Bedrooms</label>
-                <select id="ap-beds"><option>1</option><option selected>2</option><option>3</option><option>4</option><option>5</option><option>6</option></select></div>
-              <div class="field"><label for="ap-baths">Bathrooms</label>
-                <select id="ap-baths"><option>1</option><option>2</option><option>3</option><option>4</option></select></div>
-            </div>
-            <div class="field-row">
-              <div class="field"><label for="ap-sleeps">Sleeps</label>
-                <select id="ap-sleeps"><option>2</option><option>3</option><option selected>4</option><option>5</option><option>6</option><option>8</option><option>10</option><option>12</option></select></div>
-              <div class="field"><label for="ap-price">Nightly rate</label><input id="ap-price" type="number" value="350" min="0"></div>
-            </div>
-            <div class="field"><label for="ap-clean">Cleaning fee</label><input id="ap-clean" type="number" value="180" min="0"></div>
-            <div class="field"><label for="ap-desc">Description for the website</label>
-              <textarea id="ap-desc" rows="3" placeholder="What makes this one worth booking"></textarea></div>
-
-            <div class="field">
-              <label for="ap-photos">Photos</label>
-              <label class="dropzone" for="ap-photos">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 8h3l2-2h8l2 2h3v11H3z"/><circle cx="12" cy="13" r="3.5"/></svg>
-                <span class="dz-main">Choose photos, or drag them here</span>
-                <span class="dz-sub">First one becomes the cover. JPG or PNG.</span>
-              </label>
-              <input type="file" id="ap-photos" accept="image/*" multiple hidden>
-              <div class="dz-grid" id="ap-photogrid"></div>
-            </div>
-
-            <div class="mgfields" style="margin:1rem 0">
-              <label class="mgtoggle"><input type="checkbox" id="ap-site" checked><span class="mgtoggle-ui"></span><span class="mgtoggle-lab">Show on the Guest Guardian website</span></label>
-              <label class="mgtoggle"><input type="checkbox" id="ap-partner" checked><span class="mgtoggle-ui"></span><span class="mgtoggle-lab">Generate a partner embed</span></label>
-            </div>
-
-            <!-- 🚨 The live switch. Off by default, and the button copy changes with
-                 it so nobody can push to a real booking system by accident. -->
-            <label class="livecheck">
-              <input type="checkbox" id="ap-live">
-              <span class="livecheck-ui"></span>
-              <span class="livecheck-txt"><b>Also create this in my Hostaway account</b>
-              <span>Off, the property is added to the website only. On, a real build would also
-              create it in Hostaway, where it picks up a calendar and becomes bookable.
-              <b class="lc-note">In this preview neither happens</b> &mdash; nothing is sent
-              anywhere either way, so tick it and see what it does.</span></span>
-            </label>
-
-            <button class="btn btn-primary" type="submit" id="ap-submit" style="width:100%;justify-content:center;margin-top:1rem">Add in practice mode <svg class="arw" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 12h13M12 5l7 7-7 7"/></svg></button>
-          </form>
-        </div>
-
-        <div id="ap-result" hidden>
-          <div class="ocard">
-            <div class="ocard-head"><h2 class="h3">Added &mdash; here is what you got</h2></div>
-            <div class="ap-created" id="ap-created"></div>
-
-            <p class="eyebrow mt-2">1. Its page on your site</p>
-            <div class="copyrow"><input type="text" id="ap-url" readonly><button class="btn btn-ghost btn-copy" type="button" id="ap-copyurl"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a1 1 0 01-1-1V4a1 1 0 011-1h10a1 1 0 011 1v1"/></svg><span>Copy</span></button></div>
-
-            <p class="eyebrow mt-2">2. The code to send the winery</p>
-            <p class="small muted" style="margin:0 0 .6rem">They paste this once, anywhere on their own website. It shows the property in their page, with a button that comes back to you.</p>
-
-            <div class="wlpick" role="radiogroup" aria-label="Branding">
-              <label class="wlopt">
-                <input type="radio" name="ap-wl" value="0" checked>
-                <span class="wlopt-ui"></span>
-                <span class="wlopt-txt"><b>Show your name</b><span>Card says "Managed by Guest Guardian". Good for a venue happy to credit you, and it puts your name in front of their visitors.</span></span>
-              </label>
-              <label class="wlopt">
-                <input type="radio" name="ap-wl" value="1">
-                <span class="wlopt-ui"></span>
-                <span class="wlopt-txt"><b>White label</b><span>No mention of Guest Guardian anywhere on the card. It reads as the winery's own listing. They still land on your booking page when they press the button.</span></span>
-              </label>
-            </div>
-
-            <textarea id="ap-embed" class="embed-code embed-code-light" readonly rows="5"></textarea>
-            <button class="btn btn-ghost btn-copy" type="button" id="ap-copyembed" style="width:100%;justify-content:center"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a1 1 0 01-1-1V4a1 1 0 011-1h10a1 1 0 011 1v1"/></svg><span>Copy the embed code</span></button>
-
-            <div class="ap-actions">
-              <a class="tlink" href="winery-example.html" target="_blank" rel="noopener">See it on a winery's site <svg class="arw" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 12h13M12 5l7 7-7 7"/></svg></a>
-              <button class="btn btn-ghost" type="button" id="ap-delete">Delete this property</button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
   <!-- HOW ADDING WORKS -->
   <section class="pad-sm manager-panel" data-mpanel="adding" hidden>
     <div class="wrap">
@@ -951,14 +922,11 @@
         </div>
 
         <div class="ocard mgroute mgroute-b">
-          <span class="mgroute-tag mgroute-tag-b">Fallback</span>
-          <h3 class="h3" style="font-size:1.05rem;margin-bottom:.5rem">If we cannot</h3>
-          <ol class="mgsteps">
-            <li>You add the property in Hostaway as usual.</li>
-            <li>You add it here once too: name, photos, sleeps, bedrooms.</li>
-            <li>The booking button still points at your real booking engine.</li>
-          </ol>
-          <p class="small muted" style="margin-bottom:0">Still perfectly workable, and it is how the site runs right now. The cost is that a property you rename or re-photograph has to be updated in both places. At four listings that is a minor annoyance. At forty it is a job.</p>
+          <span class="mgroute-tag mgroute-tag-b">Why there is no Add button here</span>
+          <h3 class="h3" style="font-size:1.05rem;margin-bottom:.5rem">One place, on purpose</h3>
+          <p class="small muted">A Hostaway listing carries around a hundred and forty settings, most of them the rules Airbnb and Booking.com enforce before they will accept a property. A form here could never cover all of it, and the half it did cover would be a second place to change a price.</p>
+          <p class="small muted">So properties are born where the channels can see them, and everything after that happens here: how it reads on the website, which suburb page it belongs to, which owner sees it, and the code that puts it on a partner's site.</p>
+          <p class="small muted" style="margin-bottom:0"><strong>We can revisit this.</strong> If you would rather add properties here and have them pushed across, that is buildable. It just needs one test listing first to find out exactly what Hostaway insists on.</p>
         </div>
       </div>
 
@@ -1050,7 +1018,7 @@
   </div>
 </footer>
 
-<script src="assets/app.js?v=0efc51f0"></script>
+<script src="assets/app.js?v=74350a34"></script>
 <!-- Service worker: required before Android/Chrome will offer "Install app".
      Deliberately a pure network passthrough with NO caching — a caching SW on a
      demo means stale pages survive every redeploy, which is exactly the trap we

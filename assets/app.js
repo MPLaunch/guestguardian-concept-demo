@@ -1145,6 +1145,42 @@
       apply();
     }
 
+    /* Partner-link panel on each REAL property. Properties are born in
+       Hostaway, so this is the only place a partner snippet can come from —
+       it is generated against a listing that actually exists. */
+    document.querySelectorAll('[data-partner-toggle]').forEach(function (btn) {
+      var row = btn.closest('.mgprop');
+      var panel = row.querySelector('[data-partner-panel]');
+      var box = panel.querySelector('[data-partner-code]');
+      var copy = panel.querySelector('[data-partner-copy]');
+      var write = function () {
+        var on = panel.querySelector('input[type="radio"]:checked');
+        /* A real listing needs only its own reference. The card looks up the
+           photo, the details and the live booking link from the listing
+           itself, so stuffing them into the URL would only create a second
+           copy that could fall out of date on someone else's website. */
+        var base = location.origin + location.pathname.replace(/[^/]*$/, '');
+        var src = base + 'embed.html?p=' + encodeURIComponent(box.getAttribute('data-slug')) +
+          ((on && on.value === '1') ? '&wl=1' : '');
+        var code = '<iframe\n' +
+          '  src="' + src + '"\n' +
+          '  title="' + box.getAttribute('data-name').replace(/"/g, '') + '"\n' +
+          '  style="width:100%;max-width:560px;height:470px;border:0"\n' +
+          '  loading="lazy">\n' +
+          '</iframe>';
+        box.value = code;
+        copy.setAttribute('data-copy', code);
+      };
+      panel.querySelectorAll('input[type="radio"]').forEach(function (r) {
+        r.addEventListener('change', write);
+      });
+      write();
+      btn.addEventListener('click', function () {
+        panel.hidden = !panel.hidden;
+        btn.textContent = panel.hidden ? 'Partner link' : 'Done';
+      });
+    });
+
     /* Save buttons on the manager screen — demo feedback only. */
     document.querySelectorAll('.btn-save').forEach(function (b) {
       b.addEventListener('click', function () {
