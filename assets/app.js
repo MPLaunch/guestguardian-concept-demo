@@ -885,7 +885,7 @@
            practice property exists nowhere on the server, so the card builds
            itself from what travels in the URL — no publish, nothing invented,
            and the partner sees the actual property that was typed in. */
-        var embedSrc = base + 'embed.html?p=' + encodeURIComponent(slug) +
+        var embedBase = base + 'embed.html?p=' + encodeURIComponent(slug) +
           '&name=' + encodeURIComponent(name) +
           '&beds=' + encodeURIComponent(document.getElementById('ap-beds').value) +
           '&baths=' + encodeURIComponent(document.getElementById('ap-baths').value) +
@@ -904,13 +904,24 @@
 
         document.getElementById('ap-url').value = url;
         document.getElementById('ap-copyurl').setAttribute('data-copy', url);
-        document.getElementById('ap-embed').value =
-          '<iframe\n' +
-          '  src="' + embedSrc + '"\n' +
-          '  title="Book this property"\n' +
-          '  style="width:100%;max-width:560px;height:470px;border:0"\n' +
-          '  loading="lazy">\n' +
-          '</iframe>';
+        /* Two versions of the same snippet. The only difference is wl=1, which
+           strips every Guest Guardian mention off the card. */
+        var embedField = document.getElementById('ap-embed');
+        var writeSnippet = function () {
+          var wlOn = document.querySelector('input[name="ap-wl"]:checked');
+          var src = embedBase + ((wlOn && wlOn.value === '1') ? '&wl=1' : '');
+          embedField.value =
+            '<iframe\n' +
+            '  src="' + src + '"\n' +
+            '  title="' + name.replace(/"/g, '') + '"\n' +
+            '  style="width:100%;max-width:560px;height:470px;border:0"\n' +
+            '  loading="lazy">\n' +
+            '</iframe>';
+        };
+        document.querySelectorAll('input[name="ap-wl"]').forEach(function (radio) {
+          radio.addEventListener('change', writeSnippet);
+        });
+        writeSnippet();
         document.getElementById('ap-copyembed').setAttribute('data-copy-from', '#ap-embed');
 
         /* Point the "see it on a winery's site" link at THIS property. */

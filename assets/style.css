@@ -1550,3 +1550,19 @@ b.tag-auto, b.tag-web { font-weight: 500; padding: .1rem .45rem; border-radius: 
 .ap-photocount { font-size:.78rem; color:var(--muted); margin:0 0 .3rem !important; }
 
 .lc-note { display:inline; color:var(--sage-deep); }
+
+/* ---- co-branded vs white-label picker ---- */
+.wlpick { display:grid; gap:.5rem; margin-bottom:.8rem; }
+.wlopt { display:flex; align-items:flex-start; gap:.65rem; cursor:pointer; padding:.7rem .85rem;
+  border:1px solid var(--line); border-radius:var(--rad); background:rgba(28,29,28,.02); transition:all .18s var(--ease); }
+.wlopt:hover { border-color:var(--sage-deep); }
+.wlopt input { position:absolute; opacity:0; width:0; height:0; }
+.wlopt-ui { flex:none; width:17px; height:17px; margin-top:.15rem; border-radius:50%;
+  border:2px solid var(--muted); position:relative; transition:all .18s var(--ease); }
+.wlopt input:checked + .wlopt-ui { border-color:var(--sage-deep); }
+.wlopt input:checked + .wlopt-ui::after { content:""; position:absolute; inset:3px; border-radius:50%; background:var(--sage-deep); }
+.wlopt input:focus-visible + .wlopt-ui { outline:2px solid var(--sage); outline-offset:2px; }
+.wlopt input:checked ~ .wlopt-txt b { color:var(--sage-deep); }
+.wlopt-txt { font-size:.85rem; line-height:1.5; }
+.wlopt-txt b { display:block; margin-bottom:.1rem; }
+.wlopt-txt span { color:var(--muted); font-size:.79rem; }

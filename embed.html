@@ -101,16 +101,20 @@
   </div>
 </div>
 <div class="gge" id="gge-placeholder" hidden>
-  <div class="gge-body" style="padding:22px">
-    <div class="gge-brand">
+  <div class="gge-img" data-ph-img hidden><img alt=""></div>
+  <div class="gge-body">
+    <div class="gge-brand" data-ph-brand>
       <svg viewBox="0 0 50 50" fill="none" aria-hidden="true"><path d="M25 0a25 25 0 000 50z" fill="currentColor"/><path d="M34.6 50V29.5L25 24.9 48.2 14.1v29z" fill="currentColor" opacity=".55"/></svg>
       <span>Managed by Guest Guardian</span>
     </div>
     <h2 class="gge-name" data-slugname>This property</h2>
     <p class="gge-blurb">Not published yet, so there is nothing to show here. Once this home is live
     on the website, this card fills in on its own with the photo, the details and a working
-    booking button. Nothing on the partner's site needs changing when that happens.</p>
-    <p class="gge-foot" style="text-align:left">Preview only &middot; <a href="https://guestguardian-concept.mplaunch.com.au/" target="_blank" rel="noopener">Guest Guardian</a></p>
+    booking button.</p>
+    <a class="gge-cta" data-ph-cta href="#" target="_blank" rel="noopener">Check dates &amp; enquire
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 12h13M12 5l7 7-7 7"/></svg>
+    </a>
+    <p class="gge-foot" data-ph-foot>Booked and managed by <a href="https://guestguardian-concept.mplaunch.com.au/" target="_blank" rel="noopener">Guest Guardian</a></p>
   </div>
 </div>
 <script>
@@ -118,6 +122,9 @@
   var q = new URLSearchParams(location.search);
   var slug = q.get('p') || 'the-bungalow';
   if (q.get('theme') === 'dark') document.body.className = 'dark';
+  /* Declared before anything uses it. It sat below the placeholder block, and
+     var-hoisting meant the enquiry link was built from an undefined base. */
+  var base = location.origin + location.pathname.replace(/[^/]*$/, '');
   var cards = document.querySelectorAll('.gge');
   var shown = false;
   cards.forEach(function (c) {
@@ -137,7 +144,7 @@
       if (n) n.textContent = q.get('name') ||
         slug.replace(/-/g, ' ').replace(/\b\w/g, function (m) { return m.toUpperCase(); });
       /* When the snippet carries the details, show the real card rather than
-         the "not published" note: facts, price, and an enquiry button. */
+         the "not published" note: photo, facts, price and a booking button. */
       if (q.get('beds') || q.get('price')) {
         var blurb = ph.querySelector('.gge-blurb');
         var facts = [];
@@ -149,16 +156,53 @@
         meta.innerHTML = facts.map(function (f) { return '<span>' + f.replace(/[<>]/g, '') + '</span>'; }).join('');
         ph.querySelector('.gge-name').insertAdjacentElement('afterend', meta);
         if (blurb) blurb.textContent = (q.get('price') ? 'From $' + q.get('price').replace(/[^0-9]/g, '') + ' a night. ' : '') +
-          'Newly listed with Guest Guardian. Live availability and instant booking arrive here the moment it is published.';
+          'Enquire for dates and availability.';
+      }
+
+      /* Photo. A snippet cannot carry an image, so a practice property's cover
+         is read from this browser's own storage — same origin as the back
+         office. On a real build the photo is simply served with the listing. */
+      var img = q.get('img');
+      if (!img) {
+        try {
+          var mine = JSON.parse(localStorage.getItem('gg_practice_props') || '[]');
+          for (var i = 0; i < mine.length; i++) {
+            if (mine[i].slug === slug && mine[i].photo) { img = mine[i].photo; break; }
+          }
+        } catch (e) {}
+      }
+      var box = ph.querySelector('[data-ph-img]');
+      if (img && box) { box.hidden = false; box.querySelector('img').src = img; }
+
+      /* Enquiry destination — the property's own page on the real site. */
+      var cta = ph.querySelector('[data-ph-cta]');
+      if (cta) cta.href = base + 'stay-' + slug + '.html';
+
+      /* WHITE LABEL. With wl=1 every mention of Guest Guardian comes off the
+         card, so it reads as the partner's own listing.
+         🚨 The guest still learns who they are dealing with — the button opens
+         Guest Guardian's booking page, which is where the money and the terms
+         live. Hiding the manager on a card is presentation; hiding them at the
+         point of payment would not be. */
+      if (q.get('wl') === '1') {
+        var b = ph.querySelector('[data-ph-brand]');
+        var f = ph.querySelector('[data-ph-foot]');
+        if (b) b.remove();
+        if (f) f.remove();
+        if (cta) cta.firstChild.textContent = 'Check availability ';
       }
     } else if (cards[0]) { cards[0].hidden = false; }
   }
   /* Point the links at whichever host is actually serving this card, so the
      embed keeps working on the preview as well as on the production domain. */
-  var base = location.origin + location.pathname.replace(/[^/]*$/, '');
   document.querySelectorAll('.gge a[href]').forEach(function (a) {
     a.href = base + a.getAttribute('href').split('/').pop();
   });
+
+  /* White label a PUBLISHED card too — same rule as the placeholder below. */
+  if (q.get('wl') === '1') {
+    document.querySelectorAll('.gge .gge-brand, .gge .gge-foot').forEach(function (el) { el.remove(); });
+  }
   /* Tell the parent page how tall we are, so the embed never gets a scrollbar
      or a gap. The host site opts in by listening for this message. */
   var post = function () {

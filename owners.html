@@ -29,7 +29,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500&family=Outfit:wght@200;300;400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/style.css?v=67307581">
+<link rel="stylesheet" href="assets/style.css?v=1038fe5e">
 <script type="application/ld+json">[
  {
   "@context": "https://schema.org",
@@ -900,7 +900,21 @@
             <div class="copyrow"><input type="text" id="ap-url" readonly><button class="btn btn-ghost btn-copy" type="button" id="ap-copyurl"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a1 1 0 01-1-1V4a1 1 0 011-1h10a1 1 0 011 1v1"/></svg><span>Copy</span></button></div>
 
             <p class="eyebrow mt-2">2. The code to send the winery</p>
-            <p class="small muted" style="margin:0 0 .5rem">They paste this once, anywhere on their own website. It shows the property in their page, with a Book button that comes back to you.</p>
+            <p class="small muted" style="margin:0 0 .6rem">They paste this once, anywhere on their own website. It shows the property in their page, with a button that comes back to you.</p>
+
+            <div class="wlpick" role="radiogroup" aria-label="Branding">
+              <label class="wlopt">
+                <input type="radio" name="ap-wl" value="0" checked>
+                <span class="wlopt-ui"></span>
+                <span class="wlopt-txt"><b>Show your name</b><span>Card says "Managed by Guest Guardian". Good for a venue happy to credit you, and it puts your name in front of their visitors.</span></span>
+              </label>
+              <label class="wlopt">
+                <input type="radio" name="ap-wl" value="1">
+                <span class="wlopt-ui"></span>
+                <span class="wlopt-txt"><b>White label</b><span>No mention of Guest Guardian anywhere on the card. It reads as the winery's own listing. They still land on your booking page when they press the button.</span></span>
+              </label>
+            </div>
+
             <textarea id="ap-embed" class="embed-code embed-code-light" readonly rows="5"></textarea>
             <button class="btn btn-ghost btn-copy" type="button" id="ap-copyembed" style="width:100%;justify-content:center"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a1 1 0 01-1-1V4a1 1 0 011-1h10a1 1 0 011 1v1"/></svg><span>Copy the embed code</span></button>
 
@@ -1036,7 +1050,7 @@
   </div>
 </footer>
 
-<script src="assets/app.js?v=67307581"></script>
+<script src="assets/app.js?v=1038fe5e"></script>
 <!-- Service worker: required before Android/Chrome will offer "Install app".
      Deliberately a pure network passthrough with NO caching — a caching SW on a
      demo means stale pages survive every redeploy, which is exactly the trap we
