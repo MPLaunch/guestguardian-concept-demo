@@ -208,22 +208,6 @@
     var BASE = window.GG_RATES ||
       { coastal: [155, 215, 310, 430], city: [165, 225, 315, 425], inner: [140, 190, 265, 360], hills: [150, 205, 285, 380] };
 
-    /* ---- The gate (Nick's wishlist item 1) ----
-       The figures are only WRITTEN INTO THE PAGE once the form is submitted.
-       Masking them in CSS alone would leave the real numbers sitting in the DOM
-       for anyone who opened dev tools, which is not a lock, it is a curtain.
-       On a production build the sum itself moves to the server so the numbers
-       never reach the browser until a lead exists. */
-    var wrap = document.getElementById('estwrap');
-    var gate = document.getElementById('estform');
-    var done = document.getElementById('estdone');
-    var doneEmail = document.getElementById('estdone-email');
-    var unlocked = false;
-
-    /* The locked class is already on the element from the build, so there is no
-       unlocked flash and no dependency on this script running at all. */
-    if (wrap && !gate) wrap.classList.remove('is-locked');
-
     var calc = function () {
       var b = Math.max(1, Math.min(4, parseInt(beds.value, 10) || 1));
       var a = area.value in BASE ? area.value : 'city';
@@ -240,6 +224,43 @@
     [beds, area, occ].forEach(function (el) {
       if (el) { el.addEventListener('input', calc); el.addEventListener('change', calc); }
     });
+
+    /* ---- Three steps in one card (Nick's wishlist item 1) ----
+       Choose the property, THEN hand over details, THEN see the figures. The
+       form used to sit beside the sliders, which showed the price of an
+       estimate before anyone had done the easy part.
+
+       The figures are only WRITTEN INTO THE PAGE once the form is submitted.
+       Masking them in CSS alone would leave the real numbers in the DOM for
+       anyone who opened dev tools, which is a curtain rather than a lock. On a
+       production build the sum moves to the server so they never reach the
+       browser without a lead. */
+    var stepInputs = document.querySelector('[data-est-inputs]');
+    var stepGate = document.querySelector('[data-est-gate]');
+    var stepOut = document.querySelector('[data-est-out]');
+    var gate = document.getElementById('estform');
+    var done = document.getElementById('estdone');
+    var doneEmail = document.getElementById('estdone-email');
+    var unlocked = false;
+
+    var showStep = function (n) {
+      if (!stepInputs) return;
+      stepInputs.hidden = (n === 2);
+      if (stepGate) stepGate.hidden = (n !== 2);
+      if (stepOut) stepOut.hidden = (n !== 3);
+      var next = document.getElementById('est-next');
+      if (next) next.hidden = (n !== 1);
+    };
+    if (stepInputs) showStep(1);
+
+    var nextBtn = document.getElementById('est-next');
+    if (nextBtn) nextBtn.addEventListener('click', function () {
+      showStep(2);
+      var f = document.getElementById('eg-name');
+      if (f) f.focus();
+    });
+    var backBtn = document.getElementById('est-back');
+    if (backBtn) backBtn.addEventListener('click', function () { showStep(1); });
 
     if (gate) {
       gate.addEventListener('submit', function (ev) {
@@ -258,12 +279,9 @@
         if (!ok) return;
 
         unlocked = true;
-        wrap.classList.remove('is-locked');
+        showStep(3);
         calc();
-        if (done) {
-          if (doneEmail && email) doneEmail.textContent = email;
-          done.hidden = false;
-        }
+        if (doneEmail && email) doneEmail.textContent = email;
 
         /* Send it on, including what they had the sliders set to — the numbers
            they saw are the whole context for following the lead up. */

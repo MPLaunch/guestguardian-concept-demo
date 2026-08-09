@@ -1580,3 +1580,19 @@ b.tag-auto, b.tag-web { font-weight: 500; padding: .1rem .45rem; border-radius: 
 .mgmanage .wlpick { margin-bottom:.7rem; }
 .mgmanage .wlopt { padding:.5rem .7rem; }
 .mgmanage .wlopt-txt { font-size:.8rem; }
+
+/* ---- estimator: one centred card, three steps ---- */
+.estcard { max-width:520px; margin-inline:auto; padding:clamp(1.6rem,3.5vw,2.2rem);
+  background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.12);
+  border-radius:var(--rad-lg); text-align:left; }
+.estcard [data-est-gate] { text-align:center; }
+.estcard .estform { text-align:left; }
+.estcard .stats { margin-bottom:0; }
+.estcard label { color:rgba(255,255,255,.6); }
+.estcard select, .estcard input:not([type=range]) { background:rgba(255,255,255,.07);
+  border-color:rgba(255,255,255,.16); color:#fff; }
+.estcard select option { color:var(--ink); }
+.estback { display:block; width:100%; margin-top:1rem; padding:.5rem; background:none;
+  border:0; font:inherit; font-size:.8rem; color:rgba(255,255,255,.5);
+  text-decoration:underline; cursor:pointer; }
+.estback:hover { color:#fff; }
