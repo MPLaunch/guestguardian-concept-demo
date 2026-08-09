@@ -1596,3 +1596,34 @@ b.tag-auto, b.tag-web { font-weight: 500; padding: .1rem .45rem; border-radius: 
   border:0; font:inherit; font-size:.8rem; color:rgba(255,255,255,.5);
   text-decoration:underline; cursor:pointer; }
 .estback:hover { color:#fff; }
+
+/* ---- booking panel on a property page ---- */
+.bookpanel { margin-top:1.4rem; padding:1.25rem 1.3rem; background:var(--paper-2);
+  border:1px solid var(--line); border-radius:var(--rad-lg); box-shadow:var(--shadow-sm); }
+.bp-head { display:flex; align-items:baseline; justify-content:space-between; gap:1rem; flex-wrap:wrap; margin-bottom:1rem; }
+.bp-from, .bp-night { font-size:.82rem; color:var(--muted); }
+.bp-head b { font-family:var(--serif); font-size:1.5rem; }
+.bp-live { display:inline-flex; align-items:center; gap:.35rem; font-size:.76rem; color:var(--sage-deep); }
+.bp-calbar { display:flex; align-items:center; justify-content:space-between; margin-bottom:.6rem; font-size:.9rem; font-weight:500; }
+.bp-nav { width:30px; height:30px; border:1px solid var(--line); border-radius:50%; background:none;
+  font-size:1.1rem; line-height:1; color:var(--ink); cursor:pointer; }
+.bp-nav:hover:not(:disabled) { background:rgba(28,29,28,.05); }
+.bp-nav:disabled { opacity:.3; cursor:not-allowed; }
+.bp-dow, .bp-days { display:grid; grid-template-columns:repeat(7,1fr); gap:3px; }
+.bp-dow span { text-align:center; font-size:.68rem; letter-spacing:.06em; text-transform:uppercase; color:var(--muted); padding-bottom:.25rem; }
+.bp-pad { aspect-ratio:1; }
+.bp-day { aspect-ratio:1; display:grid; place-items:center; border:0; border-radius:var(--rad);
+  background:rgba(28,29,28,.04); font:inherit; font-size:.82rem; color:var(--ink); cursor:pointer;
+  font-variant-numeric:tabular-nums; transition:background .15s; }
+.bp-day:hover:not(:disabled) { background:rgba(167,171,161,.4); }
+.bp-day.is-taken, .bp-day.is-out { background:transparent; color:rgba(28,29,28,.22);
+  text-decoration:line-through; cursor:not-allowed; }
+.bp-day.is-start, .bp-day.is-end { background:var(--ink); color:#fff; }
+.bp-day.is-mid { background:rgba(167,171,161,.45); }
+.bp-hint { margin:.7rem 0 0; font-size:.78rem; color:var(--muted); min-height:1.1em; }
+.bp-quote { margin-top:1rem; padding-top:.9rem; border-top:1px solid var(--line); }
+.bp-lines { width:100%; border-collapse:collapse; font-size:.88rem; }
+.bp-lines td { padding:.35rem 0; }
+.bp-lines td:last-child { text-align:right; font-variant-numeric:tabular-nums; }
+.bp-lines .bp-total td { padding-top:.6rem; border-top:1px solid var(--line-soft); font-weight:500; font-size:1rem; }
+.bp-note { margin:.6rem 0 0; font-size:.75rem; color:var(--muted); text-align:center; }

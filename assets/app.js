@@ -1230,6 +1230,158 @@
     });
   }
 
+  /* ==========================================================================
+     BOOKING PANEL (property pages)
+
+     The guest picks dates, sees real availability and a real total, all on
+     Guest Guardian's own page. It used to open the booking engine over the
+     top, which put another company's website in front of the guest at the
+     exact moment they decided.
+
+     🚨 Where the demo stops: taking the card and writing the reservation need
+     a server holding the Hostaway key. Nothing here talks to anyone — the
+     calendar was baked in at build time. The panel says so rather than
+     pretending, because a fake "booked!" is worse than an honest stop.
+     ========================================================================== */
+  var bp = document.getElementById('bookpanel');
+  if (bp && window.GG_CAL) {
+    var CAL = {};
+    window.GG_CAL.forEach(function (r) { CAL[r[0]] = { free: !!r[1], price: r[2] }; });
+    var allDates = Object.keys(CAL).sort();
+    if (allDates.length) {
+      var cleanFee = +bp.getAttribute('data-clean') || 0;
+      var daysEl = document.getElementById('bp-days');
+      var monthEl = document.getElementById('bp-month');
+      var hintEl = document.getElementById('bp-hint');
+      var quoteEl = document.getElementById('bp-quote');
+      var linesEl = document.getElementById('bp-lines');
+      var goBtn = document.getElementById('bp-go');
+      var MON = ['January', 'February', 'March', 'April', 'May', 'June', 'July',
+                 'August', 'September', 'October', 'November', 'December'];
+      var view = allDates[0].slice(0, 7);
+      var arrive = null, depart = null;
+
+      var iso = function (y, m, d) {
+        return y + '-' + String(m).padStart(2, '0') + '-' + String(d).padStart(2, '0');
+      };
+      var addMonth = function (ym, n) {
+        var y = +ym.slice(0, 4), m = +ym.slice(5, 7) + n;
+        return (y + Math.floor((m - 1) / 12)) + '-' + String(((m - 1) % 12 + 12) % 12 + 1).padStart(2, '0');
+      };
+      /* Every night from arrival to the night before departure.
+         🚨 Stays in UTC start to finish. Doing this with new Date('2026-08-08')
+         and toISOString() parses as LOCAL midnight and hands back the PREVIOUS
+         day in Adelaide (UTC+9:30), so every night shifted a day early and no
+         date ever matched the calendar. A booking calendar is the last place
+         you want an off-by-one. */
+      var nightsBetween = function (a, b) {
+        var out = [];
+        var d = Date.UTC(+a.slice(0, 4), +a.slice(5, 7) - 1, +a.slice(8, 10));
+        var end = Date.UTC(+b.slice(0, 4), +b.slice(5, 7) - 1, +b.slice(8, 10));
+        while (d < end) {
+          var x = new Date(d);
+          out.push(x.getUTCFullYear() + '-' +
+                   String(x.getUTCMonth() + 1).padStart(2, '0') + '-' +
+                   String(x.getUTCDate()).padStart(2, '0'));
+          d += 86400000;
+        }
+        return out;
+      };
+      var rangeIsFree = function (a, b) {
+        return nightsBetween(a, b).every(function (d) { return CAL[d] && CAL[d].free; });
+      };
+
+      var quote = function () {
+        if (!arrive || !depart) { quoteEl.hidden = true; return null; }
+        var nights = nightsBetween(arrive, depart);
+        var accom = nights.reduce(function (s, d) { return s + ((CAL[d] && CAL[d].price) || 0); }, 0);
+        var total = accom + cleanFee;
+        var fmt = function (n) { return '$' + Math.round(n).toLocaleString('en-AU'); };
+        linesEl.innerHTML =
+          '<tr><td>' + fmt(accom / nights.length) + ' average &times; ' + nights.length + ' night' + (nights.length > 1 ? 's' : '') + '</td><td>' + fmt(accom) + '</td></tr>' +
+          (cleanFee ? '<tr><td>Cleaning</td><td>' + fmt(cleanFee) + '</td></tr>' : '') +
+          '<tr class="bp-total"><td>Total</td><td>' + fmt(total) + '</td></tr>';
+        quoteEl.hidden = false;
+        return { nights: nights.length, total: total };
+      };
+
+      var draw = function () {
+        var y = +view.slice(0, 4), m = +view.slice(5, 7);
+        monthEl.textContent = MON[m - 1] + ' ' + y;
+        var first = new Date(y, m - 1, 1);
+        var lead = (first.getDay() + 6) % 7;              // Monday-start grid
+        var count = new Date(y, m, 0).getDate();
+        var html = '<span class="bp-pad"></span>'.repeat(lead);
+        for (var d = 1; d <= count; d++) {
+          var key = iso(y, m, d);
+          var info = CAL[key];
+          var cls = 'bp-day';
+          if (!info) cls += ' is-out';
+          else if (!info.free) cls += ' is-taken';
+          if (key === arrive) cls += ' is-start';
+          if (key === depart) cls += ' is-end';
+          if (arrive && depart && key > arrive && key < depart) cls += ' is-mid';
+          html += '<button type="button" class="' + cls + '" data-d="' + key + '"' +
+                  ((!info || !info.free) ? ' disabled' : '') + '>' + d + '</button>';
+        }
+        daysEl.innerHTML = html;
+
+        var prev = document.querySelector('[data-cal-prev]');
+        var next = document.querySelector('[data-cal-next]');
+        if (prev) prev.disabled = view <= allDates[0].slice(0, 7);
+        if (next) next.disabled = view >= allDates[allDates.length - 1].slice(0, 7);
+      };
+
+      daysEl.addEventListener('click', function (ev) {
+        var b = ev.target.closest('[data-d]');
+        if (!b || b.disabled) return;
+        var key = b.getAttribute('data-d');
+
+        if (!arrive || (arrive && depart) || key <= arrive) {
+          arrive = key; depart = null;
+          hintEl.textContent = 'Now pick your departure.';
+        } else if (!rangeIsFree(arrive, key)) {
+          /* Start again from the day they just pressed. Keeping the old
+             arrival left them stuck: every later date also spans the booked
+             night, so nothing they clicked would work and nothing said why. */
+          arrive = key; depart = null;
+          hintEl.textContent = 'Someone has those nights. Starting again from here — pick your departure.';
+        } else {
+          depart = key;
+          hintEl.textContent = '';
+        }
+
+        var q = quote();
+        goBtn.disabled = !q;
+        goBtn.textContent = q
+          ? 'Book ' + q.nights + ' night' + (q.nights > 1 ? 's' : '') + ' — $' + Math.round(q.total).toLocaleString('en-AU')
+          : 'Select your dates';
+        draw();
+      });
+
+      var prevBtn = document.querySelector('[data-cal-prev]');
+      var nextBtn2 = document.querySelector('[data-cal-next]');
+      if (prevBtn) prevBtn.addEventListener('click', function () { view = addMonth(view, -1); draw(); });
+      if (nextBtn2) nextBtn2.addEventListener('click', function () { view = addMonth(view, 1); draw(); });
+
+      goBtn.addEventListener('click', function () {
+        var q = quote();
+        if (!q) return;
+        alert(
+          'On the real build this is where you would enter your details and pay, ' +
+          'without leaving this page.\n\n' +
+          arrive + ' to ' + depart + ', ' + q.nights + ' night' + (q.nights > 1 ? 's' : '') +
+          ', $' + Math.round(q.total).toLocaleString('en-AU') + ' total.\n\n' +
+          'This preview stops here on purpose: taking a card and writing the ' +
+          'booking need a server, and nothing in this demo touches the live ' +
+          'booking system.'
+        );
+      });
+
+      draw();
+    }
+  }
+
   /* Footer year */
   document.querySelectorAll('[data-year]').forEach(function (el) {
     el.textContent = String(new Date().getFullYear());

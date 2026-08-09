@@ -29,7 +29,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500&family=Outfit:wght@200;300;400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/style.css?v=74350a34">
+<link rel="stylesheet" href="assets/style.css?v=bfdaa990">
 <script type="application/ld+json">[
  {
   "@context": "https://schema.org",
@@ -101,19 +101,46 @@
         </div>
         <p class="lede" style="font-size:1.02rem">Both homes taken together for up to twelve guests, with the pool and spa included. This is the booking for a wedding party, a milestone birthday or two families travelling as one.</p>
 
-        <form class="propbook" action="https://guestguardian.holidayfuture.com/listings/472312" method="get" data-book-title="The Bungalow and The Cabana">
-          <div class="propbook-row">
-            <label class="bb-field"><span class="bb-label">Arrive</span><input type="date" name="start"></label>
-            <label class="bb-field"><span class="bb-label">Depart</span><input type="date" name="end"></label>
-            <label class="bb-field"><span class="bb-label">Guests</span>
-              <select name="numberOfGuests">
-                <option value="1">1</option><option value="2" selected>2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option><option value="11">11</option><option value="12">12</option>
-              </select>
-            </label>
+        <!-- Booking happens HERE, on Guest Guardian's own page. It used to open
+             the booking engine over the top in a panel, which is a different
+             company's website appearing in front of the guest at the moment
+             they decide. Dates, availability and pricing below are the real
+             calendar, baked in from the Hostaway API at build time. -->
+        <div class="bookpanel" id="bookpanel" data-listing="472312" data-clean="455" data-max="12">
+          <div class="bp-head">
+            <div><span class="bp-from">from</span> <b id="bp-base">$730</b> <span class="bp-night">a night</span></div>
+            <span class="bp-live"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span>Live availability</span></span>
           </div>
-          <button class="btn btn-primary" type="submit" style="width:100%;justify-content:center">Check dates &amp; book this home <svg class="arw" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 12h13M12 5l7 7-7 7"/></svg></button>
-          <p class="propbook-hint"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span>Live availability and real pricing, straight from our booking system.</span></p>
-        </form>
+
+          <div class="bp-cal">
+            <div class="bp-calbar">
+              <button type="button" class="bp-nav" data-cal-prev aria-label="Previous month">&lsaquo;</button>
+              <span id="bp-month">&nbsp;</span>
+              <button type="button" class="bp-nav" data-cal-next aria-label="Next month">&rsaquo;</button>
+            </div>
+            <div class="bp-dow"><span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span><span>S</span></div>
+            <div class="bp-days" id="bp-days"></div>
+            <p class="bp-hint" id="bp-hint">Pick your arrival, then your departure.</p>
+          </div>
+
+          <div class="field" style="margin:.9rem 0 0">
+            <label for="bp-guests">Guests</label>
+            <select id="bp-guests">
+              <option value="1">1</option><option value="2" selected>2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option><option value="11">11</option><option value="12">12</option>
+            </select>
+          </div>
+
+          <div class="bp-quote" id="bp-quote" hidden>
+            <table class="bp-lines" id="bp-lines"></table>
+          </div>
+
+          <button class="btn btn-primary" type="button" id="bp-go" disabled style="width:100%;justify-content:center;margin-top:1rem">Select your dates</button>
+          <p class="bp-note">No account needed. You will not leave this page.</p>
+        </div>
+
+        <!-- The real calendar for this property: date, whether it is free, and
+             the actual nightly rate. Read-only pull, no key in the browser. -->
+        <script>window.GG_CAL = [["2026-08-08",1,890],["2026-08-09",1,890],["2026-08-10",1,890],["2026-08-11",1,890],["2026-08-12",1,890],["2026-08-13",1,890],["2026-08-14",0,890],["2026-08-15",0,890],["2026-08-16",1,890],["2026-08-17",1,890],["2026-08-18",1,890],["2026-08-19",1,890],["2026-08-20",1,890],["2026-08-21",1,890],["2026-08-22",1,890],["2026-08-23",1,890],["2026-08-24",1,890],["2026-08-25",1,890],["2026-08-26",1,890],["2026-08-27",1,890],["2026-08-28",1,890],["2026-08-29",1,890],["2026-08-30",1,890],["2026-08-31",1,890],["2026-09-01",1,940],["2026-09-02",1,940],["2026-09-03",1,940],["2026-09-04",1,990],["2026-09-05",1,990],["2026-09-06",1,940],["2026-09-07",1,940],["2026-09-08",1,940],["2026-09-09",1,940],["2026-09-10",1,940],["2026-09-11",0,990],["2026-09-12",0,990],["2026-09-13",0,940],["2026-09-14",1,940],["2026-09-15",1,940],["2026-09-16",1,940],["2026-09-17",1,940],["2026-09-18",1,990],["2026-09-19",1,990],["2026-09-20",1,940],["2026-09-21",1,940],["2026-09-22",1,940],["2026-09-23",1,940],["2026-09-24",1,940],["2026-09-25",0,990],["2026-09-26",0,1150],["2026-09-27",1,1150],["2026-09-28",1,1150],["2026-09-29",1,1150],["2026-09-30",1,1150],["2026-10-01",1,1150],["2026-10-02",1,1150],["2026-10-03",0,1150],["2026-10-04",0,1150],["2026-10-05",1,1150],["2026-10-06",1,1150],["2026-10-07",1,1150],["2026-10-08",1,1150],["2026-10-09",0,1150],["2026-10-10",0,1150],["2026-10-11",1,1150],["2026-10-12",1,940],["2026-10-13",1,940],["2026-10-14",1,940],["2026-10-15",1,940],["2026-10-16",1,990],["2026-10-17",1,990],["2026-10-18",1,990],["2026-10-19",1,990],["2026-10-20",1,940],["2026-10-21",1,940],["2026-10-22",1,940],["2026-10-23",0,990],["2026-10-24",0,990],["2026-10-25",1,940],["2026-10-26",1,940],["2026-10-27",1,940],["2026-10-28",1,940],["2026-10-29",1,940],["2026-10-30",1,990],["2026-10-31",0,990],["2026-11-01",0,940],["2026-11-02",0,940],["2026-11-03",1,940],["2026-11-04",1,940],["2026-11-05",1,940],["2026-11-06",1,990],["2026-11-07",1,990],["2026-11-08",1,940],["2026-11-09",1,940],["2026-11-10",1,940],["2026-11-11",1,940],["2026-11-12",1,940],["2026-11-13",0,990],["2026-11-14",0,990],["2026-11-15",0,940],["2026-11-16",1,940],["2026-11-17",1,940],["2026-11-18",1,940],["2026-11-19",1,940],["2026-11-20",1,990],["2026-11-21",0,990],["2026-11-22",0,940],["2026-11-23",0,940],["2026-11-24",0,940],["2026-11-25",0,1140],["2026-11-26",0,1140],["2026-11-27",0,1140],["2026-11-28",0,869],["2026-11-29",0,730],["2026-11-30",0,730]];</script>
       </div>
     </div>
 
@@ -257,7 +284,7 @@
   </div>
 </footer>
 
-<script src="assets/app.js?v=74350a34"></script>
+<script src="assets/app.js?v=bfdaa990"></script>
 <!-- Service worker: required before Android/Chrome will offer "Install app".
      Deliberately a pure network passthrough with NO caching — a caching SW on a
      demo means stale pages survive every redeploy, which is exactly the trap we
