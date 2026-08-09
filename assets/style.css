@@ -1627,3 +1627,19 @@ b.tag-auto, b.tag-web { font-weight: 500; padding: .1rem .45rem; border-radius: 
 .bp-lines td:last-child { text-align:right; font-variant-numeric:tabular-nums; }
 .bp-lines .bp-total td { padding-top:.6rem; border-top:1px solid var(--line-soft); font-weight:500; font-size:1rem; }
 .bp-note { margin:.6rem 0 0; font-size:.75rem; color:var(--muted); text-align:center; }
+
+/* ---- booking: details + confirmation steps ---- */
+.bp-back { background:none; border:0; padding:0; font:inherit; font-size:.82rem;
+  color:var(--muted); cursor:pointer; text-decoration:underline; }
+.bp-back:hover { color:var(--ink); }
+.bookpanel input.is-bad, .bookpanel textarea.is-bad { border-color:var(--rust); }
+.bookpanel textarea { width:100%; padding:.6rem .8rem; font:inherit; font-size:.9rem;
+  border:1px solid var(--line); border-radius:var(--rad); background:var(--paper); resize:vertical; }
+.bp-confirmed { text-align:center; }
+.bp-confirmed .bp-lines { text-align:left; }
+.bp-tick { width:46px; height:46px; margin:0 auto; border-radius:50%; display:grid; place-items:center;
+  background:rgba(167,171,161,.28); color:var(--sage-deep); }
+.bp-tick svg { width:22px; height:22px; }
+.bp-ref { margin:.9rem 0 0; font-size:.8rem; color:var(--muted); }
+.bp-ref b { color:var(--ink); font-variant-numeric:tabular-nums; letter-spacing:.03em; }
+.src-direct, .src-booking { background:rgba(167,171,161,.3); color:var(--sage-deep); }

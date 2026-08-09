@@ -680,6 +680,12 @@
   /* ==========================================================================
      Owner portal (owners.html)
      ========================================================================== */
+  /* Bookings made in this browser during the demo. Lets the whole workflow be
+     walked: book a stay, then sign in and find it waiting. */
+  var demoBookings = function () {
+    try { return JSON.parse(localStorage.getItem('gg_bookings') || '[]'); } catch (e) { return []; }
+  };
+
   var ownerForm = document.getElementById('ownerform');
   var ownerApp = document.getElementById('owner-app');
   var ownerLogin = document.getElementById('owner-login');
@@ -739,6 +745,31 @@
     } catch (e) {}
     var standalone = (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) || navigator.standalone;
     if (standalone && ownerLogin.hidden === false) show('owner');
+
+    /* A booking made during the demo takes over the guest view, so signing in
+       after booking shows YOUR stay rather than the worked example. */
+    var mine = demoBookings();
+    if (mine.length && guestApp) {
+      var b = mine[mine.length - 1];
+      var fmtLong = function (s) {
+        var d = new Date(Date.UTC(+s.slice(0, 4), +s.slice(5, 7) - 1, +s.slice(8, 10)));
+        return d.toLocaleDateString('en-AU', { weekday: 'long', day: 'numeric', month: 'long', timeZone: 'UTC' });
+      };
+      var setText = function (sel, txt) {
+        var el = guestApp.querySelector(sel);
+        if (el) el.textContent = txt;
+      };
+      setText('.eyebrow', 'Your stay, ' + b.first);
+      setText('h1', b.property || 'Your stay');
+      setText('.owner-top p.small', b.nights + ' night' + (b.nights > 1 ? 's' : '') +
+        ' · ' + b.guests + ' guest' + (b.guests > 1 ? 's' : '') + ' · booked ' + b.madeAt);
+      var kpis = guestApp.querySelectorAll('.okpi-n');
+      if (kpis.length >= 3) {
+        kpis[0].textContent = fmtLong(b.arrive);
+        kpis[1].textContent = fmtLong(b.depart);
+        kpis[2].textContent = b.ref;
+      }
+    }
 
     /* Tabs — owner side and manager side share the look and the behaviour, so
        both are scoped to their own container. Selecting on `.owner-tab` alone
@@ -1088,6 +1119,23 @@
     var leadTbl = document.getElementById('leadtbl');
     if (leadTbl) {
       var tbody = leadTbl.querySelector('tbody');
+
+      /* A booking taken during the demo lands at the top of the enquiry list,
+         so the back office reflects it the moment it happens. */
+      demoBookings().slice().reverse().forEach(function (b) {
+        var tr = document.createElement('tr');
+        tr.innerHTML =
+          '<td data-sort="' + b.madeAt + '"><span class="lead-when">just now</span><span class="lead-time">' + b.madeAt.slice(11) + '</span></td>' +
+          '<td><b>' + (b.first + ' ' + b.last).replace(/[<>]/g, '') + '</b></td>' +
+          '<td><span class="lead-em">' + b.email.replace(/[<>]/g, '') + '</span><span class="lead-ph">' + b.phone.replace(/[<>]/g, '') + '</span></td>' +
+          '<td><span class="src src-booking">Direct booking</span></td>' +
+          '<td>Guest</td>' +
+          '<td class="lead-note">' + (b.property || '') + ' &middot; ' + b.nights + ' night' + (b.nights > 1 ? 's' : '') +
+            ' &middot; $' + Math.round(b.total).toLocaleString('en-AU') + ' &middot; ' + b.ref + '</td>' +
+          '<td><span class="pill pill-ok">Booked</span></td>';
+        tbody.insertBefore(tr, tbody.firstChild);
+      });
+
       var allRows = [].slice.call(tbody.querySelectorAll('tr'));
       var search = document.getElementById('lead-search');
       var filter = document.getElementById('lead-filter');
@@ -1364,18 +1412,89 @@
       if (prevBtn) prevBtn.addEventListener('click', function () { view = addMonth(view, -1); draw(); });
       if (nextBtn2) nextBtn2.addEventListener('click', function () { view = addMonth(view, 1); draw(); });
 
+      /* ---- Steps 2 and 3: guest details, then confirmation ----
+         🚨 Stored in THIS BROWSER only, so the whole journey can be walked
+         end to end without a server and without touching the live booking
+         system. A real build replaces this one function with a call that
+         takes the payment and writes the reservation into Hostaway. Nothing
+         else in the flow changes. */
+      var detailsEl = document.getElementById('bp-details');
+      var doneEl = document.getElementById('bp-done');
+      var lines2 = document.getElementById('bp-lines2');
+      var lines3 = document.getElementById('bp-lines3');
+
+      var step = function (n) {
+        bp.hidden = n !== 1;
+        if (detailsEl) detailsEl.hidden = n !== 2;
+        if (doneEl) doneEl.hidden = n !== 3;
+      };
+
       goBtn.addEventListener('click', function () {
+        if (!quote()) return;
+        lines2.innerHTML = linesEl.innerHTML;
+        step(2);
+        var f = document.getElementById('bk-first');
+        if (f) f.focus();
+      });
+
+      var backBtn2 = document.getElementById('bp-back');
+      if (backBtn2) backBtn2.addEventListener('click', function () { step(1); });
+
+      var payBtn = document.getElementById('bp-pay');
+      if (payBtn) payBtn.addEventListener('click', function () {
+        var val = function (id) { var e = document.getElementById(id); return e ? e.value.trim() : ''; };
+        var ok = true;
+        ['bk-first', 'bk-last', 'bk-email', 'bk-phone'].forEach(function (id) {
+          var e = document.getElementById(id);
+          var bad = !e.value.trim() || (e.type === 'email' && e.value.indexOf('@') < 1);
+          e.classList.toggle('is-bad', bad);
+          if (bad) ok = false;
+        });
+        if (!ok) return;
+
         var q = quote();
-        if (!q) return;
-        alert(
-          'On the real build this is where you would enter your details and pay, ' +
-          'without leaving this page.\n\n' +
-          arrive + ' to ' + depart + ', ' + q.nights + ' night' + (q.nights > 1 ? 's' : '') +
-          ', $' + Math.round(q.total).toLocaleString('en-AU') + ' total.\n\n' +
-          'This preview stops here on purpose: taking a card and writing the ' +
-          'booking need a server, and nothing in this demo touches the live ' +
-          'booking system.'
-        );
+        var ref = 'GG-' + arrive.slice(2, 4) + arrive.slice(5, 7) + arrive.slice(8, 10) +
+                  '-' + String(bp.getAttribute('data-listing')).slice(-3);
+
+        var booking = {
+          ref: ref,
+          listing: bp.getAttribute('data-listing'),
+          property: document.querySelector('h1.h2') ? document.querySelector('h1.h2').textContent.trim() : '',
+          arrive: arrive, depart: depart, nights: q.nights, total: q.total,
+          guests: document.getElementById('bp-guests').value,
+          first: val('bk-first'), last: val('bk-last'),
+          email: val('bk-email'), phone: val('bk-phone'), notes: val('bk-notes'),
+          madeAt: new Date().toISOString().slice(0, 16).replace('T', ' '),
+        };
+        try {
+          var all = JSON.parse(localStorage.getItem('gg_bookings') || '[]');
+          all = all.filter(function (b) { return b.ref !== ref; });
+          all.push(booking);
+          localStorage.setItem('gg_bookings', JSON.stringify(all));
+        } catch (e) {}
+
+        var fmt = function (s) {
+          var d = new Date(Date.UTC(+s.slice(0, 4), +s.slice(5, 7) - 1, +s.slice(8, 10)));
+          return d.toLocaleDateString('en-AU', { weekday: 'short', day: 'numeric', month: 'long', timeZone: 'UTC' });
+        };
+        document.getElementById('bp-doneline').textContent =
+          fmt(arrive) + ' to ' + fmt(depart) + ' · ' + booking.guests + ' guest' + (booking.guests > 1 ? 's' : '');
+        lines3.innerHTML = linesEl.innerHTML;
+        document.getElementById('bp-ref').textContent = ref;
+        step(3);
+
+        /* Tell Peter a demo booking came through — same relay as the estimator,
+           his inbox only. */
+        relayLead('direct booking', {
+          name: booking.first + ' ' + booking.last,
+          email: booking.email, phone: booking.phone,
+          message: booking.notes,
+        }, {
+          Property: booking.property, Reference: ref,
+          Dates: arrive + ' to ' + depart,
+          Nights: String(q.nights), Guests: booking.guests,
+          Total: '$' + Math.round(q.total).toLocaleString('en-AU'),
+        });
       });
 
       draw();
