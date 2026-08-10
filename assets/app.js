@@ -488,6 +488,15 @@
             tag.textContent = 'Beyond the dates we hold here — ask us';
           }
         }
+        /* Carry the search through to the property page, so clicking a home
+           lands on its calendar with those dates and that many guests already
+           chosen. Written onto the href rather than handled on click, so
+           middle-click, open-in-new-tab and copy-link all carry it too. */
+        var base = (el.getAttribute('href') || '').split('?')[0];
+        el.setAttribute('href', (ok && useDates)
+          ? base + '?arrive=' + a1 + '&depart=' + a2 + '&guests=' + (g || 1)
+          : base);
+
         el.style.display = ok ? '' : 'none';
         if (ok) shown++;
       });
@@ -1830,6 +1839,36 @@
       });
 
       draw();
+
+      /* ---- Arriving from the Book Your Stay search.
+         The guest has already said when and how many, so asking again is
+         asking twice. Dates are re-checked against this property's own
+         calendar rather than trusted from the URL: the search page could be a
+         stale tab, or someone could type anything in. If they do not hold up,
+         the calendar just opens on that month with nothing selected. */
+      try {
+        var qs = new URLSearchParams(location.search);
+        var qa = qs.get('arrive'), qd = qs.get('depart'), qg = qs.get('guests');
+
+        if (qg && guestSel) {
+          var wanted = String(Math.min(parseInt(qg, 10) || 1, +bp.getAttribute('data-max') || 1));
+          if (Array.prototype.some.call(guestSel.options, function (o) { return o.value === wanted; })) {
+            guestSel.value = wanted;
+          }
+        }
+
+        if (/^\d{4}-\d{2}-\d{2}$/.test(qa || '') && /^\d{4}-\d{2}-\d{2}$/.test(qd || '') && qd > qa) {
+          view = qa.slice(0, 7);
+          if (CAL[qa] && rangeIsFree(qa, qd)) {
+            arrive = qa; depart = qd;
+            hintEl.textContent = 'Carried over from your search. Change any date to adjust.';
+            refreshGo();
+          } else {
+            hintEl.textContent = 'Those nights have gone since you searched. Pick your arrival.';
+          }
+          draw();
+        }
+      } catch (e) {}
     }
   }
 

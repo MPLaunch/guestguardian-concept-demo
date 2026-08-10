@@ -1711,6 +1711,22 @@ b.tag-auto, b.tag-web { font-weight: 500; padding: .1rem .45rem; border-radius: 
 .bp-mail-sep { height:1px; background:var(--line-soft); margin:.55rem 0; }
 .bp-mail-body > div:last-child { white-space:pre-wrap; font-size:.78rem; line-height:1.6; color:var(--ink); }
 
+/* Where you'll be. */
+.pf-loc { background: var(--ink); border-color: var(--ink) !important; color: #fff !important; }
+.pf-loc svg { color: #fff !important; }
+.prop-loc { background: var(--paper-2); border: 1px solid var(--line);
+  border-radius: var(--rad-lg); padding: 1.35rem 1.4rem; }
+.locmap { border-radius: var(--rad); overflow: hidden; border: 1px solid var(--line);
+  background: var(--paper); }
+/* Fixed ratio so the card does not jump around while the map loads. */
+.locmap iframe { display: block; width: 100%; aspect-ratio: 16 / 9; min-height: 220px; border: 0; }
+.loclist { list-style: none; margin: 1rem 0 0; padding: 0;
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: .1rem .9rem; }
+.loclist li { display: flex; align-items: baseline; justify-content: space-between; gap: .6rem;
+  padding: .45rem 0; border-bottom: 1px solid var(--line-soft); font-size: .86rem; }
+.loclist span { color: var(--muted); }
+.loclist b { font-weight: 500; font-variant-numeric: tabular-nums; white-space: nowrap; }
+
 /* The answer to a date search, on the card itself. Green when it is free with
    the real price, muted when the date is simply past the window we hold. */
 .jcard-av { display:block; margin:.55rem 0 0; font-size:.8rem; font-weight:500;
