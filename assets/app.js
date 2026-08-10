@@ -2178,10 +2178,29 @@
     document.body.appendChild(box);
     var img = box.querySelector('img'), count = box.querySelector('.pgl-count');
 
+    /* 🪤 Stepping through was slow because each press started a fresh download
+       of a full-size photo with nothing ready. Two fixes: warm the neighbours
+       so the next press is instant, and keep the current photo on screen until
+       the new one has actually decoded rather than blanking to white first. */
+    var warmed = {};
+    var warm = function (i) {
+      var k = (i + PH.length) % PH.length;
+      if (warmed[k]) return;
+      warmed[k] = true;
+      var p = new Image();
+      p.decoding = 'async';
+      p.src = PH[k];
+    };
+
     var show = function (i) {
       at = (i + PH.length) % PH.length;
-      img.src = PH[at];
       count.textContent = (at + 1) + ' of ' + PH.length;
+      var next = new Image();
+      next.decoding = 'async';
+      next.onload = function () { img.src = next.src; warm(at + 1); warm(at - 1); };
+      next.onerror = function () { img.src = PH[at]; };
+      next.src = PH[at];
+      if (next.complete) { img.src = next.src; warm(at + 1); warm(at - 1); }
     };
     var open = function (i) { show(i); box.classList.add('is-on'); document.body.style.overflow = 'hidden'; };
     var close = function () { box.classList.remove('is-on'); document.body.style.overflow = ''; };
