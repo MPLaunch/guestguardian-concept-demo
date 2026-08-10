@@ -1726,6 +1726,21 @@ b.tag-auto, b.tag-web { font-weight: 500; padding: .1rem .45rem; border-radius: 
 .lede-tight { max-width: 46rem; margin-bottom: clamp(1.2rem, 3vw, 1.7rem); }
 .phero-book .bookbar-filter { margin-bottom: 0; }
 
+/* 🪤 SITE-WIDE SPACING. `.phero .wrap` was padding 76.8px top AND bottom on
+   every page, which on a laptop pushed the first useful thing on the page down
+   past 400px. Halved. The hero still breathes, it just no longer costs half a
+   screen before anyone can see what the page is for. */
+.phero .wrap { padding-block: clamp(1.6rem, 3vw, 2.6rem) clamp(2rem, 3.5vw, 3rem); }
+
+/* "See what yours could be worth" — the estimator nudge. */
+.estnudge { display: flex; align-items: center; justify-content: space-between;
+  gap: clamp(1rem, 3vw, 2.5rem); flex-wrap: wrap;
+  background: var(--paper-2); border: 1px solid var(--line);
+  border-radius: var(--rad-lg); padding: clamp(1.2rem, 3vw, 1.8rem) clamp(1.3rem, 3vw, 2rem); }
+.estnudge > div { flex: 1 1 22rem; min-width: 0; }
+.estnudge .btn { flex: none; }
+.estnudge-lg { background: var(--sand); border-color: transparent; }
+
 /* Where you'll be. */
 .pf-loc { background: var(--ink); border-color: var(--ink) !important; color: #fff !important; }
 .pf-loc svg { color: #fff !important; }
