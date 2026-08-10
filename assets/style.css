@@ -1835,6 +1835,13 @@ b.tag-auto, b.tag-web { font-weight: 500; padding: .1rem .45rem; border-radius: 
 .otbl th.stmt-links-h, .otbl td.stmt-links { text-align: right; white-space: nowrap; }
 .stmt-links .tlink { display: inline-flex; align-items: center; gap: .35rem; }
 .stmt-links .tlink + .tlink { margin-left: 1.4rem; }
+/* 🪤 Right-aligning to the table edge left a TWO PIXEL gutter — the links were
+   touching the card. A right-aligned last column still needs breathing room. */
+.otbl th.stmt-links-h, .otbl td.stmt-links { padding-right: .3rem; }
+/* 🪤 The two icons ship at DIFFERENT sizes (doc is 20px, down is 16px), so
+   centring each link independently still left them sitting at different
+   heights next to identical text. Force one size for both. */
+.stmt-links .tlink svg { width: 15px; height: 15px; flex: none; }
 
 .stmt-head { align-items:flex-start; }
 .stmt-actions { display:flex; gap:.5rem; align-items:center; flex-wrap:wrap; }
