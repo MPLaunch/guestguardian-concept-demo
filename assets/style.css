@@ -1686,6 +1686,35 @@ b.tag-auto, b.tag-web { font-weight: 500; padding: .1rem .45rem; border-radius: 
 .pcode { font-family:ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size:.82em;
   background:rgba(28,29,28,.05); border:1px solid var(--line-soft); border-radius:5px;
   padding:.1rem .35rem; word-break:break-all; color:var(--ink); }
+/* Country code sits against the number as one control. */
+.bp-phone { display:flex; gap:.4rem; }
+.bp-phone select { flex:none; width:6.2rem; }
+.bp-phone input { flex:1; min-width:0; }
+
+.bp-billing { margin-top:.2rem; }
+.bp-optin { display:flex; align-items:flex-start; gap:.55rem; margin-top:.9rem;
+  font-size:.82rem; line-height:1.5; color:var(--muted); cursor:pointer; }
+.bp-optin input { flex:none; margin-top:.15rem; accent-color:var(--ink); }
+.bp-agree { margin:.6rem 0 0; font-size:.72rem; line-height:1.55; color:var(--muted); text-align:center; }
+.bp-agree a { color:var(--ink); text-decoration:underline; text-underline-offset:2px; }
+
+/* The confirmation email, shown as an email rather than described as one. */
+.bp-mail { margin-top:1.1rem; text-align:left; border:1px solid var(--line);
+  border-radius:var(--rad); overflow:hidden; background:var(--paper); }
+.bp-mail-head { display:flex; align-items:center; justify-content:space-between; gap:.6rem;
+  padding:.5rem .75rem; background:rgba(28,29,28,.04); border-bottom:1px solid var(--line-soft); }
+.bp-mail-tag { font-size:.68rem; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); }
+.bp-mail-status { font-size:.66rem; color:var(--rust); }
+.bp-mail-body { padding:.75rem; }
+.bp-mail-line { margin:0 0 .2rem; font-size:.76rem; color:var(--muted); }
+.bp-mail-line b { color:var(--ink); font-weight:500; display:inline-block; min-width:3.4rem; }
+.bp-mail-sep { height:1px; background:var(--line-soft); margin:.55rem 0; }
+.bp-mail-body > div:last-child { white-space:pre-wrap; font-size:.78rem; line-height:1.6; color:var(--ink); }
+
+/* Guest share row. Buttons wrap rather than squash on a phone. */
+.sharebtns { display:flex; flex-wrap:wrap; gap:.5rem; }
+.sharebtns .btn { padding:.55rem 1rem; font-size:.82rem; }
+
 .bp-terms { margin-top:.4rem; }
 .bp-termlist { margin:0; padding-left:1.05rem; font-size:.8rem; color:var(--muted); line-height:1.65; }
 .src-direct, .src-booking { background:rgba(167,171,161,.3); color:var(--sage-deep); }

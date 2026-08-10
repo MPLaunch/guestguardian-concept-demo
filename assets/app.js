@@ -32,6 +32,23 @@
     } catch (e) {}
   }
 
+  /* Guest share row on a property page. The native share sheet only appears
+     where the browser actually has one (phones, mostly), so it is hidden by
+     default and revealed rather than shown then broken. */
+  var shareRow = document.querySelector('.sharebtns');
+  if (shareRow && navigator.share) {
+    var nativeBtn = shareRow.querySelector('[data-share-native]');
+    if (nativeBtn) {
+      nativeBtn.hidden = false;
+      nativeBtn.addEventListener('click', function () {
+        navigator.share({
+          title: shareRow.getAttribute('data-share-title') || document.title,
+          url: shareRow.getAttribute('data-share-url') || location.href,
+        }).catch(function () {});
+      });
+    }
+  }
+
   /* Sticky nav shadow */
   var nav = document.querySelector('.nav');
   if (nav) {
@@ -1644,9 +1661,14 @@
           arrive: arrive, depart: depart, nights: q.nights, total: q.total,
           guests: document.getElementById('bp-guests').value,
           first: val('bk-first'), last: val('bk-last'),
-          email: val('bk-email'), phone: val('bk-phone'), notes: val('bk-notes'),
+          email: val('bk-email'),
+          phone: (val('bk-cc') + ' ' + val('bk-phone')).trim(),
+          notes: val('bk-notes'),
           extras: chosenExtras.map(function (x) { return x.name; }).join(', '),
           coupon: coupon ? coupon.code : '',
+          billing: [val('bp-addr'), val('bp-addr2'), val('bp-city'), val('bp-state'),
+                    val('bp-post'), val('bp-country')].filter(Boolean).join(', '),
+          optin: document.getElementById('bp-optin') && document.getElementById('bp-optin').checked ? 'yes' : 'no',
           madeAt: new Date().toISOString().slice(0, 16).replace('T', ' '),
         };
         /* 🚨 Note what is NOT in that object: no card number, no expiry, no CVC.
@@ -1666,10 +1688,40 @@
           fmt(arrive) + ' to ' + fmt(depart) + ' · ' + booking.guests + ' guest' + (booking.guests > 1 ? 's' : '');
         renderLines(lines3, q);
         document.getElementById('bp-ref').textContent = ref;
+
+        /* ---- The confirmation email the guest would receive.
+           Built here so there is ONE version of the wording: the same text is
+           rendered on screen and relayed to Peter, so what he reads in his inbox
+           is what the guest would have read. */
+        var mailSubject = 'Your stay at ' + booking.property + ' — ' + ref;
+        var mailBody =
+          'Hi ' + booking.first + ',\n\n' +
+          'You are booked in. Here are the details.\n\n' +
+          booking.property + '\n' +
+          fmt(arrive) + ' to ' + fmt(depart) + '\n' +
+          q.nights + ' night' + (q.nights > 1 ? 's' : '') + ' · ' + booking.guests +
+            ' guest' + (booking.guests > 1 ? 's' : '') + '\n' +
+          'Reference ' + ref + '\n' +
+          'Total paid ' + money(q.total) + '\n' +
+          (booking.extras ? 'Added to your stay: ' + booking.extras + '\n' : '') +
+          '\nCheck in from ' + (bp.getAttribute('data-checkin') || '2') + ':00, check out by ' +
+            (bp.getAttribute('data-checkout') || '10') + ':00.\n\n' +
+          'We will be in touch before you arrive with everything you need. ' +
+          'Reply to this email if anything changes, or call us on 08 8239 1787.\n\n' +
+          'See you soon,\nGuest Guardian';
+
+        var to = document.getElementById('bp-mail-to');
+        var subj = document.getElementById('bp-mail-subj');
+        var text = document.getElementById('bp-mail-text');
+        if (to) to.textContent = booking.email;
+        if (subj) subj.textContent = mailSubject;
+        if (text) text.textContent = mailBody;
+
         step(4);
 
         /* Tell Peter a demo booking came through — same relay as the estimator,
-           his inbox only. Contact details and the stay, never the card. */
+           his inbox only. Contact details, the stay and a copy of the guest's
+           confirmation. Never the card. */
         relayLead('direct booking', {
           name: booking.first + ' ' + booking.last,
           email: booking.email, phone: booking.phone,
@@ -1680,6 +1732,9 @@
           Nights: String(q.nights), Guests: booking.guests,
           Extras: booking.extras || 'none', Coupon: booking.coupon || 'none',
           Total: money(q.total),
+          'Billing address': booking.billing || 'not given',
+          'Marketing opt-in': booking.optin,
+          'Guest confirmation (NOT sent to them)': mailSubject + '\n\n' + mailBody,
         });
       });
 
