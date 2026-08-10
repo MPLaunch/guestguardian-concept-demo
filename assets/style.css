@@ -1741,6 +1741,79 @@ b.tag-auto, b.tag-web { font-weight: 500; padding: .1rem .45rem; border-radius: 
 .estnudge .btn { flex: none; }
 .estnudge-lg { background: var(--sand); border-color: transparent; }
 
+/* ==========================================================================
+   THE STATEMENT DOCUMENT. Sized to A4 so what appears on screen is what comes
+   out of Print to PDF, rather than a web page that happens to print.
+   ========================================================================== */
+.bare { background: #E8E7E3; }
+.doc-shell { max-width: 900px; margin: 0 auto; padding: clamp(1rem, 3vw, 2rem) var(--gut) 4rem; }
+.doc-bar { display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+  flex-wrap: wrap; margin-bottom: 1.2rem; }
+.doc-bar-actions { display: flex; gap: .6rem; align-items: center; flex-wrap: wrap; }
+.doc-bar select { padding: .55rem .8rem; font: inherit; font-size: .86rem; border: 1px solid var(--line);
+  border-radius: var(--rad); background: #fff; color: var(--ink); }
+
+.doc { background: #fff; color: #14150F; padding: clamp(1.6rem, 4vw, 3rem);
+  border-radius: 6px; box-shadow: 0 10px 40px rgba(28,29,28,.10); }
+.doc-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 1.5rem;
+  flex-wrap: wrap; padding-bottom: 1.1rem; border-bottom: 2px solid var(--ink); }
+.doc-brand { display: flex; align-items: center; gap: .7rem; }
+/* The brand mark, drawn rather than loaded, so the document never prints with a
+   missing image box. */
+.doc-mark { width: 34px; height: 34px; flex: none; border-radius: 50%;
+  background: var(--ink);
+  -webkit-mask: radial-gradient(circle at 50% 50%, #000 99%, transparent 100%);
+          mask: radial-gradient(circle at 50% 50%, #000 99%, transparent 100%); }
+.doc-biz { font-family: var(--serif); font-size: 1.3rem; font-weight: 300; letter-spacing: -.02em; }
+.doc-biz b { font-weight: 600; }
+.doc-tag { font-size: .66rem; letter-spacing: .16em; text-transform: uppercase; color: var(--muted); margin-top: .1rem; }
+.doc-meta { text-align: right; }
+.doc-kind { font-size: .66rem; letter-spacing: .16em; text-transform: uppercase; color: var(--muted); }
+.doc-period { font-family: var(--serif); font-size: 1.15rem; margin-top: .15rem; }
+.doc-range { font-size: .72rem; color: var(--muted); }
+
+.doc-to { display: flex; flex-wrap: wrap; gap: 1.4rem 2.4rem; padding: 1.1rem 0; }
+.doc-to div { display: flex; flex-direction: column; gap: .15rem; }
+.doc-to span { font-size: .64rem; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+.doc-to b { font-weight: 500; font-size: .95rem; }
+
+.doc-headline { display: flex; align-items: baseline; justify-content: space-between;
+  background: var(--paper); border-radius: 5px; padding: .9rem 1.1rem; margin-bottom: 1.4rem; }
+.doc-headline span { font-size: .68rem; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+.doc-headline b { font-family: var(--serif); font-size: 1.9rem; font-weight: 400; font-variant-numeric: tabular-nums; }
+
+.doc-tbl { width: 100%; border-collapse: collapse; font-size: .78rem; }
+.doc-tbl th { text-align: left; font-weight: 500; font-size: .62rem; letter-spacing: .09em;
+  text-transform: uppercase; color: var(--muted); padding: 0 .5rem .45rem 0; border-bottom: 1px solid var(--line); }
+.doc-tbl td { padding: .55rem .5rem .55rem 0; border-bottom: 1px solid var(--line-soft); vertical-align: top; }
+.doc-tbl .num, .doc-run .num { text-align: right; font-variant-numeric: tabular-nums; }
+.doc-tbl th.num { padding-right: 0; }
+.doc-tbl .strong { font-weight: 600; }
+.d-sub { display: block; font-size: .68rem; color: var(--muted); }
+
+.doc-run { width: 100%; max-width: 26rem; margin: 1.3rem 0 0 auto; border-collapse: collapse; }
+.doc-run td { padding: .4rem 0; font-size: .85rem; }
+.doc-run .sub td { color: var(--muted); }
+.doc-run .mid td { border-top: 1px solid var(--line-soft); font-weight: 500; }
+.doc-run .tot td { border-top: 2px solid var(--ink); padding-top: .6rem;
+  font-family: var(--serif); font-size: 1.25rem; }
+
+.doc-foot { margin-top: 2rem; padding-top: 1rem; border-top: 1px solid var(--line);
+  font-size: .68rem; line-height: 1.6; color: var(--muted); }
+.doc-foot p { margin: 0 0 .3rem; }
+.doc-demo { font-style: italic; }
+
+@media print {
+  @page { size: A4; margin: 12mm; }
+  .bare { background: #fff; }
+  .no-print { display: none !important; }
+  .doc-shell { max-width: none; padding: 0; }
+  .doc { box-shadow: none; border-radius: 0; padding: 0; }
+  .doc-tbl { font-size: .72rem; }
+  .doc-tbl tr, .doc-run tr { break-inside: avoid; }
+  .doc-head { break-after: avoid; }
+}
+
 /* ---- Owner statements ---------------------------------------------------- */
 .fy-card { display:flex; align-items:center; gap:clamp(1rem,3vw,2rem); flex-wrap:wrap; }
 .fy-card > div:first-child { flex:1 1 18rem; min-width:0; }
@@ -1749,6 +1822,8 @@ b.tag-auto, b.tag-web { font-weight: 500; padding: .1rem .45rem; border-radius: 
 .fy-nums span { font-size:.7rem; letter-spacing:.06em; text-transform:uppercase; color:var(--muted); }
 .fy-nums b { font-family:var(--serif); font-size:1.35rem; font-weight:400; font-variant-numeric:tabular-nums; }
 .fy-card .btn { flex:none; }
+.fy-btns { display:flex; gap:.5rem; flex-wrap:wrap; flex:none; }
+.nowrap { white-space:nowrap; }
 
 .stmt-head { align-items:flex-start; }
 .stmt-actions { display:flex; gap:.5rem; align-items:center; flex-wrap:wrap; }

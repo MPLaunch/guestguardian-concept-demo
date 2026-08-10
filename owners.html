@@ -29,7 +29,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500&family=Outfit:wght@200;300;400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/style.css?v=8e286561">
+<link rel="stylesheet" href="assets/style.css?v=233316c9">
 <script type="application/ld+json">[
  {
   "@context": "https://schema.org",
@@ -228,7 +228,10 @@
           <div><span>Cleaning</span><b>$1,164</b></div>
           <div><span>Channel fees</span><b>$692</b></div>
         </div>
-        <button class="btn btn-primary" type="button" data-fy-csv><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 4v12M7 12l5 5 5-5M4 20h16"/></svg><span>Download the year</span></button>
+        <div class="fy-btns">
+          <a class="btn btn-primary" href="statement.html?p=495920&amp;m=fy" target="_blank" rel="noopener"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 3h8l4 4v14H6z"/><path d="M14 3v4h4M9 12h6M9 16h6"/></svg><span>Statement PDF</span></a>
+          <button class="btn btn-ghost" type="button" data-fy-csv><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 4v12M7 12l5 5 5-5M4 20h16"/></svg><span>Spreadsheet</span></button>
+        </div>
       </div>
 
       <!-- ONE MONTH, ITEMISED. Laid out to mirror the statement their owners
@@ -243,7 +246,7 @@
             <select id="stmt-month" aria-label="Statement month">
               <option value="2026-08">Aug 2026</option><option value="2026-07">Jul 2026</option><option value="2026-06">Jun 2026</option><option value="2026-05">May 2026</option><option value="2026-04">Apr 2026</option><option value="2026-03">Mar 2026</option>
             </select>
-            <button class="btn btn-ghost" type="button" data-stmt-print><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 3h8l4 4v14H6z"/><path d="M14 3v4h4M9 12h6M9 16h6"/></svg><span>PDF</span></button>
+            <a class="btn btn-ghost" id="stmt-pdf" href="statement.html?p=495920" target="_blank" rel="noopener"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 3h8l4 4v14H6z"/><path d="M14 3v4h4M9 12h6M9 16h6"/></svg><span>PDF</span></a>
           </div>
         </div>
 
@@ -541,6 +544,7 @@
       </div>
       <div class="owner-tabs" role="tablist">
         <button class="owner-tab is-on" type="button" data-mtab="props" role="tab">Properties</button>
+        <button class="owner-tab" type="button" data-mtab="statements" role="tab">Statements</button>
         <button class="owner-tab" type="button" data-mtab="leads" role="tab">Leads</button>
         <button class="owner-tab" type="button" data-mtab="owners" role="tab">Owners</button>
         <button class="owner-tab" type="button" data-mtab="adding" role="tab">Adding a property</button>
@@ -1007,6 +1011,47 @@
   </section>
 
   <!-- OWNERS -->
+  <!-- STATEMENTS, Guest Guardian's side. The same document the owner sees,
+       reachable for any owner without asking them to log in and read it out.
+       One document, one set of figures — two would eventually disagree. -->
+  <section class="pad-sm manager-panel" data-mpanel="statements" hidden>
+    <div class="wrap">
+      <div class="ocard">
+        <div class="ocard-head">
+          <h2 class="h3">Owner statements</h2>
+          <span class="small muted">Built from your bookings, on your formula</span>
+        </div>
+        <div class="tbl-wrap"><table class="otbl otbl-wide">
+            <thead><tr><th>Property</th><th>Owner</th><th class="num">This year to date</th><th class="num">Bookings</th><th>Latest</th><th></th></tr></thead>
+            <tbody>
+              <tr>
+                  <td><b>Victoria House - 3Br, BBQ & Sunroom</b></td>
+                  <td>Owner, Victoria House</td>
+                  <td class="num">$1,964</td>
+                  <td class="num">4</td>
+                  <td>Aug 2026</td>
+                  <td class="num nowrap">
+                    <a class="tlink" href="statement.html?p=495920&amp;m=fy" target="_blank" rel="noopener"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 3h8l4 4v14H6z"/><path d="M14 3v4h4M9 12h6M9 16h6"/></svg><span>Year</span></a>
+                    &ensp;
+                    <a class="tlink" href="statement.html?p=495920&amp;m=2026-08" target="_blank" rel="noopener"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 4v12M7 12l5 5 5-5M4 20h16"/></svg><span>Month</span></a>
+                  </td>
+                </tr>
+            </tbody></table></div>
+      </div>
+
+      <div class="book-note mt-2">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 3l7 3v6c0 4.5-3 8-7 9-4-1-7-4.5-7-9V6l7-3z"/></svg>
+        <span><strong>Only Victoria House appears here, and that is correct.</strong>
+        <br><br>The Bungalow and The Cabana are yours, so there is no owner to pay and no statement
+        to issue. As you take on managed properties they appear on this list on their own, each with
+        their own owner and their own terms.
+        <br><br><strong>Every figure is yours.</strong> The Airbnb fee as Airbnb charged it, cleaning
+        from the listing, your commission at 22% including GST, and linen per booking. We checked it
+        against the July statement you sent and it lands on the same number to the cent.</span>
+      </div>
+    </div>
+  </section>
+
   <section class="pad-sm manager-panel" data-mpanel="owners" hidden>
     <div class="wrap">
       <div class="ocard">
@@ -1169,7 +1214,7 @@
   </div>
 </footer>
 
-<script src="assets/app.js?v=8e286561"></script>
+<script src="assets/app.js?v=233316c9"></script>
 <!-- Service worker: required before Android/Chrome will offer "Install app".
      Deliberately a pure network passthrough with NO caching — a caching SW on a
      demo means stale pages survive every redeploy, which is exactly the trap we

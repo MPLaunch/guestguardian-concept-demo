@@ -1978,6 +1978,163 @@
     });
   }
 
+  /* ==========================================================================
+     THE STATEMENT DOCUMENT (statement.html)
+
+     One page that serves every owner and every period. ?p= picks the property,
+     ?m= picks a month or `fy` for the financial year to date. Both the owner
+     portal and Guest Guardian's back office link here, so there is one document
+     and one set of numbers rather than two that can drift apart.
+     ========================================================================== */
+  var docEl = document.getElementById('doc');
+  if (docEl && window.GG_DOC) {
+    var D = window.GG_DOC;
+    var qs = new URLSearchParams(location.search);
+    var pid = qs.get('p') || Object.keys(D.properties)[0];
+    var prop = D.properties[pid];
+
+    var MLD = { '01': 'January', '02': 'February', '03': 'March', '04': 'April', '05': 'May',
+                '06': 'June', '07': 'July', '08': 'August', '09': 'September', '10': 'October',
+                '11': 'November', '12': 'December' };
+    var mny = function (n) {
+      return '$' + Math.abs(n).toLocaleString('en-AU', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    };
+    var dshort = function (s) {
+      if (!s) return '';
+      var d = new Date(Date.UTC(+s.slice(0, 4), +s.slice(5, 7) - 1, +s.slice(8, 10)));
+      return d.toLocaleDateString('en-AU', { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC' });
+    };
+
+    /* The Australian financial year the given month sits in: 1 Jul to 30 Jun. */
+    var fyOf = function (ym) {
+      var y = +ym.slice(0, 4), m = +ym.slice(5, 7);
+      return m >= 7 ? y : y - 1;
+    };
+    var months = prop ? Object.keys(prop.months).sort() : [];
+    var latest = months[months.length - 1];
+    var fyStart = latest ? fyOf(latest) : new Date().getUTCFullYear();
+    var fyMonths = months.filter(function (ym) { return fyOf(ym) === fyStart; });
+
+    var sumOf = function (list, k) {
+      return list.reduce(function (s, ym) { return s + (prop.months[ym][k] || 0); }, 0);
+    };
+    var linesOf = function (list) {
+      return list.reduce(function (a, ym) {
+        return a.concat(prop.months[ym].lines.map(function (l) {
+          var c = {}; for (var k in l) c[k] = l[k]; c._ym = ym; return c;
+        }));
+      }, []);
+    };
+
+    /* Period selector: the financial year first, because an owner downloading a
+       statement at tax time wants the year, not to click twelve months. */
+    var sel = document.getElementById('doc-period');
+    if (sel) {
+      sel.innerHTML =
+        '<option value="fy">Financial year ' + fyStart + '/' + String(fyStart + 1).slice(2) + ' to date</option>' +
+        months.slice().reverse().map(function (ym) {
+          return '<option value="' + ym + '">' + MLD[ym.slice(5, 7)] + ' ' + ym.slice(0, 4) + '</option>';
+        }).join('');
+      sel.value = qs.get('m') || 'fy';
+    }
+
+    var render = function (period) {
+      if (!prop) { docEl.innerHTML = '<p>No statement for that property.</p>'; return; }
+      var isFY = period === 'fy';
+      var list = isFY ? fyMonths : [period];
+      if (!isFY && !prop.months[period]) { docEl.innerHTML = '<p>No statement for that period.</p>'; return; }
+
+      var lines = linesOf(list);
+      var t = function (k) { return sumOf(list, k); };
+      var title = isFY
+        ? 'Financial year ' + fyStart + '/' + String(fyStart + 1).slice(2) + ', to date'
+        : MLD[period.slice(5, 7)] + ' ' + period.slice(0, 4);
+      var range = isFY && fyMonths.length
+        ? '1 July ' + fyStart + ' to ' + dshort(prop.months[fyMonths[fyMonths.length - 1]].lines.slice(-1)[0].depart)
+        : '';
+
+      var rows = lines.map(function (l) {
+        return '<tr>' +
+          '<td>' + dshort(l.arrive) + '<span class="d-sub">to ' + dshort(l.depart) + '</span></td>' +
+          '<td class="num">' + l.nights + '</td>' +
+          '<td>' + (l.channel === 'airbnbOfficial' ? 'Airbnb' : (l.channel || 'Direct')) + '</td>' +
+          '<td class="num">' + mny(l.total) + '</td>' +
+          '<td class="num">' + mny(l.fee) + '</td>' +
+          '<td class="num">' + mny(l.cleaning) + '</td>' +
+          '<td class="num">' + mny(l.commission) + '</td>' +
+          '<td class="num">' + mny(l.linen) + '</td>' +
+          '<td class="num strong">' + mny(l.ownerAfter) + '</td>' +
+        '</tr>';
+      }).join('');
+
+      var run = function (label, amt, cls) {
+        return '<tr class="' + (cls || '') + '"><td>' + label + '</td><td class="num">' +
+          (amt < 0 ? '&minus;' : '') + mny(amt) + '</td></tr>';
+      };
+
+      docEl.innerHTML =
+        '<header class="doc-head">' +
+          '<div class="doc-brand"><span class="doc-mark"></span><div>' +
+            '<div class="doc-biz">Guest <b>Guardian</b></div>' +
+            '<div class="doc-tag">Short-stay management &middot; Adelaide</div>' +
+          '</div></div>' +
+          '<div class="doc-meta">' +
+            '<div class="doc-kind">Owner statement</div>' +
+            '<div class="doc-period">' + title + '</div>' +
+            (range ? '<div class="doc-range">' + range + '</div>' : '') +
+          '</div>' +
+        '</header>' +
+
+        '<section class="doc-to">' +
+          '<div><span>Property</span><b>' + (prop.name || '') + '</b></div>' +
+          '<div><span>Prepared for</span><b>' + (prop.owner || 'Owner') + '</b></div>' +
+          '<div><span>Bookings</span><b>' + lines.length + '</b></div>' +
+          '<div><span>Nights</span><b>' + lines.reduce(function (s, l) { return s + (+l.nights || 0); }, 0) + '</b></div>' +
+        '</section>' +
+
+        '<div class="doc-headline"><span>Paid to you</span><b>' + mny(t('ownerAfter')) + '</b></div>' +
+
+        '<table class="doc-tbl">' +
+          '<thead><tr><th>Stay</th><th class="num">Nights</th><th>Channel</th><th class="num">Booking</th>' +
+          '<th class="num">Channel fee</th><th class="num">Cleaning</th><th class="num">Management</th>' +
+          '<th class="num">Linen</th><th class="num">To you</th></tr></thead>' +
+          '<tbody>' + rows + '</tbody>' +
+        '</table>' +
+
+        '<table class="doc-run">' +
+          run('Received from the channels', t('payout')) +
+          run('Cleaning', -t('cleaning'), 'sub') +
+          run('Net', t('net'), 'mid') +
+          run('Management, ' + Math.round(prop.commission * 100) + '% including GST', -t('commission'), 'sub') +
+          run('Linen and amenities', -t('linen'), 'sub') +
+          '<tr class="tot"><td>Paid to you</td><td class="num">' + mny(t('ownerAfter')) + '</td></tr>' +
+        '</table>' +
+
+        '<section class="doc-foot">' +
+          '<p><b>' + D.business.name + '</b> &middot; ABN ' + D.business.abn + ' &middot; ' +
+            D.business.phone + ' &middot; ' + D.business.email + '</p>' +
+          '<p>All amounts include GST. Channel fees are charged by the booking platform. ' +
+          'A booking is counted in the month the stay begins.</p>' +
+          '<p class="doc-demo">Concept document produced for review. Figures are read from the ' +
+          'Guest Guardian booking system.</p>' +
+        '</section>';
+    };
+
+    if (sel) {
+      sel.addEventListener('change', function () {
+        render(sel.value);
+        /* Keep the address bar honest so the document can be linked or resent. */
+        var u = new URL(location.href);
+        u.searchParams.set('p', pid); u.searchParams.set('m', sel.value);
+        history.replaceState(null, '', u);
+      });
+    }
+    render((sel && sel.value) || 'fy');
+
+    var dp = document.getElementById('doc-print');
+    if (dp) dp.addEventListener('click', function () { window.print(); });
+  }
+
   /* Footer year */
   document.querySelectorAll('[data-year]').forEach(function (el) {
     el.textContent = String(new Date().getFullYear());
