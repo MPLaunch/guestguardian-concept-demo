@@ -1825,6 +1825,11 @@ b.tag-auto, b.tag-web { font-weight: 500; padding: .1rem .45rem; border-radius: 
 .fy-card .btn { flex:none; }
 .fy-btns { display:flex; gap:.5rem; flex-wrap:wrap; flex:none; }
 .nowrap { white-space:nowrap; }
+/* Two links in one cell need to be laid out, not separated by a space
+   character and hoped for. Right-aligned to sit under their own heading. */
+.stmt-links, .stmt-links-h { text-align:right; white-space:nowrap; }
+.stmt-links { display:flex; gap:1.1rem; justify-content:flex-end; align-items:center; }
+.stmt-links .tlink { display:inline-flex; align-items:center; gap:.35rem; }
 
 .stmt-head { align-items:flex-start; }
 .stmt-actions { display:flex; gap:.5rem; align-items:center; flex-wrap:wrap; }
