@@ -1872,6 +1872,12 @@
     }
   }
 
+  /* Expenses come STRAIGHT OUT OF HOSTAWAY. They are already there — 40 of
+     them, each linked to its reservation — so there is no editor here and there
+     never should be. Nick already records them where he works; asking him to
+     type them a second time would be the worst kind of feature. */
+  window.applyCharges = function (m) { return m; };
+
   /* ==========================================================================
      OWNER STATEMENTS.
 
@@ -1900,6 +1906,9 @@
     var draw = function (ym) {
       var m = S.months[ym];
       if (!m) { stmtBody.innerHTML = ''; return; }
+      /* Charges are applied at render time, so changing them in the back office
+         updates every statement rather than only the next one built. */
+      m = window.applyCharges(m, ym, S.pid);
 
       /* Every booking, then the run down to what the owner is paid. The
          deduction rows are negative and read as negative, because a statement
@@ -1909,6 +1918,7 @@
                '<span class="stmt-sub">' + l.nights + ' night' + (l.nights === 1 ? '' : 's') +
                (l.channel === 'airbnbOfficial' ? ' &middot; Airbnb' : l.channel ? ' &middot; ' + l.channel : '') +
                (l.flag ? ' &middot; <span class="stmt-flag">check this one</span>' : '') +
+               (l.note ? ' &middot; <span class="stmt-flag">' + l.note + '</span>' : '') +
                '</span></td><td class="num">' + $(l.total) + '</td>' +
                '<td class="num neg">&minus;' + $(l.fee) + '</td>' +
                '<td class="num">' + $(l.payout) + '</td></tr>';
@@ -1931,7 +1941,7 @@
           line('Cleaning', -m.cleaning, 'neg-row') +
           line('Net', m.net, 'stmt-sub-total') +
           line('Management, 22% including GST', -m.commission, 'neg-row') +
-          line('Linen and amenities', -m.linen, 'neg-row') +
+          line('Expenses, from your Hostaway records', -m.linen, 'neg-row') +
           '<tr class="stmt-total"><td>Paid to you</td><td class="num">' + $(m.ownerAfter) + '</td></tr>' +
         '</table>';
     };
@@ -2015,13 +2025,21 @@
     var fyStart = latest ? fyOf(latest) : new Date().getUTCFullYear();
     var fyMonths = months.filter(function (ym) { return fyOf(ym) === fyStart; });
 
+    /* Every read of a month goes through the charges, so the document and the
+       portal can never show different numbers. */
+    var monthOf = function (ym) { return window.applyCharges(prop.months[ym], ym, pid); };
     var sumOf = function (list, k) {
-      return list.reduce(function (s, ym) { return s + (prop.months[ym][k] || 0); }, 0);
+      return list.reduce(function (s, ym) { return s + (monthOf(ym)[k] || 0); }, 0);
     };
     var linesOf = function (list) {
       return list.reduce(function (a, ym) {
-        return a.concat(prop.months[ym].lines.map(function (l) {
-          var c = {}; for (var k in l) c[k] = l[k]; c._ym = ym; return c;
+        var mm = monthOf(ym);
+        var perBooking = mm.bookings ? mm.linen / mm.bookings : 0;
+        return a.concat(mm.lines.map(function (l) {
+          var c = {}; for (var k in l) c[k] = l[k];
+          c._ym = ym; c.linen = Math.round(perBooking * 100) / 100;
+          c.ownerAfter = Math.round((l.owner - c.linen) * 100) / 100;
+          return c;
         }));
       }, []);
     };
@@ -2043,6 +2061,9 @@
       var isFY = period === 'fy';
       var list = isFY ? fyMonths : [period];
       if (!isFY && !prop.months[period]) { docEl.innerHTML = '<p>No statement for that period.</p>'; return; }
+      var oneOffs = list.reduce(function (a, ym) {
+        return a.concat((monthOf(ym).expenses || []).map(function (e) { return e; }));
+      }, []);
 
       var lines = linesOf(list);
       var t = function (k) { return sumOf(list, k); };
@@ -2107,6 +2128,7 @@
           run('Net', t('net'), 'mid') +
           run('Management, ' + Math.round(prop.commission * 100) + '% including GST', -t('commission'), 'sub') +
           run('Linen and amenities', -t('linen'), 'sub') +
+          oneOffs.map(function (e) { return run(e.desc, -(e.amount * 1.1), 'sub'); }).join('') +
           '<tr class="tot"><td>Paid to you</td><td class="num">' + mny(t('ownerAfter')) + '</td></tr>' +
         '</table>' +
 
