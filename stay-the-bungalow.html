@@ -29,7 +29,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500&family=Outfit:wght@200;300;400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/style.css?v=e2a5417f">
+<link rel="stylesheet" href="assets/style.css?v=1cd46956">
 <script type="application/ld+json">[
  {
   "@context": "https://schema.org",
@@ -136,7 +136,10 @@
              company's website appearing in front of the guest at the moment
              they decide. Dates, availability and pricing below are the real
              calendar, baked in from the Hostaway API at build time. -->
-        <div class="bookpanel" id="bookpanel" data-listing="472310" data-clean="250" data-max="7">
+        <div class="bookpanel" id="bookpanel" data-listing="472310" data-clean="250" data-max="7"
+             data-weekly="0.6" data-monthly="0.5"
+             data-extra="0" data-incl="1"
+             data-checkin="14" data-checkout="10">
           <div class="bp-head">
             <div><span class="bp-from">from</span> <b id="bp-base">$350</b> <span class="bp-night">a night</span></div>
             <span class="bp-live"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span>Live availability</span></span>
@@ -182,10 +185,81 @@
             <textarea id="bk-notes" rows="2" placeholder="Arrival time, an occasion, a question"></textarea></div>
           <div class="bp-quote"><table class="bp-lines" id="bp-lines2"></table></div>
           <button class="btn btn-primary" type="button" id="bp-pay" style="width:100%;justify-content:center;margin-top:1rem">Continue to payment <svg class="arw" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 12h13M12 5l7 7-7 7"/></svg></button>
-          <p class="bp-note">Card details are handled by our payment provider, never stored on this page.</p>
+          <p class="bp-note">Next step is the card. You still will not leave this page.</p>
         </div>
 
-        <!-- Step 3: confirmed. -->
+        <!-- Step 3: THE PAYMENT PAGE, on Guest Guardian's own domain.
+             This is the step the guest currently gets handed to another company
+             for. Everything their engine's checkout does is reproduced here from
+             the real Hostaway rules: length-of-stay discount, cleaning, extra
+             guests, extras, coupon, cancellation terms.
+
+             🚨 NOTHING IS CHARGED AND NOTHING IS SENT. The card fields are inert
+             and are deliberately excluded from the demo relay further down. The
+             number is pre-filled with the industry-standard test card so nobody
+             is ever invited to type a real one. -->
+        <div class="bookpanel" id="bp-payment" hidden>
+          <button type="button" class="bp-back" id="bp-back2">&lsaquo; Back</button>
+          <div class="bp-payhead">
+            <h3 class="h3" style="font-size:1.1rem;margin:.3rem 0 .2rem">Payment</h3>
+            <span class="bp-onsite"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 018 0v3"/></svg><span>guestguardian.com.au</span></span>
+          </div>
+          <p class="small muted" id="bp-paysum" style="margin:0 0 1rem"></p>
+
+          
+          <div class="bp-extras">
+            <p class="bp-sublabel">Enhance your stay</p>
+            
+            <label class="bp-extra">
+              <input type="checkbox" class="bp-extra-in" data-price="100" data-name="Fire Pit" id="bp-extra-0">
+              <span class="bp-extra-name">Fire Pit</span>
+              <span class="bp-extra-price">$100</span>
+            </label>
+          </div>
+
+          <div class="bp-coupon">
+            <button type="button" class="tlink" id="bp-coupon-open">+ Add a coupon</button>
+            <div class="bp-coupon-row" id="bp-coupon-row" hidden>
+              <input type="text" id="bp-coupon-code" placeholder="Coupon code" aria-label="Coupon code">
+              <button type="button" class="btn btn-ghost" id="bp-coupon-apply">Apply</button>
+            </div>
+            <p class="small muted" id="bp-coupon-msg" hidden></p>
+          </div>
+
+          <div class="bp-quote"><table class="bp-lines" id="bp-lines-pay"></table></div>
+
+          <div class="bp-demo">
+            <b>Demonstration only.</b> No card is charged, nothing is stored and nothing
+            is sent anywhere. The number below is the standard test card. Please do not
+            type a real one.
+          </div>
+
+          <div class="bp-card">
+            <div class="field"><label for="bp-cc">Card number</label>
+              <div class="bp-ccwrap">
+                <input id="bp-cc" inputmode="numeric" autocomplete="off" value="4242 4242 4242 4242" aria-describedby="bp-cchint">
+                <span class="bp-brand">TEST</span>
+              </div>
+            </div>
+            <div class="field-row">
+              <div class="field"><label for="bp-exp">Expiry</label><input id="bp-exp" inputmode="numeric" autocomplete="off" value="04 / 30"></div>
+              <div class="field"><label for="bp-cvc">CVC</label><input id="bp-cvc" inputmode="numeric" autocomplete="off" value="123"></div>
+            </div>
+            <div class="field"><label for="bp-ccname">Name on card</label><input id="bp-ccname" autocomplete="off" placeholder="As it appears on the card"></div>
+            <p class="small muted" id="bp-cchint" style="margin:-.2rem 0 0">Card fields on this demo are inert. On the real build they are a Stripe field, so the number never reaches Guest Guardian's own server.</p>
+          </div>
+
+          <button class="btn btn-primary" type="button" id="bp-paynow" style="width:100%;justify-content:center;margin-top:1rem">Pay</button>
+
+          <div class="bp-terms">
+            
+            <p class="bp-sublabel" style="margin-top:1rem">Cancellation</p>
+            <ul class="bp-termlist"><li>100% refund up to 14 days before arrival</li><li>50% refund up to 7 days before arrival</li></ul>
+            <p class="small muted" style="margin:.7rem 0 0">Check in from 14:00 &middot; check out by 10:00.</p>
+          </div>
+        </div>
+
+        <!-- Step 4: confirmed. -->
         <div class="bookpanel bp-confirmed" id="bp-done" hidden>
           <div class="bp-tick"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg></div>
           <h3 class="h3" style="font-size:1.2rem;margin:.6rem 0 .3rem">You're booked in</h3>
@@ -306,7 +380,7 @@
   </div>
 </footer>
 
-<script src="assets/app.js?v=e2a5417f"></script>
+<script src="assets/app.js?v=1cd46956"></script>
 <!-- Service worker: required before Android/Chrome will offer "Install app".
      Deliberately a pure network passthrough with NO caching — a caching SW on a
      demo means stale pages survive every redeploy, which is exactly the trap we

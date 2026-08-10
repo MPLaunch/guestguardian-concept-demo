@@ -1366,18 +1366,82 @@
         return nightsBetween(a, b).every(function (d) { return CAL[d] && CAL[d].free; });
       };
 
-      var quote = function () {
-        if (!arrive || !depart) { quoteEl.hidden = true; return null; }
+      /* The real Hostaway pricing rules for this listing. Their checkout applies
+         all of these, so ours has to as well or the two disagree at the moment
+         the guest is looking at a number.
+         🚨 weeklyDiscount/monthlyDiscount are MULTIPLIERS, not discounts. 0.6
+         means the guest pays 60%, i.e. 40% off. Reading it the other way round
+         turns a 40% discount into a 60% one. */
+      var weeklyMult = parseFloat(bp.getAttribute('data-weekly'));
+      var monthlyMult = parseFloat(bp.getAttribute('data-monthly'));
+      var extraPerson = +bp.getAttribute('data-extra') || 0;
+      var guestsIncl = +bp.getAttribute('data-incl') || 1;
+
+      /* Extras and coupon live on the payment step but change the total, so the
+         quote has to know about them. */
+      var chosenExtras = [];
+      var coupon = null;                       // {code, pct}
+
+      var money = function (n) {
+        return '$' + Math.abs(n).toLocaleString('en-AU', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+      };
+
+      var priceBreakdown = function () {
+        if (!arrive || !depart) return null;
         var nights = nightsBetween(arrive, depart);
+        var n = nights.length;
         var accom = nights.reduce(function (s, d) { return s + ((CAL[d] && CAL[d].price) || 0); }, 0);
-        var total = accom + cleanFee;
-        var fmt = function (n) { return '$' + Math.round(n).toLocaleString('en-AU'); };
-        linesEl.innerHTML =
-          '<tr><td>' + fmt(accom / nights.length) + ' average &times; ' + nights.length + ' night' + (nights.length > 1 ? 's' : '') + '</td><td>' + fmt(accom) + '</td></tr>' +
-          (cleanFee ? '<tr><td>Cleaning</td><td>' + fmt(cleanFee) + '</td></tr>' : '') +
-          '<tr class="bp-total"><td>Total</td><td>' + fmt(total) + '</td></tr>';
+        var guests = +(document.getElementById('bp-guests') || {}).value || 1;
+
+        var lines = [];
+        lines.push({ label: money(accom / n) + ' average &times; ' + n + ' night' + (n > 1 ? 's' : ''), amt: accom });
+
+        /* Length-of-stay discount, exactly as their engine does it. */
+        var stayDisc = 0, stayLabel = '';
+        if (n >= 28 && monthlyMult > 0 && monthlyMult < 1) {
+          stayDisc = accom * (1 - monthlyMult); stayLabel = 'Monthly discount';
+        } else if (n >= 7 && weeklyMult > 0 && weeklyMult < 1) {
+          stayDisc = accom * (1 - weeklyMult); stayLabel = 'Weekly discount';
+        }
+        if (stayDisc > 0) lines.push({ label: stayLabel, amt: -stayDisc, good: true });
+
+        /* Extra guests above the number the nightly rate covers. */
+        var extraGuests = Math.max(0, guests - guestsIncl);
+        var extraCost = extraGuests * extraPerson * n;
+        if (extraCost > 0) {
+          lines.push({ label: extraGuests + ' extra guest' + (extraGuests > 1 ? 's' : '') + ' &times; ' + n + ' night' + (n > 1 ? 's' : ''), amt: extraCost });
+        }
+
+        if (cleanFee) lines.push({ label: 'Cleaning fee', amt: cleanFee });
+
+        chosenExtras.forEach(function (x) { lines.push({ label: x.name, amt: x.price }); });
+
+        var sub = lines.reduce(function (s, l) { return s + l.amt; }, 0);
+
+        var couponCut = 0;
+        if (coupon) {
+          couponCut = sub * coupon.pct;
+          lines.push({ label: 'Coupon ' + coupon.code, amt: -couponCut, good: true });
+        }
+
+        return { nights: n, guests: guests, lines: lines, total: sub - couponCut };
+      };
+
+      var renderLines = function (table, q) {
+        if (!table || !q) return;
+        table.innerHTML = q.lines.map(function (l) {
+          return '<tr' + (l.good ? ' class="bp-good"' : '') + '><td>' + l.label + '</td><td>' +
+                 (l.amt < 0 ? '&minus;' : '') + money(l.amt) + '</td></tr>';
+        }).join('') +
+        '<tr class="bp-total"><td>Total</td><td>' + money(q.total) + '</td></tr>';
+      };
+
+      var quote = function () {
+        var q = priceBreakdown();
+        if (!q) { quoteEl.hidden = true; return null; }
+        renderLines(linesEl, q);
         quoteEl.hidden = false;
-        return { nights: nights.length, total: total };
+        return q;
       };
 
       var draw = function () {
@@ -1426,13 +1490,23 @@
           hintEl.textContent = '';
         }
 
+        refreshGo();
+        draw();
+      });
+
+      var refreshGo = function () {
         var q = quote();
         goBtn.disabled = !q;
         goBtn.textContent = q
-          ? 'Book ' + q.nights + ' night' + (q.nights > 1 ? 's' : '') + ' — $' + Math.round(q.total).toLocaleString('en-AU')
+          ? 'Book ' + q.nights + ' night' + (q.nights > 1 ? 's' : '') + ' — ' + money(q.total)
           : 'Select your dates';
-        draw();
-      });
+        return q;
+      };
+
+      /* Guest count changes the price wherever a listing charges for extra
+         people, so the quote has to follow it. */
+      var guestSel = document.getElementById('bp-guests');
+      if (guestSel) guestSel.addEventListener('change', function () { refreshGo(); });
 
       var prevBtn = document.querySelector('[data-cal-prev]');
       var nextBtn2 = document.querySelector('[data-cal-next]');
@@ -1446,14 +1520,24 @@
          takes the payment and writes the reservation into Hostaway. Nothing
          else in the flow changes. */
       var detailsEl = document.getElementById('bp-details');
+      var payEl = document.getElementById('bp-payment');
       var doneEl = document.getElementById('bp-done');
       var lines2 = document.getElementById('bp-lines2');
+      var linesPay = document.getElementById('bp-lines-pay');
       var lines3 = document.getElementById('bp-lines3');
+      var val = function (id) { var e = document.getElementById(id); return e ? e.value.trim() : ''; };
 
       var step = function (n) {
         bp.hidden = n !== 1;
         if (detailsEl) detailsEl.hidden = n !== 2;
-        if (doneEl) doneEl.hidden = n !== 3;
+        if (payEl) payEl.hidden = n !== 3;
+        if (doneEl) doneEl.hidden = n !== 4;
+        /* Each step replaces the one before it in the same sticky column, so on
+           a phone the top of the new step can end up above the fold. */
+        var top = (n === 1 ? bp : n === 2 ? detailsEl : n === 3 ? payEl : doneEl);
+        if (top && top.getBoundingClientRect().top < 0) {
+          top.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
       };
 
       goBtn.addEventListener('click', function () {
@@ -1466,10 +1550,60 @@
 
       var backBtn2 = document.getElementById('bp-back');
       if (backBtn2) backBtn2.addEventListener('click', function () { step(1); });
+      var backBtn3 = document.getElementById('bp-back2');
+      if (backBtn3) backBtn3.addEventListener('click', function () { step(2); });
+
+      /* ---- Step 3: the payment page. Extras, coupon and the card, all on
+         Guest Guardian's own domain. Repricing runs through the same
+         priceBreakdown() the calendar uses, so the number on the card step can
+         never drift from the number on the calendar step. */
+      var payNowBtn = document.getElementById('bp-paynow');
+
+      var repay = function () {
+        var q = priceBreakdown();
+        if (!q) return null;
+        renderLines(linesPay, q);
+        if (payNowBtn) payNowBtn.textContent = 'Pay ' + money(q.total);
+        return q;
+      };
+
+      document.querySelectorAll('.bp-extra-in').forEach(function (cb) {
+        cb.addEventListener('change', function () {
+          var name = cb.getAttribute('data-name');
+          var price = +cb.getAttribute('data-price') || 0;
+          chosenExtras = chosenExtras.filter(function (x) { return x.name !== name; });
+          if (cb.checked) chosenExtras.push({ name: name, price: price });
+          repay();
+        });
+      });
+
+      var couponOpen = document.getElementById('bp-coupon-open');
+      var couponRow = document.getElementById('bp-coupon-row');
+      var couponMsg = document.getElementById('bp-coupon-msg');
+      if (couponOpen) couponOpen.addEventListener('click', function () {
+        couponRow.hidden = !couponRow.hidden;
+        if (!couponRow.hidden) document.getElementById('bp-coupon-code').focus();
+      });
+      var couponApply = document.getElementById('bp-coupon-apply');
+      if (couponApply) couponApply.addEventListener('click', function () {
+        var code = val('bp-coupon-code').toUpperCase();
+        couponMsg.hidden = false;
+        /* One demo code so the mechanism is visible. A real build validates
+           against codes Guest Guardian creates, not a list baked into a page. */
+        if (code === 'DIRECT10') {
+          coupon = { code: code, pct: 0.10 };
+          couponMsg.textContent = 'Coupon applied — 10% off.';
+          couponMsg.className = 'small bp-good-text';
+        } else if (code) {
+          coupon = null;
+          couponMsg.textContent = 'That code is not recognised.';
+          couponMsg.className = 'small muted';
+        }
+        repay();
+      });
 
       var payBtn = document.getElementById('bp-pay');
       if (payBtn) payBtn.addEventListener('click', function () {
-        var val = function (id) { var e = document.getElementById(id); return e ? e.value.trim() : ''; };
         var ok = true;
         ['bk-first', 'bk-last', 'bk-email', 'bk-phone'].forEach(function (id) {
           var e = document.getElementById(id);
@@ -1479,7 +1613,27 @@
         });
         if (!ok) return;
 
-        var q = quote();
+        var fmtd = function (s) {
+          var d = new Date(Date.UTC(+s.slice(0, 4), +s.slice(5, 7) - 1, +s.slice(8, 10)));
+          return d.toLocaleDateString('en-AU', { day: 'numeric', month: 'short', timeZone: 'UTC' });
+        };
+        var pq = repay();
+        document.getElementById('bp-paysum').textContent =
+          fmtd(arrive) + ' to ' + fmtd(depart) + ' · ' + pq.nights + ' night' +
+          (pq.nights > 1 ? 's' : '') + ' · ' + pq.guests + ' guest' + (pq.guests > 1 ? 's' : '');
+        step(3);
+      });
+
+      /* Card number spacing, purely so the field behaves like a real one. The
+         value never leaves this function. */
+      var ccIn = document.getElementById('bp-cc');
+      if (ccIn) ccIn.addEventListener('input', function () {
+        var digits = ccIn.value.replace(/\D/g, '').slice(0, 16);
+        ccIn.value = (digits.match(/.{1,4}/g) || []).join(' ');
+      });
+
+      if (payNowBtn) payNowBtn.addEventListener('click', function () {
+        var q = repay();
         var ref = 'GG-' + arrive.slice(2, 4) + arrive.slice(5, 7) + arrive.slice(8, 10) +
                   '-' + String(bp.getAttribute('data-listing')).slice(-3);
 
@@ -1491,8 +1645,12 @@
           guests: document.getElementById('bp-guests').value,
           first: val('bk-first'), last: val('bk-last'),
           email: val('bk-email'), phone: val('bk-phone'), notes: val('bk-notes'),
+          extras: chosenExtras.map(function (x) { return x.name; }).join(', '),
+          coupon: coupon ? coupon.code : '',
           madeAt: new Date().toISOString().slice(0, 16).replace('T', ' '),
         };
+        /* 🚨 Note what is NOT in that object: no card number, no expiry, no CVC.
+           The card fields are never read, never stored and never relayed. */
         try {
           var all = JSON.parse(localStorage.getItem('gg_bookings') || '[]');
           all = all.filter(function (b) { return b.ref !== ref; });
@@ -1506,12 +1664,12 @@
         };
         document.getElementById('bp-doneline').textContent =
           fmt(arrive) + ' to ' + fmt(depart) + ' · ' + booking.guests + ' guest' + (booking.guests > 1 ? 's' : '');
-        lines3.innerHTML = linesEl.innerHTML;
+        renderLines(lines3, q);
         document.getElementById('bp-ref').textContent = ref;
-        step(3);
+        step(4);
 
         /* Tell Peter a demo booking came through — same relay as the estimator,
-           his inbox only. */
+           his inbox only. Contact details and the stay, never the card. */
         relayLead('direct booking', {
           name: booking.first + ' ' + booking.last,
           email: booking.email, phone: booking.phone,
@@ -1520,7 +1678,8 @@
           Property: booking.property, Reference: ref,
           Dates: arrive + ' to ' + depart,
           Nights: String(q.nights), Guests: booking.guests,
-          Total: '$' + Math.round(q.total).toLocaleString('en-AU'),
+          Extras: booking.extras || 'none', Coupon: booking.coupon || 'none',
+          Total: money(q.total),
         });
       });
 
