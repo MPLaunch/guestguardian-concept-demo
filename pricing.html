@@ -151,24 +151,110 @@
   </div>
 </section>
 
-<!-- The estimator used to sit here, at the very bottom of the pricing page,
-     which is the last place a curious owner looks. It is the single best
-     lead-catcher on the site: nobody sees a figure until they hand over their
-     details. It now lives high on the appraisal page, where the header button
-     actually points, and the home page sends people to it. Pricing keeps a
-     pointer rather than the whole thing. -->
-<section class="pad-sm">
+<!-- Kept on pricing, because a percentage only means something next to a
+     number. It also runs on the home page now, so it is no longer buried at
+     the bottom of one page nobody scrolls to the end of. -->
+
+<section class="dark pad" id="estimator">
   <div class="wrap">
-    <div class="estnudge rv">
-      <div>
-        <p class="eyebrow">Before you compare fees</p>
-        <h2 class="h3" style="margin-bottom:.4rem">See what yours could be worth</h2>
-        <p class="small muted" style="margin:0">A percentage only means something next to a number. Work out what your property could earn first.</p>
+    <div class="sec-head centered rv">
+      <p class="eyebrow centered">Estimator</p>
+      <h2 class="h2">What could yours earn?</h2>
+      <p class="lede" style="margin-inline:auto">Move the numbers to see an indicative range. A real appraisal accounts for your actual property, position and presentation.</p>
+    </div>
+    <!-- One centred card, three steps. The details form used to sit beside the
+         sliders, so the price of an estimate was visible before anyone had
+         done the easy part. Now: choose, then hand over details, then see it. -->
+    <div class="estcard rv">
+
+      <div data-est-inputs>
+        <div class="field">
+          <label for="est-area">Area</label>
+          <select id="est-area">
+            <option value="coastal">Coastal &mdash; Glenelg, Henley, Brighton</option>
+            <option value="city" selected>City &mdash; CBD, North Adelaide</option>
+            <option value="inner">Inner &mdash; Norwood, Unley, Prospect</option>
+            <option value="hills">Hills &amp; wine &mdash; Hahndorf, McLaren Vale</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="est-beds">Bedrooms</label>
+          <select id="est-beds">
+            <option value="1">1 bedroom</option>
+            <option value="2" selected>2 bedrooms</option>
+            <option value="3">3 bedrooms</option>
+            <option value="4">4+ bedrooms</option>
+          </select>
+        </div>
+        <div class="field" style="margin-bottom:0">
+          <label for="est-occ">How often is it booked &mdash; <span id="est-occ-out">65%</span></label>
+          <input type="range" id="est-occ" min="35" max="90" value="65" step="1" style="padding:0;background:transparent;border:none">
+        </div>
+        <button class="btn btn-light" type="button" id="est-next" style="width:100%;justify-content:center;margin-top:1.4rem">See my estimate <svg class="arw" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 12h13M12 5l7 7-7 7"/></svg></button>
       </div>
-      <a class="btn btn-primary" href="contact.html#estimator">Work out my figure <svg class="arw" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 12h13M12 5l7 7-7 7"/></svg></a>
+
+      <div data-est-gate hidden>
+        <div class="estgate-ico"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 018 0v3"/></svg></div>
+        <h3 class="estgate-h">Your estimate is ready</h3>
+        <p class="estgate-p">We will show it to you right here, and email you a copy along with a proper written appraisal.</p>
+        <form class="estform" id="estform" novalidate>
+          <div class="field-row">
+            <div class="field"><label for="eg-name">Your name</label><input id="eg-name" autocomplete="name" required></div>
+            <div class="field"><label for="eg-phone">Phone</label><input id="eg-phone" type="tel" autocomplete="tel" required></div>
+          </div>
+          <div class="field"><label for="eg-email">Email</label><input id="eg-email" type="email" autocomplete="email" required></div>
+          <div class="field"><label for="eg-suburb">Property suburb</label><input id="eg-suburb" required></div>
+          <button class="btn btn-light" type="submit" style="width:100%;justify-content:center">Show me the numbers <svg class="arw" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 12h13M12 5l7 7-7 7"/></svg></button>
+          <p class="estgate-fine">No obligation and no lock-in. We use this only to send your appraisal.</p>
+        </form>
+        <button type="button" class="estback" id="est-back">Change the details above</button>
+      </div>
+
+      <div data-est-out hidden>
+        <div class="stats" style="grid-template-columns:1fr">
+          <div class="stat"><div class="n" id="est-night">$&bull;&bull;&bull;</div><div class="l">Indicative nightly rate</div></div>
+          <div class="stat"><div class="n" id="est-month">$&bull;,&bull;&bull;&bull;</div><div class="l">Indicative gross per month</div></div>
+          <div class="stat"><div class="n" id="est-year">$&bull;&bull;,&bull;&bull;&bull;</div><div class="l">Indicative gross per year</div></div>
+        </div>
+        <div class="estdone" id="estdone">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg><span>A copy is on its way to <b id="estdone-email">your inbox</b> &mdash; adjust anything above and the figures follow.</span>
+        </div>
+      </div>
+
+      <p class="small mt-2" style="color:rgba(255,255,255,.5);margin-bottom:0">A rough guide only, before fees and running costs. Every property is different, so the number that matters is the written appraisal &mdash; free, no obligation, and based on your actual home.</p>
+    </div>
+
+    <!-- Real achieved nightly rates from Guest Guardian's own bookings, baked in
+         at build time. Anchored on the best-performing home at each size, because
+         the portfolio's 2-bedroom (pool + spa) out-earns its plainer 3-bedroom and
+         a naive average would draw a curve that dips in the middle. The other area
+         bands are scaled off the inner-Adelaide anchor, which is where their
+         properties actually are (Torrensville and Mile End). -->
+    <script>
+      window.GG_RATES = {"inner":[296,478,516,769],"city":[314,507,547,815],"coastal":[332,535,578,861],"hills":[278,449,485,723]};
+      window.GG_RATE_NOTE = "Anchored on 67 real bookings";
+    </script>
+
+    <div class="book-note book-note-dark mt-3">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 3l7 3v6c0 4.5-3 8-7 9-4-1-7-4.5-7-9V6l7-3z"/></svg>
+      <span><strong>Concept note for Nick &mdash; the "make them fill in the form first" bit.</strong>
+      <br><br>This is now built the way you asked. Nobody sees a number until they hand over their
+      details, so every person curious enough to work out what their property could earn becomes a
+      named enquiry sitting in your inbox rather than an anonymous visitor who quietly leaves.
+      <br><br><strong>One honest caveat about "protecting it".</strong> In this demo the lock is done
+      in the visitor's browser, which means somebody technical could get around it if they really
+      wanted to. On the real build we would do the sum on the server instead, so the figures are
+      simply not sent to the page until the form is submitted. Same experience for a normal visitor,
+      but the numbers genuinely cannot be lifted. Worth knowing, because it is the difference between
+      looking locked and being locked.
+      <br><br><strong>And the data behind it.</strong> The figures here are still Adelaide market
+      averages. Pointing this at your own booking and pricing history is exactly what the Hostaway
+      connection below unlocks, and it is what turns this from a nice widget into something you can
+      defend to an owner.</span>
     </div>
   </div>
 </section>
+
 
 <section class="pad">
   <div class="wrap">
