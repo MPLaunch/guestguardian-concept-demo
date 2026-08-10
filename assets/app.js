@@ -492,17 +492,38 @@
         if (ok) shown++;
       });
 
-      if (fCount) fCount.textContent = shown;
+      /* 🪤 The hint is rebuilt from scratch every run, and #f-count is written
+         by textContent rather than replaced by innerHTML. Rewriting the whole
+         paragraph detached the count element, so from the second search onward
+         the number stopped updating and the sentence kept whichever wording the
+         previous search left behind — a date outside the window showed the
+         cards saying "ask us" above a line insisting nothing was free. */
+      var hint = document.querySelector('.bb-hint');
+      var tail;
+      if (!useDates) {
+        tail = ' of our 4 homes match. Add dates to see what is actually free and what those nights cost.';
+      } else if (outside) {
+        tail = ' of our 4 homes match, but those dates run past the window this preview holds. Ask us and we will check the live calendar.';
+      } else if (shown) {
+        tail = ' of our 4 homes ' + (shown === 1 ? 'is' : 'are') +
+               ' free for those nights, priced for the exact dates you picked.';
+      } else {
+        tail = ' of our 4 homes are free for those nights. Try moving them by a night or two.';
+      }
+      if (hint) {
+        var strong = hint.querySelector('strong') || fCount;
+        hint.textContent = tail;
+        if (strong) hint.insertBefore(strong, hint.firstChild);
+      }
+      if (fCount) fCount.textContent = outside ? props.length : shown;
+
       if (fEmpty) {
-        fEmpty.style.display = shown ? 'none' : '';
+        /* A date past the window is not "no match" — the cards are still on
+           screen saying ask us, so an empty-state under them would contradict. */
+        fEmpty.style.display = (shown || outside) ? 'none' : '';
         fEmpty.textContent = useDates
           ? 'None of our homes are free for those dates. Try moving them by a night or two.'
           : 'No homes match that combination. Try widening the filters.';
-      }
-      var hint = document.querySelector('.bb-hint');
-      if (hint && useDates && outside === 0) {
-        hint.innerHTML = '<strong id="f-count">' + shown + '</strong> of our 4 homes ' +
-          (shown === 1 ? 'is' : 'are') + ' free for those nights, with the real price for the dates you picked.';
       }
     };
 
