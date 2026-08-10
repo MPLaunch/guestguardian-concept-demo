@@ -1825,11 +1825,16 @@ b.tag-auto, b.tag-web { font-weight: 500; padding: .1rem .45rem; border-radius: 
 .fy-card .btn { flex:none; }
 .fy-btns { display:flex; gap:.5rem; flex-wrap:wrap; flex:none; }
 .nowrap { white-space:nowrap; }
-/* Two links in one cell need to be laid out, not separated by a space
-   character and hoped for. Right-aligned to sit under their own heading. */
-.stmt-links, .stmt-links-h { text-align:right; white-space:nowrap; }
-.stmt-links { display:flex; gap:1.1rem; justify-content:flex-end; align-items:center; }
-.stmt-links .tlink { display:inline-flex; align-items:center; gap:.35rem; }
+/* 🪤 Two goes at this failed for two separate reasons, both worth remembering.
+   1. `.otbl td, .otbl th` sets `text-align:left`, which is MORE SPECIFIC than a
+      bare `.stmt-links`, so the right-align was being thrown away. Qualify with
+      the table class or it silently loses.
+   2. `display:flex` on a <td> pulls the cell out of table layout, so it stops
+      lining up with its own heading. Keep it a table-cell and lay the links out
+      as inline-flex inside it. */
+.otbl th.stmt-links-h, .otbl td.stmt-links { text-align: right; white-space: nowrap; }
+.stmt-links .tlink { display: inline-flex; align-items: center; gap: .35rem; }
+.stmt-links .tlink + .tlink { margin-left: 1.4rem; }
 
 .stmt-head { align-items:flex-start; }
 .stmt-actions { display:flex; gap:.5rem; align-items:center; flex-wrap:wrap; }
