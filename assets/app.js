@@ -419,6 +419,39 @@
     var fCount = document.getElementById('f-count');
     var fEmpty = document.getElementById('f-empty');
 
+    var AV = window.GG_AVAIL || {};
+    var datesOn = false;          // only judge availability once dates are given
+
+    var nightsIn = function (a, b) {
+      var out = [];
+      var d = Date.UTC(+a.slice(0, 4), +a.slice(5, 7) - 1, +a.slice(8, 10));
+      var end = Date.UTC(+b.slice(0, 4), +b.slice(5, 7) - 1, +b.slice(8, 10));
+      while (d < end) {
+        var x = new Date(d);
+        out.push(x.getUTCFullYear() + '-' + String(x.getUTCMonth() + 1).padStart(2, '0') +
+                 '-' + String(x.getUTCDate()).padStart(2, '0'));
+        d += 86400000;
+      }
+      return out;
+    };
+
+    /* Three answers, not two. "We do not hold that far ahead" is a different
+       thing from "someone has it", and telling a guest the second when the
+       truth is the first is how a site loses a booking it could have taken. */
+    var checkStay = function (id, a, b) {
+      var av = AV[String(id)];
+      if (!av) return { state: 'unknown' };
+      var nights = nightsIn(a, b);
+      if (!nights.length) return { state: 'unknown' };
+      if (nights[0] < av.min || nights[nights.length - 1] > av.max) return { state: 'outside' };
+      var taken = nights.some(function (d) {
+        return (av.booked || []).some(function (r) { return d >= r[0] && d <= r[1]; });
+      });
+      if (taken) return { state: 'taken' };
+      var total = nights.reduce(function (s, d) { return s + ((av.prices || {})[d] || 0); }, 0);
+      return { state: 'free', nights: nights.length, total: total, avg: total / nights.length };
+    };
+
     var applyFilter = function () {
       /* Queried per run, not cached — practice properties are appended to the
          grid after this block initialises, and a cached list would leave them
@@ -427,20 +460,76 @@
       var g = parseInt(fGuests.value, 10) || 0;
       var b = parseInt(fBeds.value, 10) || 0;
       var p = fPool.value;
-      var shown = 0;
+      var a1 = fStartEl && fStartEl.value, a2 = fEndEl && fEndEl.value;
+      var useDates = datesOn && a1 && a2 && a2 > a1;
+      var shown = 0, outside = 0;
+
       props.forEach(function (el) {
         var ok = parseInt(el.getAttribute('data-sleeps'), 10) >= g
               && parseInt(el.getAttribute('data-beds'), 10) >= b
               && (p === 'any' || el.getAttribute('data-pool') === 'true');
+
+        var tag = el.querySelector('[data-av]');
+        if (tag) { tag.textContent = ''; tag.hidden = true; }
+
+        if (ok && useDates) {
+          var r = checkStay(el.getAttribute('data-listing'), a1, a2);
+          if (r.state === 'taken') ok = false;
+          else if (tag && r.state === 'free') {
+            tag.hidden = false;
+            tag.className = 'jcard-av is-free';
+            tag.textContent = r.nights + ' night' + (r.nights > 1 ? 's' : '') + ' · $' +
+              Math.round(r.total).toLocaleString('en-AU') + ' · $' +
+              Math.round(r.avg).toLocaleString('en-AU') + ' a night';
+          } else if (tag && r.state === 'outside') {
+            outside++;
+            tag.hidden = false;
+            tag.className = 'jcard-av is-outside';
+            tag.textContent = 'Beyond the dates we hold here — ask us';
+          }
+        }
         el.style.display = ok ? '' : 'none';
         if (ok) shown++;
       });
+
       if (fCount) fCount.textContent = shown;
-      if (fEmpty) fEmpty.style.display = shown ? 'none' : '';
+      if (fEmpty) {
+        fEmpty.style.display = shown ? 'none' : '';
+        fEmpty.textContent = useDates
+          ? 'None of our homes are free for those dates. Try moving them by a night or two.'
+          : 'No homes match that combination. Try widening the filters.';
+      }
+      var hint = document.querySelector('.bb-hint');
+      if (hint && useDates && outside === 0) {
+        hint.innerHTML = '<strong id="f-count">' + shown + '</strong> of our 4 homes ' +
+          (shown === 1 ? 'is' : 'are') + ' free for those nights, with the real price for the dates you picked.';
+      }
     };
+
+    var fStartEl = document.getElementById('f-start');
+    var fEndEl = document.getElementById('f-end');
+
     [fGuests, fBeds, fPool].forEach(function (el) {
       if (el) el.addEventListener('change', applyFilter);
     });
+    /* Changing a date after searching re-answers straight away rather than
+       leaving yesterday's answer on screen next to today's dates. */
+    [fStartEl, fEndEl].forEach(function (el) {
+      if (el) el.addEventListener('change', function () { if (datesOn) applyFilter(); });
+    });
+
+    /* 🚨 This used to open their booking engine in a panel over the page — the
+       one remaining place a guest was handed to another company. It also
+       disagreed with the page underneath it: the cards said one home matched
+       while the panel said "No results". Now it just answers, here. */
+    pf.addEventListener('submit', function (ev) {
+      ev.preventDefault();
+      datesOn = true;
+      applyFilter();
+      var list = document.getElementById('proplist');
+      if (list) list.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+
     applyFilter();
 
     /* Depart can never precede arrive. */
@@ -513,30 +602,11 @@
       });
     });
 
-    /* The date/guest search opens in the SAME modal, so checking availability
-       never bounces the guest off the site either. The plain form action stays
-       as the no-JS fallback. */
-    var bookbar = document.querySelector('form.bookbar');
-    if (bookbar) {
-      bookbar.addEventListener('submit', function (ev) {
-        ev.preventDefault();
-        var params = [];
-        Array.prototype.forEach.call(bookbar.elements, function (el) {
-          // Only named fields go to their engine. Bedrooms/pool are ours and
-          // filter the cards locally, so they are deliberately unnamed.
-          if (el.name && el.value) {
-            params.push(encodeURIComponent(el.name) + '=' + encodeURIComponent(el.value));
-          }
-        });
-        var url = bookbar.getAttribute('action') + (params.length ? '?' + params.join('&') : '');
-        var s = document.getElementById('f-start'), e = document.getElementById('f-end');
-        var title = (s && s.value && e && e.value)
-          ? 'Available ' + s.value + ' to ' + e.value
-          : 'Available properties';
-        openModal(url, title);
-        guardLoader();
-      });
-    }
+    /* 🚨 The date/guest search USED to open the booking engine in this modal.
+       It is now answered on the page itself, in the property-filter block
+       above. Nothing here may bind to form.bookbar again: #propfilter carries
+       that class, so a handler here would re-open the panel over the top of the
+       answer the page has already given. */
 
     /* Single-property booking form — same modal, but the deep link is already
        pinned to one listing id, so the guest only ever sees that home. */
