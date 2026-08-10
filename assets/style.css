@@ -1741,6 +1741,62 @@ b.tag-auto, b.tag-web { font-weight: 500; padding: .1rem .45rem; border-radius: 
 .estnudge .btn { flex: none; }
 .estnudge-lg { background: var(--sand); border-color: transparent; }
 
+/* ---- Owner statements ---------------------------------------------------- */
+.fy-card { display:flex; align-items:center; gap:clamp(1rem,3vw,2rem); flex-wrap:wrap; }
+.fy-card > div:first-child { flex:1 1 18rem; min-width:0; }
+.fy-nums { display:flex; gap:clamp(1rem,3vw,2rem); flex-wrap:wrap; }
+.fy-nums div { display:flex; flex-direction:column; gap:.15rem; }
+.fy-nums span { font-size:.7rem; letter-spacing:.06em; text-transform:uppercase; color:var(--muted); }
+.fy-nums b { font-family:var(--serif); font-size:1.35rem; font-weight:400; font-variant-numeric:tabular-nums; }
+.fy-card .btn { flex:none; }
+
+.stmt-head { align-items:flex-start; }
+.stmt-actions { display:flex; gap:.5rem; align-items:center; flex-wrap:wrap; }
+.stmt-actions select { padding:.5rem .7rem; font:inherit; font-size:.85rem; border:1px solid var(--line);
+  border-radius:var(--rad); background:var(--paper-2); color:var(--ink); }
+.stmt-actions .btn { padding:.5rem .9rem; font-size:.78rem; }
+.stmt-period { margin:.2rem 0 1rem; font-size:.8rem; color:var(--muted); }
+.stmt-sub { display:block; font-size:.74rem; color:var(--muted); margin-top:.15rem; }
+.stmt-flag { color:var(--rust); }
+.stmt-tbl td, .stmt-tbl th { vertical-align:top; }
+.otbl td.neg, .stmt-run .neg-row td { color:var(--muted); }
+.stmt-run { width:100%; margin-top:1rem; border-top:1px solid var(--line); }
+.stmt-run td { padding:.45rem 0; font-size:.9rem; }
+.stmt-run td.num { text-align:right; font-variant-numeric:tabular-nums; }
+.stmt-run .stmt-sub-total td { border-top:1px solid var(--line-soft); font-weight:500; }
+.stmt-run .stmt-total td { border-top:2px solid var(--ink); padding-top:.7rem;
+  font-family:var(--serif); font-size:1.2rem; }
+.stmt-note { margin:.9rem 0 0; }
+
+/* ---- Where every dollar went -------------------------------------------- */
+.stackchart { display:flex; align-items:flex-end; gap:clamp(.4rem,1.5vw,1rem); height:200px; margin-top:.5rem; }
+.stackcol { flex:1 1 0; min-width:0; display:flex; flex-direction:column; align-items:center; gap:.35rem; height:100%; }
+.stackbar { flex:1; width:100%; max-width:52px; display:flex; flex-direction:column-reverse;
+  border-radius:5px; overflow:hidden; background:var(--paper); }
+.sg { display:block; width:100%; }
+.sg-owner { background:var(--ink); }
+.sg-comm  { background:var(--sage-deep); }
+.sg-clean { background:var(--sage); }
+.sg-fee   { background:var(--rust); }
+.sg-linen { background:var(--sand); }
+.stacklab { font-size:.68rem; letter-spacing:.05em; text-transform:uppercase; color:var(--muted); }
+.stackval { font-size:.72rem; font-variant-numeric:tabular-nums; color:var(--ink); }
+.stackkey { display:flex; flex-wrap:wrap; gap:.4rem 1.1rem; margin-top:1rem; font-size:.76rem; color:var(--muted); }
+.stackkey span { display:inline-flex; align-items:center; gap:.4rem; }
+.stackkey i { width:11px; height:11px; border-radius:3px; display:inline-block; }
+
+/* ---- Print: the statement becomes the PDF, nothing else on the page ------ */
+@media print {
+  body.printing-stmt > *:not(main),
+  body.printing-stmt main > *:not(.owner-panel[data-panel="statements"]),
+  body.printing-stmt .nav, body.printing-stmt .site-footer,
+  body.printing-stmt .owner-tabs, body.printing-stmt .book-note,
+  body.printing-stmt .fy-card, body.printing-stmt .stmt-actions { display:none !important; }
+  body.printing-stmt .ocard { border:0; padding:0; }
+  body.printing-stmt { background:#fff; }
+  .stmt-run .stmt-total td { border-top:2px solid #000; }
+}
+
 /* Where you'll be. */
 .pf-loc { background: var(--ink); border-color: var(--ink) !important; color: #fff !important; }
 .pf-loc svg { color: #fff !important; }

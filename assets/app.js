@@ -1872,6 +1872,112 @@
     }
   }
 
+  /* ==========================================================================
+     OWNER STATEMENTS.
+
+     Renders one month, itemised the way their owners already receive it, from
+     figures that came out of Nick's own formula at build time. Nothing is
+     calculated here beyond formatting: the maths lives in gg_statements.py so
+     there is exactly ONE place it can be wrong.
+     ========================================================================== */
+  var stmtBody = document.getElementById('stmt-body');
+  if (stmtBody && window.GG_STMT) {
+    var S = window.GG_STMT;
+    var sel = document.getElementById('stmt-month');
+    var ML = { '01': 'January', '02': 'February', '03': 'March', '04': 'April', '05': 'May',
+               '06': 'June', '07': 'July', '08': 'August', '09': 'September', '10': 'October',
+               '11': 'November', '12': 'December' };
+    var lab = function (ym) { return ML[ym.slice(5, 7)] + ' ' + ym.slice(0, 4); };
+    var $ = function (n) {
+      return '$' + Math.abs(n).toLocaleString('en-AU', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    };
+    var day = function (s) {
+      if (!s) return '';
+      var d = new Date(Date.UTC(+s.slice(0, 4), +s.slice(5, 7) - 1, +s.slice(8, 10)));
+      return d.toLocaleDateString('en-AU', { day: 'numeric', month: 'short', timeZone: 'UTC' });
+    };
+
+    var draw = function (ym) {
+      var m = S.months[ym];
+      if (!m) { stmtBody.innerHTML = ''; return; }
+
+      /* Every booking, then the run down to what the owner is paid. The
+         deduction rows are negative and read as negative, because a statement
+         that hides its subtractions is the reason people distrust them. */
+      var rows = m.lines.map(function (l) {
+        return '<tr><td><b>' + day(l.arrive) + ' to ' + day(l.depart) + '</b>' +
+               '<span class="stmt-sub">' + l.nights + ' night' + (l.nights === 1 ? '' : 's') +
+               (l.channel === 'airbnbOfficial' ? ' &middot; Airbnb' : l.channel ? ' &middot; ' + l.channel : '') +
+               (l.flag ? ' &middot; <span class="stmt-flag">check this one</span>' : '') +
+               '</span></td><td class="num">' + $(l.total) + '</td>' +
+               '<td class="num neg">&minus;' + $(l.fee) + '</td>' +
+               '<td class="num">' + $(l.payout) + '</td></tr>';
+      }).join('');
+
+      var line = function (label, amt, cls) {
+        return '<tr class="' + (cls || '') + '"><td>' + label + '</td><td class="num">' +
+               (amt < 0 ? '&minus;' : '') + $(amt) + '</td></tr>';
+      };
+
+      stmtBody.innerHTML =
+        '<p class="stmt-period">' + lab(ym) + ' &middot; ' + m.bookings + ' booking' +
+          (m.bookings === 1 ? '' : 's') + ' &middot; ' + m.nights + ' night' + (m.nights === 1 ? '' : 's') + '</p>' +
+        '<div class="tbl-wrap"><table class="otbl stmt-tbl">' +
+          '<thead><tr><th>Stay</th><th class="num">Booking</th><th class="num">Channel fee</th><th class="num">Received</th></tr></thead>' +
+          '<tbody>' + rows + '</tbody>' +
+        '</table></div>' +
+        '<table class="otbl stmt-run">' +
+          line('Received from the channel', m.payout) +
+          line('Cleaning', -m.cleaning, 'neg-row') +
+          line('Net', m.net, 'stmt-sub-total') +
+          line('Management, 22% including GST', -m.commission, 'neg-row') +
+          line('Linen and amenities', -m.linen, 'neg-row') +
+          '<tr class="stmt-total"><td>Paid to you</td><td class="num">' + $(m.ownerAfter) + '</td></tr>' +
+        '</table>';
+    };
+
+    if (sel) {
+      sel.addEventListener('change', function () { draw(sel.value); });
+      draw(sel.value);
+    }
+
+    /* PDF is the browser's own print-to-PDF against a print stylesheet. It
+       needs no server, it is the same document on every machine, and it keeps
+       working the day this moves onto their real site. */
+    var printBtn = document.querySelector('[data-stmt-print]');
+    if (printBtn) printBtn.addEventListener('click', function () {
+      document.body.classList.add('printing-stmt');
+      window.print();
+      setTimeout(function () { document.body.classList.remove('printing-stmt'); }, 400);
+    });
+
+    /* The whole financial year, as a spreadsheet their accountant can open. */
+    var fyBtn = document.querySelector('[data-fy-csv]');
+    if (fyBtn) fyBtn.addEventListener('click', function () {
+      var head = ['Month', 'Arrive', 'Depart', 'Nights', 'Channel', 'Booking total',
+                  'Channel fee', 'Received', 'Cleaning', 'Net', 'Management', 'Linen', 'Paid to you'];
+      var rows = [head];
+      (S.fy || []).forEach(function (ym) {
+        var m = S.months[ym];
+        if (!m) return;
+        m.lines.forEach(function (l) {
+          rows.push([lab(ym), l.arrive, l.depart, l.nights,
+                     l.channel === 'airbnbOfficial' ? 'Airbnb' : (l.channel || ''),
+                     l.total, l.fee, l.payout, l.cleaning, l.net, l.commission, l.linen, l.ownerAfter]);
+        });
+      });
+      /* Quote every field: property names and dates both contain commas. */
+      var csv = rows.map(function (r) {
+        return r.map(function (c) { return '"' + String(c).replace(/"/g, '""') + '"'; }).join(',');
+      }).join('\r\n');
+      var a = document.createElement('a');
+      a.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv;charset=utf-8;' }));
+      a.download = 'guest-guardian-statements-FY2026-27.csv';
+      document.body.appendChild(a); a.click(); document.body.removeChild(a);
+      URL.revokeObjectURL(a.href);
+    });
+  }
+
   /* Footer year */
   document.querySelectorAll('[data-year]').forEach(function (el) {
     el.textContent = String(new Date().getFullYear());
