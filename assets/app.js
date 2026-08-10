@@ -2161,6 +2161,46 @@
     if (dp) dp.addEventListener('click', function () { window.print(); });
   }
 
+  /* ---- Property photo lightbox.
+     Built only when the page actually has a gallery, and it fails open: if the
+     script never runs, the five photos are still real images on the page. */
+  var gal = document.querySelector('[data-gal]');
+  if (gal && window.GG_PHOTOS && window.GG_PHOTOS.length) {
+    var PH = window.GG_PHOTOS, at = 0;
+    var box = document.createElement('div');
+    box.className = 'pgl';
+    box.innerHTML =
+      '<button class="pgl-close" type="button" aria-label="Close">&times;</button>' +
+      '<button class="pgl-prev" type="button" aria-label="Previous">&lsaquo;</button>' +
+      '<img alt="">' +
+      '<button class="pgl-next" type="button" aria-label="Next">&rsaquo;</button>' +
+      '<span class="pgl-count"></span>';
+    document.body.appendChild(box);
+    var img = box.querySelector('img'), count = box.querySelector('.pgl-count');
+
+    var show = function (i) {
+      at = (i + PH.length) % PH.length;
+      img.src = PH[at];
+      count.textContent = (at + 1) + ' of ' + PH.length;
+    };
+    var open = function (i) { show(i); box.classList.add('is-on'); document.body.style.overflow = 'hidden'; };
+    var close = function () { box.classList.remove('is-on'); document.body.style.overflow = ''; };
+
+    gal.querySelectorAll('[data-gal-open]').forEach(function (b) {
+      b.addEventListener('click', function () { open(+b.getAttribute('data-gal-open') || 0); });
+    });
+    box.querySelector('.pgl-close').addEventListener('click', close);
+    box.querySelector('.pgl-prev').addEventListener('click', function () { show(at - 1); });
+    box.querySelector('.pgl-next').addEventListener('click', function () { show(at + 1); });
+    box.addEventListener('click', function (ev) { if (ev.target === box) close(); });
+    document.addEventListener('keydown', function (ev) {
+      if (!box.classList.contains('is-on')) return;
+      if (ev.key === 'Escape') close();
+      if (ev.key === 'ArrowLeft') show(at - 1);
+      if (ev.key === 'ArrowRight') show(at + 1);
+    });
+  }
+
   /* Footer year */
   document.querySelectorAll('[data-year]').forEach(function (el) {
     el.textContent = String(new Date().getFullYear());

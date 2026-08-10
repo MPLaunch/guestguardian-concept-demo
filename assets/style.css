@@ -1894,6 +1894,39 @@ b.tag-auto, b.tag-web { font-weight: 500; padding: .1rem .45rem; border-radius: 
   .stmt-run .stmt-total td { border-top:2px solid #000; }
 }
 
+/* ---- Property photo gallery -------------------------------------------- */
+.prop-gal { position: relative; display: grid; grid-template-columns: 2fr 1fr;
+  gap: .5rem; border-radius: var(--rad-lg); overflow: hidden; }
+.prop-gal button { padding: 0; border: 0; background: none; cursor: zoom-in; display: block; }
+.pg-main { height: 100%; }
+.pg-main img { width: 100%; height: 100%; object-fit: cover; display: block; aspect-ratio: 4 / 3; }
+.pg-side { display: grid; grid-template-rows: 1fr 1fr; grid-template-columns: 1fr 1fr; gap: .5rem; }
+.pg-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.pg-all { position: absolute; right: .9rem; bottom: .9rem; display: inline-flex !important;
+  align-items: center; gap: .45rem; background: #fff; color: var(--ink);
+  border-radius: 100px !important; padding: .5rem .95rem !important; font-size: .8rem;
+  box-shadow: 0 2px 12px rgba(0,0,0,.18); cursor: pointer; }
+.pg-all svg { width: 16px; height: 16px; }
+@media (max-width: 720px) {
+  .prop-gal { grid-template-columns: 1fr; }
+  .pg-side { grid-template-rows: 1fr; }
+  .pg-side .pg-thumb:nth-child(n+3) { display: none; }
+}
+
+/* Lightbox. Kept deliberately plain: a photo, a count, and a way out. */
+.pgl { position: fixed; inset: 0; z-index: 300; background: rgba(11,13,20,.94);
+  display: none; align-items: center; justify-content: center; }
+.pgl.is-on { display: flex; }
+.pgl img { max-width: 92vw; max-height: 84vh; object-fit: contain; border-radius: 4px; }
+.pgl-close, .pgl-prev, .pgl-next { position: absolute; background: rgba(255,255,255,.12);
+  color: #fff; border: 0; border-radius: 50%; width: 44px; height: 44px; font-size: 1.4rem;
+  cursor: pointer; display: grid; place-items: center; }
+.pgl-close { top: 1.2rem; right: 1.2rem; }
+.pgl-prev { left: 1.2rem; } .pgl-next { right: 1.2rem; }
+.pgl-close:hover, .pgl-prev:hover, .pgl-next:hover { background: rgba(255,255,255,.24); }
+.pgl-count { position: absolute; bottom: 1.4rem; left: 50%; transform: translateX(-50%);
+  color: #fff; font-size: .82rem; letter-spacing: .04em; }
+
 /* Where you'll be. */
 .pf-loc { background: var(--ink); border-color: var(--ink) !important; color: #fff !important; }
 .pf-loc svg { color: #fff !important; }
