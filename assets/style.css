@@ -1758,12 +1758,11 @@ b.tag-auto, b.tag-web { font-weight: 500; padding: .1rem .45rem; border-radius: 
 .doc-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 1.5rem;
   flex-wrap: wrap; padding-bottom: 1.1rem; border-bottom: 2px solid var(--ink); }
 .doc-brand { display: flex; align-items: center; gap: .7rem; }
-/* The brand mark, drawn rather than loaded, so the document never prints with a
-   missing image box. */
-.doc-mark { width: 34px; height: 34px; flex: none; border-radius: 50%;
-  background: var(--ink);
-  -webkit-mask: radial-gradient(circle at 50% 50%, #000 99%, transparent 100%);
-          mask: radial-gradient(circle at 50% 50%, #000 99%, transparent 100%); }
+/* 🪤 The mark is TWO overlapping paths, not a circle. A CSS mask of a radial
+   gradient rendered it as a plain filled dot — inline SVG is the only way it
+   comes out right, and it still never prints as a missing image box. */
+.doc-mark { width: 36px; height: 36px; flex: none; color: var(--ink); display: block;
+  -webkit-print-color-adjust: exact; print-color-adjust: exact; }
 .doc-biz { font-family: var(--serif); font-size: 1.3rem; font-weight: 300; letter-spacing: -.02em; }
 .doc-biz b { font-weight: 600; }
 .doc-tag { font-size: .66rem; letter-spacing: .16em; text-transform: uppercase; color: var(--muted); margin-top: .1rem; }
@@ -1784,8 +1783,10 @@ b.tag-auto, b.tag-web { font-weight: 500; padding: .1rem .45rem; border-radius: 
 
 .doc-tbl { width: 100%; border-collapse: collapse; font-size: .78rem; }
 .doc-tbl th { text-align: left; font-weight: 500; font-size: .62rem; letter-spacing: .09em;
-  text-transform: uppercase; color: var(--muted); padding: 0 .5rem .45rem 0; border-bottom: 1px solid var(--line); }
-.doc-tbl td { padding: .55rem .5rem .55rem 0; border-bottom: 1px solid var(--line-soft); vertical-align: top; }
+  text-transform: uppercase; color: var(--muted); padding: 0 .75rem .45rem 0;
+  border-bottom: 1px solid var(--line); white-space: nowrap; }
+.doc-tbl th:last-child, .doc-tbl td:last-child { padding-right: 0; }
+.doc-tbl td { padding: .55rem .75rem .55rem 0; border-bottom: 1px solid var(--line-soft); vertical-align: top; }
 .doc-tbl .num, .doc-run .num { text-align: right; font-variant-numeric: tabular-nums; }
 .doc-tbl th.num { padding-right: 0; }
 .doc-tbl .strong { font-weight: 600; }

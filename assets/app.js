@@ -2095,7 +2095,11 @@
 
       docEl.innerHTML =
         '<header class="doc-head">' +
-          '<div class="doc-brand"><span class="doc-mark"></span><div>' +
+          '<div class="doc-brand">' +
+            '<svg class="doc-mark" viewBox="0 0 50 50" fill="none" aria-hidden="true">' +
+              '<path d="M25 0a25 25 0 000 50z" fill="currentColor"/>' +
+              '<path d="M34.6 50V29.5L25 24.9 48.2 14.1v29z" fill="currentColor" opacity=".55"/>' +
+            '</svg><div>' +
             '<div class="doc-biz">Guest <b>Guardian</b></div>' +
             '<div class="doc-tag">Short-stay management &middot; Adelaide</div>' +
           '</div></div>' +
