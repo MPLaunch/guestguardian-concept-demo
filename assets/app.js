@@ -2220,6 +2220,50 @@
     });
   }
 
+  /* ---- Lead photo. Which image opens the property page on OUR site.
+     Hostaway owns the listing's own cover; this is a website-only choice and
+     there is nowhere in Hostaway to keep it, same as the show-on-website flag.
+     🚨 Saved in this browser for the demo; on a live build it sits against the
+     property alongside that flag. */
+  var COVER_KEY = 'gg_cover_photo';
+  var covers = function () {
+    try { return JSON.parse(localStorage.getItem(COVER_KEY) || '{}'); } catch (e) { return {}; }
+  };
+  document.querySelectorAll('[data-cover-for]').forEach(function (strip) {
+    var id = strip.getAttribute('data-cover-for');
+    var chosen = covers()[id] || 0;
+    var paint = function () {
+      strip.querySelectorAll('[data-cover-pick]').forEach(function (b) {
+        b.classList.toggle('is-on', +b.getAttribute('data-cover-pick') === chosen);
+      });
+    };
+    paint();
+    strip.addEventListener('click', function (ev) {
+      var b = ev.target.closest('[data-cover-pick]');
+      if (!b) return;
+      chosen = +b.getAttribute('data-cover-pick');
+      var all = covers(); all[id] = chosen;
+      try { localStorage.setItem(COVER_KEY, JSON.stringify(all)); } catch (e) {}
+      paint();
+    });
+  });
+
+  /* On a property page, honour whichever photo was chosen by moving it to the
+     front rather than reshuffling the set, so the gallery order is otherwise
+     exactly the order their listing has. */
+  var galEl = document.querySelector('[data-gal]');
+  if (galEl && window.GG_PHOTOS && window.GG_PHOTOS.length > 1) {
+    var lid = (document.getElementById('bookpanel') || {}).getAttribute
+      ? document.getElementById('bookpanel').getAttribute('data-listing') : null;
+    var pick = lid ? (covers()[lid] || 0) : 0;
+    if (pick > 0 && pick < window.GG_PHOTOS.length) {
+      var chosenUrl = window.GG_PHOTOS.splice(pick, 1)[0];
+      window.GG_PHOTOS.unshift(chosenUrl);
+      var main = galEl.querySelector('.pg-main img');
+      if (main) main.src = chosenUrl;
+    }
+  }
+
   /* Footer year */
   document.querySelectorAll('[data-year]').forEach(function (el) {
     el.textContent = String(new Date().getFullYear());

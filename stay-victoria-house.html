@@ -29,7 +29,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500&family=Outfit:wght@200;300;400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/style.css?v=b1349156">
+<link rel="stylesheet" href="assets/style.css?v=1fee4821">
 <script type="application/ld+json">[
  {
   "@context": "https://schema.org",
@@ -163,6 +163,11 @@
           <div class="locmap">
             <iframe title="Map of Mile End, Adelaide" loading="lazy" referrerpolicy="no-referrer"
               src="https://www.openstreetmap.org/export/embed.html?bbox=138.558,-34.942,138.582,-34.918&amp;layer=mapnik"></iframe>
+            <!-- The map embed cannot draw a shape, so the circle is laid over
+                 the top. It is centred on the same blurred coordinate the map
+                 is, which makes "somewhere in here" something a guest can see
+                 rather than a sentence they have to take on trust. -->
+            <span class="locmap-ring" aria-hidden="true"></span>
           </div>
           <ul class="loclist">
             <li><span>Adelaide CBD</span><b>2.4 km</b></li><li><span>Adelaide Oval</span><b>2.5 km</b></li><li><span>Adelaide Airport</span><b>4.3 km</b></li><li><span>Henley Beach</span><b>7.4 km</b></li><li><span>Glenelg</span><b>7.9 km</b></li>
@@ -479,7 +484,7 @@
   </div>
 </footer>
 
-<script src="assets/app.js?v=b1349156"></script>
+<script src="assets/app.js?v=1fee4821"></script>
 <!-- Service worker: required before Android/Chrome will offer "Install app".
      Deliberately a pure network passthrough with NO caching — a caching SW on a
      demo means stale pages survive every redeploy, which is exactly the trap we

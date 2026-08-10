@@ -1894,6 +1894,17 @@ b.tag-auto, b.tag-web { font-weight: 500; padding: .1rem .45rem; border-radius: 
   .stmt-run .stmt-total td { border-top:2px solid #000; }
 }
 
+/* ---- Lead-photo picker, manager side ------------------------------------ */
+.mgcover { margin-top: 1rem; padding-top: .9rem; border-top: 1px solid var(--line-soft); }
+.mgcover-lab { margin: 0 0 .55rem; font-size: .78rem; font-weight: 500; }
+.mgcover-strip { display: flex; gap: .4rem; overflow-x: auto; padding-bottom: .3rem; }
+.mgcover-pic { flex: none; width: 62px; height: 46px; padding: 0; border: 2px solid transparent;
+  border-radius: 5px; overflow: hidden; background: none; cursor: pointer; opacity: .55;
+  transition: opacity .15s, border-color .15s; }
+.mgcover-pic img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.mgcover-pic:hover { opacity: .85; }
+.mgcover-pic.is-on { border-color: var(--ink); opacity: 1; }
+
 /* ---- Property photo gallery -------------------------------------------- */
 .prop-gal { position: relative; display: grid; grid-template-columns: 2fr 1fr;
   gap: .5rem; border-radius: var(--rad-lg); overflow: hidden; }
@@ -1932,8 +1943,14 @@ b.tag-auto, b.tag-web { font-weight: 500; padding: .1rem .45rem; border-radius: 
 .pf-loc svg { color: #fff !important; }
 .prop-loc { background: var(--paper-2); border: 1px solid var(--line);
   border-radius: var(--rad-lg); padding: 1.35rem 1.4rem; }
-.locmap { border-radius: var(--rad); overflow: hidden; border: 1px solid var(--line);
-  background: var(--paper); }
+.locmap { position: relative; border-radius: var(--rad); overflow: hidden;
+  border: 1px solid var(--line); background: var(--paper); }
+/* The rough area, drawn over the map. Sized to roughly a kilometre at this
+   zoom, and pointer-events off so it never blocks panning the map underneath. */
+.locmap-ring { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+  width: 38%; aspect-ratio: 1; border-radius: 50%; pointer-events: none;
+  background: rgba(167,171,161,.28); border: 2px solid var(--sage-deep);
+  box-shadow: 0 0 0 9999px rgba(28,29,28,.05); }
 /* Fixed ratio so the card does not jump around while the map loads. */
 .locmap iframe { display: block; width: 100%; aspect-ratio: 16 / 9; min-height: 220px; border: 0; }
 .loclist { list-style: none; margin: 1rem 0 0; padding: 0;
