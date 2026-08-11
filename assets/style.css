@@ -1896,20 +1896,25 @@ b.tag-auto, b.tag-web { font-weight: 500; padding: .1rem .45rem; border-radius: 
 
 /* ---- Guest reviews on a property page ----------------------------------- */
 .prop-revs { background: var(--paper-2); border: 1px solid var(--line);
-  border-radius: var(--rad-lg); padding: clamp(1.2rem, 3vw, 1.6rem); }
+  border-radius: var(--rad-lg); padding: clamp(1rem, 2.4vw, 1.35rem); }
 .revs-head { display: flex; align-items: flex-start; justify-content: space-between;
-  gap: 1rem; flex-wrap: wrap; margin-bottom: 1.1rem; }
+  gap: 1rem; flex-wrap: wrap; margin-bottom: .85rem; }
+.revs-score { font-size: 1.35rem; }
 .revs-stars { color: var(--sage-deep); font-size: 1.05rem; letter-spacing: .1em; }
-.revs-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: .8rem; }
-.rev { margin: 0; padding: .95rem 1rem; background: var(--paper); border-radius: var(--rad);
-  display: flex; flex-direction: column; gap: .5rem; }
-.rev-top b { font-family: var(--serif); font-size: 1.25rem; }
+.revs-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(215px, 1fr)); gap: .7rem; }
+.rev { margin: 0; padding: .8rem .9rem; background: var(--paper); border-radius: var(--rad);
+  display: flex; flex-direction: column; gap: .4rem; }
+.rev-top b { font-family: var(--serif); font-size: 1.1rem; }
 .rev-top span { font-size: .74rem; color: var(--muted); }
-.rev blockquote { margin: 0; font-size: .87rem; line-height: 1.6; }
+.rev blockquote { margin: 0; font-size: .82rem; line-height: 1.55; }
 .rev figcaption { font-size: .76rem; font-weight: 500; margin-top: auto; }
 .rev figcaption span { display: block; font-weight: 400; color: var(--muted); font-size: .72rem; }
-.revs-rest { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
-  gap: .8rem; margin-top: .8rem; }
+/* 🪤 `display:grid` BEATS the `hidden` attribute, so every "hidden" review was
+   showing and the Read-all button sat above content already on screen. Any
+   element given a display value needs its hidden state restated. */
+.revs-rest { display: grid; grid-template-columns: repeat(auto-fit, minmax(215px, 1fr));
+  gap: .7rem; margin-top: .7rem; }
+.revs-rest[hidden] { display: none; }
 
 /* ---- Lead-photo picker, manager side ------------------------------------ */
 .mgcover { margin-top: 1rem; padding-top: .9rem; border-top: 1px solid var(--line-soft); }
@@ -2063,6 +2068,7 @@ b.tag-auto, b.tag-web { font-weight: 500; padding: .1rem .45rem; border-radius: 
    letter-spacing). Two of those in a header row dominated everything and made
    the nav links feel like an afterthought.
    ========================================================================== */
+.btn-sm { padding: .5rem 1rem; font-size: .72rem; }
 .btn-nav {
   padding: .55rem 1rem;
   font-size: .69rem;
