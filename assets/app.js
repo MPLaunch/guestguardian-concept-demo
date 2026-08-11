@@ -2264,6 +2264,18 @@
     }
   }
 
+  /* Reveal the rest of the reviews. Progressive enhancement: with no JS the
+     first four are still on the page and the button simply never appears. */
+  var revsMore = document.querySelector('[data-revs-more]');
+  if (revsMore) {
+    var rest = document.querySelector('.revs-rest');
+    revsMore.addEventListener('click', function () {
+      if (!rest) return;
+      rest.hidden = false;
+      revsMore.remove();
+    });
+  }
+
   /* Footer year */
   document.querySelectorAll('[data-year]').forEach(function (el) {
     el.textContent = String(new Date().getFullYear());
