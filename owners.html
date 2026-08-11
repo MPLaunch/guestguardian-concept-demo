@@ -1163,50 +1163,27 @@
             </tbody></table></div>
       </div>
 
-      <!-- GST, Guest Guardian's side.
-           🚨 IN THE MANAGER VIEW, NOT THE OWNER'S. The GST on a management
-           commission is Guest Guardian's to report, not the property owner's.
-           Putting it in front of an owner would be showing them somebody else's
-           tax position.
+      <!-- 🚫 THE QUARTERLY GST PANEL WAS BUILT HERE AND THEN REMOVED, 10 Aug.
+           Do not rebuild it from this data.
 
-           🚨 AND IT IS A SUMMARY, NOT A BAS. It can only see money that moved
-           through these statements. It knows nothing about their rates,
-           insurance, subscriptions, vehicle or anything else they can claim, so
-           it is a figure to hand an accountant, never a figure to lodge. -->
-      <div class="ocard mt-2">
-        <div class="ocard-head">
-          <h2 class="h3">GST, by quarter</h2>
-          <span class="small muted">On the money that moved through your statements</span>
-        </div>
-        <div class="tbl-wrap"><table class="otbl otbl-wide">
-            <thead><tr><th>Quarter</th><th class="num">On commission</th><th class="num">On cleaning</th>
-            <th class="num">On expenses</th><th class="num">Paid on channel fees</th><th class="num">Net</th></tr></thead>
-            <tbody><tr>
-              <td><b>Jul&ndash;Sep 2026</b><span class="stmt-sub">4 bookings</span></td>
-              <td class="num">$56</td>
-              <td class="num">$106</td>
-              <td class="num">$0</td>
-              <td class="num neg">$63</td>
-              <td class="num"><b>$99</b></td>
-            </tr><tr>
-              <td><b>Apr&ndash;Jun 2026</b><span class="stmt-sub">12 bookings</span></td>
-              <td class="num">$111</td>
-              <td class="num">$317</td>
-              <td class="num">$60</td>
-              <td class="num neg">$169</td>
-              <td class="num"><b>$319</b></td>
-            </tr><tr>
-              <td><b>Jan&ndash;Mar 2026</b><span class="stmt-sub">1 booking</span></td>
-              <td class="num">$15</td>
-              <td class="num">$26</td>
-              <td class="num">$5</td>
-              <td class="num neg">$19</td>
-              <td class="num"><b>$27</b></td>
-            </tr></tbody></table></div>
-        <p class="small muted" style="margin:.9rem 0 0"><b>Read this as a starting point for your accountant, not a BAS figure.</b>
-        It covers the GST inside the amounts on these statements and nothing else, so it does not know about your
-        rates, insurance, subscriptions or anything else you claim. A booking counts in the quarter the stay begins.</p>
-      </div>
+           GST for a business this size is almost certainly reported on a CASH
+           basis, meaning it belongs to the quarter the money was RECEIVED.
+           Hostaway does not record that anywhere: /payments, /payouts,
+           /transactions, /financeReports and per-reservation payments all 404,
+           and /ownerStatements returns an id, a name and "draft" with no dates
+           and no lines.
+
+           The best we could do was the quarter the STAY BEGINS. Airbnb pays out
+           roughly a day after check-in so it is usually within a day, but a
+           stay starting on 30 September pays in October and lands in the wrong
+           quarter. Peter's call, and it is the right one: a document headed
+           "GST by quarter" will be read as being on the correct basis, and an
+           accountant relying on it would be relying on something we cannot
+           time. If he has to check it, it saved him nothing; if he does not, it
+           is a risk.
+
+           To do this properly needs Airbnb's own payout report or their Stripe
+           records. Neither reaches us. -->
 
       <div class="book-note mt-2">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 3l7 3v6c0 4.5-3 8-7 9-4-1-7-4.5-7-9V6l7-3z"/></svg>
