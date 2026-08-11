@@ -29,7 +29,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500&family=Outfit:wght@200;300;400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/style.css?v=5aa99155">
+<link rel="stylesheet" href="assets/style.css?v=fee4cc05">
 <script type="application/ld+json">[
  {
   "@context": "https://schema.org",
@@ -1163,6 +1163,51 @@
             </tbody></table></div>
       </div>
 
+      <!-- GST, Guest Guardian's side.
+           🚨 IN THE MANAGER VIEW, NOT THE OWNER'S. The GST on a management
+           commission is Guest Guardian's to report, not the property owner's.
+           Putting it in front of an owner would be showing them somebody else's
+           tax position.
+
+           🚨 AND IT IS A SUMMARY, NOT A BAS. It can only see money that moved
+           through these statements. It knows nothing about their rates,
+           insurance, subscriptions, vehicle or anything else they can claim, so
+           it is a figure to hand an accountant, never a figure to lodge. -->
+      <div class="ocard mt-2">
+        <div class="ocard-head">
+          <h2 class="h3">GST, by quarter</h2>
+          <span class="small muted">On the money that moved through your statements</span>
+        </div>
+        <div class="tbl-wrap"><table class="otbl otbl-wide">
+            <thead><tr><th>Quarter</th><th class="num">On commission</th><th class="num">On cleaning</th>
+            <th class="num">On expenses</th><th class="num">Paid on channel fees</th><th class="num">Net</th></tr></thead>
+            <tbody><tr>
+              <td><b>Jul&ndash;Sep 2026</b><span class="stmt-sub">4 bookings</span></td>
+              <td class="num">$56</td>
+              <td class="num">$106</td>
+              <td class="num">$0</td>
+              <td class="num neg">$63</td>
+              <td class="num"><b>$99</b></td>
+            </tr><tr>
+              <td><b>Apr&ndash;Jun 2026</b><span class="stmt-sub">12 bookings</span></td>
+              <td class="num">$111</td>
+              <td class="num">$317</td>
+              <td class="num">$60</td>
+              <td class="num neg">$169</td>
+              <td class="num"><b>$319</b></td>
+            </tr><tr>
+              <td><b>Jan&ndash;Mar 2026</b><span class="stmt-sub">1 booking</span></td>
+              <td class="num">$15</td>
+              <td class="num">$26</td>
+              <td class="num">$5</td>
+              <td class="num neg">$19</td>
+              <td class="num"><b>$27</b></td>
+            </tr></tbody></table></div>
+        <p class="small muted" style="margin:.9rem 0 0"><b>Read this as a starting point for your accountant, not a BAS figure.</b>
+        It covers the GST inside the amounts on these statements and nothing else, so it does not know about your
+        rates, insurance, subscriptions or anything else you claim. A booking counts in the quarter the stay begins.</p>
+      </div>
+
       <div class="book-note mt-2">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 3l7 3v6c0 4.5-3 8-7 9-4-1-7-4.5-7-9V6l7-3z"/></svg>
         <span><strong>Only Victoria House appears here, and that is correct.</strong>
@@ -1338,7 +1383,7 @@
   </div>
 </footer>
 
-<script src="assets/app.js?v=5aa99155"></script>
+<script src="assets/app.js?v=fee4cc05"></script>
 <!-- Service worker: required before Android/Chrome will offer "Install app".
      Deliberately a pure network passthrough with NO caching — a caching SW on a
      demo means stale pages survive every redeploy, which is exactly the trap we

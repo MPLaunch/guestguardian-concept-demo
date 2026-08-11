@@ -1497,7 +1497,6 @@
       /* Extras and coupon live on the payment step but change the total, so the
          quote has to know about them. */
       var chosenExtras = [];
-      var coupon = null;                       // {code, pct}
 
       var money = function (n) {
         return '$' + Math.abs(n).toLocaleString('en-AU', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
@@ -1535,13 +1534,7 @@
 
         var sub = lines.reduce(function (s, l) { return s + l.amt; }, 0);
 
-        var couponCut = 0;
-        if (coupon) {
-          couponCut = sub * coupon.pct;
-          lines.push({ label: 'Coupon ' + coupon.code, amt: -couponCut, good: true });
-        }
-
-        return { nights: n, guests: guests, lines: lines, total: sub - couponCut };
+        return { nights: n, guests: guests, lines: lines, total: sub };
       };
 
       var renderLines = function (table, q) {
@@ -1694,31 +1687,6 @@
         });
       });
 
-      var couponOpen = document.getElementById('bp-coupon-open');
-      var couponRow = document.getElementById('bp-coupon-row');
-      var couponMsg = document.getElementById('bp-coupon-msg');
-      if (couponOpen) couponOpen.addEventListener('click', function () {
-        couponRow.hidden = !couponRow.hidden;
-        if (!couponRow.hidden) document.getElementById('bp-coupon-code').focus();
-      });
-      var couponApply = document.getElementById('bp-coupon-apply');
-      if (couponApply) couponApply.addEventListener('click', function () {
-        var code = val('bp-coupon-code').toUpperCase();
-        couponMsg.hidden = false;
-        /* One demo code so the mechanism is visible. A real build validates
-           against codes Guest Guardian creates, not a list baked into a page. */
-        if (code === 'DIRECT10') {
-          coupon = { code: code, pct: 0.10 };
-          couponMsg.textContent = 'Coupon applied — 10% off.';
-          couponMsg.className = 'small bp-good-text';
-        } else if (code) {
-          coupon = null;
-          couponMsg.textContent = 'That code is not recognised.';
-          couponMsg.className = 'small muted';
-        }
-        repay();
-      });
-
       var payBtn = document.getElementById('bp-pay');
       if (payBtn) payBtn.addEventListener('click', function () {
         var ok = true;
@@ -1765,7 +1733,6 @@
           phone: (val('bk-cc') + ' ' + val('bk-phone')).trim(),
           notes: val('bk-notes'),
           extras: chosenExtras.map(function (x) { return x.name; }).join(', '),
-          coupon: coupon ? coupon.code : '',
           billing: [val('bp-addr'), val('bp-addr2'), val('bp-city'), val('bp-state'),
                     val('bp-post'), val('bp-country')].filter(Boolean).join(', '),
           optin: document.getElementById('bp-optin') && document.getElementById('bp-optin').checked ? 'yes' : 'no',
@@ -1830,7 +1797,7 @@
           Property: booking.property, Reference: ref,
           Dates: arrive + ' to ' + depart,
           Nights: String(q.nights), Guests: booking.guests,
-          Extras: booking.extras || 'none', Coupon: booking.coupon || 'none',
+          Extras: booking.extras || 'none',
           Total: money(q.total),
           'Billing address': booking.billing || 'not given',
           'Marketing opt-in': booking.optin,
