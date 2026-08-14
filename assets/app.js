@@ -225,8 +225,14 @@
 
     /* Widen the basis until there is enough evidence to speak, and always report
        WHICH basis answered. Never silently average the whole city. */
+    /* The suburb is now typed, not picked, so "glenelg" and "GLENELG" must both
+       find Glenelg. Built once rather than per keystroke. */
+    var SUB_KEY = {};
+    Object.keys(R.suburbs).forEach(function (s) { SUB_KEY[s.toLowerCase().trim()] = s; });
+    var canonical = function (v) { return SUB_KEY[String(v || '').toLowerCase().trim()] || ''; };
+
     var lookup = function (sub, b) {
-      var pc = R.suburbs[sub];
+      var pc = R.suburbs[canonical(sub)];
       var cell = pc && R.postcodes[pc] && R.postcodes[pc].beds[b];
       if (cell) {
         var near = R.postcodes[pc].suburbs || [];
@@ -258,8 +264,9 @@
           (hit.wide ? 'across ' : 'in ') + hit.where +
           /* Only name the suburb if we actually have one. An empty select would
              otherwise print "too few in  to go on". */
-          (hit.wide ? (suburb.value ? ', because there are too few in ' + suburb.value + ' to go on'
-                                    : ', because there are too few nearby to go on') : '') +
+          (hit.wide ? (canonical(suburb.value)
+                        ? ', because there are too few in ' + canonical(suburb.value) + ' to go on'
+                        : ', because there are too few nearby to go on') : '') +
           '. ' + R.source + ', ' + R.snapshot + '. Accommodation only, before ' +
           'cleaning, platform fees, management and running costs.';
       }
@@ -347,7 +354,10 @@
         ev.preventDefault();
         var ok = true;
         var email = '';
-        ['eg-name', 'eg-phone', 'eg-email', 'eg-suburb'].forEach(function (id) {
+        /* 'eg-suburb' is deliberately absent — the suburb comes from the
+           estimator now, so validating a field that no longer exists would
+           block every submission. */
+        ['eg-name', 'eg-phone', 'eg-email'].forEach(function (id) {
           var f = document.getElementById(id);
           if (!f) return;
           var v = f.value.trim();
@@ -368,12 +378,16 @@
         var val = function (id) { var f = document.getElementById(id); return f ? f.value.trim() : ''; };
         var typeSel = ptype.options[ptype.selectedIndex];
         relayLead('income estimator', {
-          name: val('eg-name'), email: email, phone: val('eg-phone'), suburb: val('eg-suburb'),
+          /* The suburb Nick needs is the PROPERTY's suburb, which is the one they
+             chose in the estimator. Canonical spelling, so a lead never arrives
+             reading "glenelg nth". */
+          name: val('eg-name'), email: email, phone: val('eg-phone'),
+          suburb: canonical(suburb.value) || suburb.value,
         }, {
           /* The suburb they picked in the estimator, which is the property's
              suburb. The gate also asks for it in writing; both are sent so Nick
              can see if they differ. */
-          Suburb: suburb.value,
+          Suburb: canonical(suburb.value) || suburb.value,
           'Property type': typeSel ? typeSel.textContent.trim() : ptype.value,
           Bedrooms: beds.value,
           Occupancy: occ.value + '%',
