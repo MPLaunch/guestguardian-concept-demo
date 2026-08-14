@@ -5,14 +5,14 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Sign In | Guest Guardian Adelaide</title>
-<meta name="description" content="Sign in to Guest Guardian. Owners see their statements and booking data, guests see their stay.">
+<meta name="description" content="Sign in to Guest Guardian. Owners see their statements and booking data.">
 <link rel="canonical" href="https://guestguardian-concept.mplaunch.com.au/owners.html">
 <!-- CONCEPT ONLY: noindex so this demo can never be indexed or mistaken for the
      real guestguardian.com.au. The production build would be "index, follow". -->
 <meta name="robots" content="noindex, nofollow">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Sign In | Guest Guardian Adelaide">
-<meta property="og:description" content="Sign in to Guest Guardian. Owners see their statements and booking data, guests see their stay.">
+<meta property="og:description" content="Sign in to Guest Guardian. Owners see their statements and booking data.">
 <meta property="og:url" content="https://guestguardian-concept.mplaunch.com.au/owners.html">
 <meta property="og:locale" content="en_AU">
 <meta name="theme-color" content="#1C1D1C">
@@ -29,7 +29,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500&family=Outfit:wght@200;300;400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/style.css?v=fee4cc05">
+<link rel="stylesheet" href="assets/style.css?v=5c769384">
 <script type="application/ld+json">[
  {
   "@context": "https://schema.org",
@@ -98,14 +98,15 @@
       </form>
 
       <!-- Preview only. On a real build the account decides where you land, so
-           there is nothing to choose. These are here purely so Nick can see all
-           three sides without us creating three real accounts for him. -->
+           there is nothing to choose. These are here purely so Nick can see both
+           sides without us creating real accounts for him.
+           The third button (Guest) was removed 14 Aug 2026 - see the note further
+           down. There are two sides now, not three. -->
       <div class="demo-roles">
-        <span class="demo-roles-lab">Preview &mdash; open any of the three</span>
+        <span class="demo-roles-lab">Preview &mdash; open either side</span>
         <div class="demo-roles-btns">
           <button type="button" data-role="manager"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>Guest Guardian</button>
           <button type="button" data-role="owner"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 8a2 2 0 012-2h12a2 2 0 012 2M3 8v10a2 2 0 002 2h14a2 2 0 002-2v-7a2 2 0 00-2-2H3z"/><circle cx="17" cy="14" r="1.2" fill="currentColor" stroke="none"/></svg>Property owner</button>
-          <button type="button" data-role="guest"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="12" r="4"/><path d="M12 12h9M18 12v3M15 12v2"/></svg>Guest</button>
         </div>
       </div>
     </div>
@@ -141,9 +142,9 @@
   <section class="pad-sm owner-panel is-on" data-panel="overview">
     <div class="wrap">
       <div class="owner-kpis">
-        <div class="okpi"><div class="okpi-l"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 8a2 2 0 012-2h12a2 2 0 012 2M3 8v10a2 2 0 002 2h14a2 2 0 002-2v-7a2 2 0 00-2-2H3z"/><circle cx="17" cy="14" r="1.2" fill="currentColor" stroke="none"/></svg><span>Next payout</span></div><div class="okpi-n">$1,326</div><div class="okpi-s">Aug 2026 statement</div></div>
+        <div class="okpi"><div class="okpi-l"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 8a2 2 0 012-2h12a2 2 0 012 2M3 8v10a2 2 0 002 2h14a2 2 0 002-2v-7a2 2 0 00-2-2H3z"/><circle cx="17" cy="14" r="1.2" fill="currentColor" stroke="none"/></svg><span>Next payout</span></div><div class="okpi-n">$1,627</div><div class="okpi-s">Aug 2026 statement</div></div>
         <div class="okpi"><div class="okpi-l"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg><span>Booking value, all time</span></div><div class="okpi-n">$47,742</div><div class="okpi-s">Across 37 bookings</div></div>
-        <div class="okpi"><div class="okpi-l"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg><span>Nights sold</span></div><div class="okpi-n">192</div><div class="okpi-s">Averaging $249 a night</div></div>
+        <div class="okpi"><div class="okpi-l"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg><span>Nights sold</span></div><div class="okpi-n">192</div><div class="okpi-s">Averaging $193 a night</div></div>
         <div class="okpi"><div class="okpi-l"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg><span>Booked ahead</span></div><div class="okpi-n">$82,432</div><div class="okpi-s">138 nights already confirmed</div></div>
       </div>
 
@@ -198,13 +199,11 @@
         <div class="ocard">
           <div class="ocard-head"><h2 class="h3">Aug 2026, itemised</h2></div>
           <table class="otbl"><tbody>
-              <tr><td>Booking revenue</td><td class="num">$1,514</td></tr>
-              <tr><td>Of which cleaning, recovered from guests</td><td class="num">$341</td></tr>
-              <tr class="sep"><td>Management fee (20%)</td><td class="num neg">&minus;$303</td></tr>
-              <tr><td>Cleaning and linen</td><td class="num neg">&minus;$341</td></tr>
-              <tr class="tot"><td>Net to you</td><td class="num">$870</td></tr>
+              <tr><td>Airbnb payout sum</td><td class="num">$3,250</td></tr>
+              <tr><td>Cleaning, management and expenses</td><td class="num neg">&minus;$1,623</td></tr>
+              <tr class="tot"><td>Paid to you</td><td class="num">$1,627</td></tr>
             </tbody></table>
-            <p class="small muted mt-2" style="margin-bottom:0">The 20% is a placeholder until you confirm your real rate. Everything else is your own booking data.</p>
+            <p class="small muted mt-2" style="margin-bottom:0">Every figure is from your own Hostaway records. The full itemised version, booking by booking, is on the <b>Statements</b> tab.</p>
         </div>
       </div>
     </div>
@@ -220,13 +219,13 @@
         <div>
           <p class="eyebrow" style="margin-bottom:.35rem">Financial year 2026 / 27</p>
           <h2 class="h3" style="margin-bottom:.3rem">Everything your accountant needs</h2>
-          <p class="small muted" style="margin:0">2 months so far, 4 bookings. Every figure below is itemised in the download.</p>
+          <p class="small muted" style="margin:0">2 months so far, 6 bookings. Every figure below is itemised in the download.</p>
         </div>
         <div class="fy-nums">
-          <div><span>Income to you</span><b>$2,184</b></div>
-          <div><span>Management</span><b>$616</b></div>
-          <div><span>Cleaning</span><b>$1,164</b></div>
-          <div><span>Channel fees</span><b>$692</b></div>
+          <div><span>Income to you</span><b>$3,004</b></div>
+          <div><span>Management</span><b>$878</b></div>
+          <div><span>Cleaning</span><b>$1,746</b></div>
+          <div><span>Channel fees</span><b>$1,057</b></div>
         </div>
         <div class="fy-btns">
           <a class="btn btn-primary" href="statement.html?p=495920&amp;m=fy" target="_blank" rel="noopener"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 3h8l4 4v14H6z"/><path d="M14 3v4h4M9 12h6M9 16h6"/></svg><span>Statement PDF</span></a>
@@ -250,9 +249,9 @@
           </div>
         </div>
 
+        <!-- The basis line now renders WITH the numbers inside #stmt-body, so it
+             can never be left behind describing a different month. -->
         <div id="stmt-body"></div>
-
-        <p class="small muted stmt-note">Amounts include GST. A booking is counted in the month the stay begins.</p>
       </div>
 
       <div class="book-note mt-2">
@@ -276,10 +275,10 @@
   <section class="pad-sm owner-panel" data-panel="analytics" hidden>
     <div class="wrap">
       <div class="okpis">
-        <div class="okpi"><div class="okpi-l"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg><span>Nights booked</span></div><div class="okpi-n">75</div><div class="okpi-s">completed months</div></div>
-        <div class="okpi"><div class="okpi-l"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg><span>Average nightly rate</span></div><div class="okpi-n">$224</div><div class="okpi-s">across every booking</div></div>
-        <div class="okpi"><div class="okpi-l"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 8a2 2 0 012-2h12a2 2 0 012 2M3 8v10a2 2 0 002 2h14a2 2 0 002-2v-7a2 2 0 00-2-2H3z"/><circle cx="17" cy="14" r="1.2" fill="currentColor" stroke="none"/></svg><span>Average per stay</span></div><div class="okpi-n">$986</div><div class="okpi-s">what a booking is worth</div></div>
-        <div class="okpi"><div class="okpi-l"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="12" r="4"/><path d="M12 12h9M18 12v3M15 12v2"/></svg><span>Bookings</span></div><div class="okpi-n">17</div><div class="okpi-s">completed months</div></div>
+        <div class="okpi"><div class="okpi-l"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg><span>Nights booked</span></div><div class="okpi-n">103</div><div class="okpi-s">completed months</div></div>
+        <div class="okpi"><div class="okpi-l"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg><span>Average nightly rate</span></div><div class="okpi-n">$248</div><div class="okpi-s">across every booking</div></div>
+        <div class="okpi"><div class="okpi-l"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 8a2 2 0 012-2h12a2 2 0 012 2M3 8v10a2 2 0 002 2h14a2 2 0 002-2v-7a2 2 0 00-2-2H3z"/><circle cx="17" cy="14" r="1.2" fill="currentColor" stroke="none"/></svg><span>Average per stay</span></div><div class="okpi-n">$1,065</div><div class="okpi-s">what a booking is worth</div></div>
+        <div class="okpi"><div class="okpi-l"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="12" r="4"/><path d="M12 12h9M18 12v3M15 12v2"/></svg><span>Bookings</span></div><div class="okpi-n">24</div><div class="okpi-s">completed months</div></div>
       </div>
 
       <div class="ocard mt-2">
@@ -290,24 +289,24 @@
         <div class="stackchart">
           <div class="stackcol">
               <div class="stackbar">
-                <span class="sg sg-fee" style="height:17.05%" title="Channel fee: $211"></span>
-                <span class="sg sg-clean" style="height:23.57%" title="Cleaning: $291"></span>
-                <span class="sg sg-comm" style="height:13.06%" title="Management: $161"></span>
-                <span class="sg sg-linen" style="height:4.45%" title="Linen: $55"></span>
-                <span class="sg sg-owner" style="height:41.86%" title="To you: $517"></span>
+                <span class="sg sg-fee" style="height:17.05%" title="Channel fee: $539"></span>
+                <span class="sg sg-clean" style="height:27.61%" title="Cleaning: $873"></span>
+                <span class="sg sg-comm" style="height:12.17%" title="Management: $385"></span>
+                <span class="sg sg-linen" style="height:5.22%" title="Linen: $165"></span>
+                <span class="sg sg-owner" style="height:37.94%" title="To you: $1,200"></span>
               </div>
               <span class="stacklab">Mar</span>
-              <span class="stackval">$517</span>
+              <span class="stackval">$1,200</span>
             </div><div class="stackcol">
               <div class="stackbar">
-                <span class="sg sg-fee" style="height:17.05%" title="Channel fee: $193"></span>
-                <span class="sg sg-clean" style="height:51.55%" title="Cleaning: $582"></span>
-                <span class="sg sg-comm" style="height:6.91%" title="Management: $78"></span>
-                <span class="sg sg-linen" style="height:9.74%" title="Linen: $110"></span>
-                <span class="sg sg-owner" style="height:14.75%" title="To you: $167"></span>
+                <span class="sg sg-fee" style="height:17.05%" title="Channel fee: $999"></span>
+                <span class="sg sg-clean" style="height:24.83%" title="Cleaning: $1,455"></span>
+                <span class="sg sg-comm" style="height:12.79%" title="Management: $749"></span>
+                <span class="sg sg-linen" style="height:4.69%" title="Linen: $275"></span>
+                <span class="sg sg-owner" style="height:40.64%" title="To you: $2,381"></span>
               </div>
               <span class="stacklab">Apr</span>
-              <span class="stackval">$167</span>
+              <span class="stackval">$2,381</span>
             </div><div class="stackcol">
               <div class="stackbar">
                 <span class="sg sg-fee" style="height:17.05%" title="Channel fee: $1,050"></span>
@@ -330,24 +329,24 @@
               <span class="stackval">$1,194</span>
             </div><div class="stackcol">
               <div class="stackbar">
-                <span class="sg sg-fee" style="height:17.05%" title="Channel fee: $286"></span>
-                <span class="sg sg-clean" style="height:17.36%" title="Cleaning: $291"></span>
-                <span class="sg sg-comm" style="height:14.43%" title="Management: $242"></span>
-                <span class="sg sg-linen" style="height:0.00%" title="Linen: $0"></span>
-                <span class="sg sg-owner" style="height:51.16%" title="To you: $858"></span>
+                <span class="sg sg-fee" style="height:17.05%" title="Channel fee: $511"></span>
+                <span class="sg sg-clean" style="height:19.40%" title="Cleaning: $582"></span>
+                <span class="sg sg-comm" style="height:13.98%" title="Management: $419"></span>
+                <span class="sg sg-linen" style="height:3.67%" title="Linen: $110"></span>
+                <span class="sg sg-owner" style="height:45.90%" title="To you: $1,377"></span>
               </div>
               <span class="stacklab">Jul</span>
-              <span class="stackval">$858</span>
+              <span class="stackval">$1,377</span>
             </div><div class="stackcol">
               <div class="stackbar">
-                <span class="sg sg-fee" style="height:13.63%" title="Channel fee: $406"></span>
-                <span class="sg sg-clean" style="height:29.30%" title="Cleaning: $873"></span>
-                <span class="sg sg-comm" style="height:12.56%" title="Management: $374"></span>
+                <span class="sg sg-fee" style="height:14.37%" title="Channel fee: $545"></span>
+                <span class="sg sg-clean" style="height:30.67%" title="Cleaning: $1,164"></span>
+                <span class="sg sg-comm" style="height:12.09%" title="Management: $459"></span>
                 <span class="sg sg-linen" style="height:0.00%" title="Linen: $0"></span>
-                <span class="sg sg-owner" style="height:44.52%" title="To you: $1,326"></span>
+                <span class="sg sg-owner" style="height:42.88%" title="To you: $1,627"></span>
               </div>
               <span class="stacklab">Aug</span>
-              <span class="stackval">$1,326</span>
+              <span class="stackval">$1,627</span>
             </div>
         </div>
         <div class="stackkey">
@@ -363,7 +362,7 @@
       <div class="book-note mt-2">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>
         <span><strong>What the channels have cost this property.</strong>
-        <br><br>Across the completed months above, <b>$2,757</b>
+        <br><br>Across the completed months above, <b>$4,257</b>
         went to Airbnb in booking fees. That is money the guest paid that never reached the property.
         A booking taken direct carries no channel fee at all, which is the entire reason the website
         has its own booking page.
@@ -375,7 +374,7 @@
 
   <!-- The statement data, so the month picker can redraw without a round trip.
        Read-only, already through the formula, no key anywhere near the page. -->
-  <script>window.GG_STMT = {"pid":"495920","name":"Victoria House - 3Br, BBQ & Sunroom","months":{"2026-08":{"lines":[{"arrive":"2026-08-05","depart":"2026-08-09","nights":4,"channel":"airbnbOfficial","total":1029,"fee":175.45,"payout":853.55,"cleaning":291,"net":562.55,"commission":123.76,"owner":438.79,"linen":0,"expenses":[],"ownerAfter":438.79,"flag":null,"note":null},{"arrive":"2026-08-21","depart":"2026-08-23","nights":2,"channel":"airbnbOfficial","total":741,"fee":24.45,"payout":716.55,"cleaning":291,"net":425.55,"commission":93.62,"owner":331.93,"linen":0,"expenses":[],"ownerAfter":331.93,"flag":null,"note":null},{"arrive":"2026-08-25","depart":"2026-09-01","nights":7,"channel":"airbnbOfficial","total":1209.75,"fee":206.26,"payout":1003.49,"cleaning":291,"net":712.49,"commission":156.75,"owner":555.74,"linen":0,"expenses":[],"ownerAfter":555.74,"flag":null,"note":null}],"bookings":3,"nights":13,"total":2979.75,"fee":406.16,"payout":2573.59,"cleaning":873,"net":1700.59,"commission":374.13,"owner":1326.46,"linen":0,"ownerAfter":1326.46},"2026-07":{"lines":[{"arrive":"2026-07-27","depart":"2026-08-05","nights":9,"channel":"airbnbOfficial","total":1676.25,"fee":285.8,"payout":1390.45,"cleaning":291,"net":1099.45,"commission":241.88,"owner":857.57,"linen":0,"expenses":[{"desc":"Line & Amenities","amount":55,"date":"2026-07-30"},{"desc":"Linen & Amenities","amount":-55,"date":"2026-07-30"}],"ownerAfter":857.57,"flag":null,"note":"expenses cancel out"}],"bookings":1,"nights":9,"total":1676.25,"fee":285.8,"payout":1390.45,"cleaning":291,"net":1099.45,"commission":241.88,"owner":857.57,"linen":0,"ownerAfter":857.57},"2026-06":{"lines":[{"arrive":"2026-06-12","depart":"2026-06-15","nights":3,"channel":"airbnbOfficial","total":826,"fee":140.83,"payout":685.17,"cleaning":291,"net":394.17,"commission":86.72,"owner":307.45,"linen":55,"expenses":[{"desc":"Linen & Amenities","amount":55,"date":"2026-06-15"}],"ownerAfter":252.45,"flag":null,"note":null},{"arrive":"2026-06-19","depart":"2026-06-21","nights":2,"channel":"airbnbOfficial","total":658,"fee":112.19,"payout":545.81,"cleaning":291,"net":254.81,"commission":56.06,"owner":198.75,"linen":55,"expenses":[{"desc":"Linen & Amenities","amount":55,"date":"2026-06-21"}],"ownerAfter":143.75,"flag":null,"note":null},{"arrive":"2026-06-21","depart":"2026-06-24","nights":3,"channel":"airbnbOfficial","total":763.5,"fee":130.17,"payout":633.33,"cleaning":291,"net":342.33,"commission":75.31,"owner":267.02,"linen":55,"expenses":[{"desc":"Linen & Amenities","amount":55,"date":"2026-06-24"}],"ownerAfter":212.02,"flag":null,"note":null},{"arrive":"2026-06-24","depart":"2026-07-02","nights":8,"channel":"airbnbOfficial","total":1341,"fee":228.65,"payout":1112.35,"cleaning":291,"net":821.35,"commission":180.7,"owner":640.65,"linen":55,"expenses":[{"desc":"Linen & Amenities","amount":55,"date":"2026-06-30"}],"ownerAfter":585.65,"flag":null,"note":null}],"bookings":4,"nights":16,"total":3588.5,"fee":611.84,"payout":2976.66,"cleaning":1164,"net":1812.66,"commission":398.79,"owner":1413.87,"linen":220,"ownerAfter":1193.87},"2026-05":{"lines":[{"arrive":"2026-05-02","depart":"2026-05-04","nights":2,"channel":"airbnbOfficial","total":675.8,"fee":115.23,"payout":560.57,"cleaning":291,"net":269.57,"commission":59.31,"owner":210.26,"linen":55,"expenses":[{"desc":"Linen & Amenities","amount":55,"date":"2026-05-03"}],"ownerAfter":155.26,"flag":null,"note":null},{"arrive":"2026-05-05","depart":"2026-05-13","nights":8,"channel":"airbnbOfficial","total":1648.6,"fee":281.08,"payout":1367.52,"cleaning":291,"net":1076.52,"commission":236.83,"owner":839.69,"linen":55,"expenses":[{"desc":"Linen & Amenities","amount":55,"date":"2026-05-13"}],"ownerAfter":784.69,"flag":null,"note":null},{"arrive":"2026-05-15","depart":"2026-05-19","nights":4,"channel":"airbnbOfficial","total":816,"fee":139.13,"payout":676.87,"cleaning":291,"net":385.87,"commission":84.89,"owner":300.98,"linen":55,"expenses":[{"desc":"Linen & Amenities","amount":55,"date":"2026-05-19"}],"ownerAfter":245.98,"flag":null,"note":null},{"arrive":"2026-05-19","depart":"2026-05-22","nights":3,"channel":"airbnbOfficial","total":834.75,"fee":142.33,"payout":692.42,"cleaning":291,"net":401.42,"commission":88.31,"owner":313.11,"linen":55,"expenses":[{"desc":"Linen & Amenities","amount":55,"date":"2026-05-21"}],"ownerAfter":258.11,"flag":null,"note":null},{"arrive":"2026-05-22","depart":"2026-05-24","nights":2,"channel":"airbnbOfficial","total":553.5,"fee":94.37,"payout":459.13,"cleaning":291,"net":168.13,"commission":36.99,"owner":131.14,"linen":55,"expenses":[{"desc":"Linen & Amenities","amount":55,"date":"2026-05-23"}],"ownerAfter":76.14,"flag":null,"note":null},{"arrive":"2026-05-25","depart":"2026-06-04","nights":10,"channel":"airbnbOfficial","total":1630.5,"fee":278,"payout":1352.5,"cleaning":291,"net":1061.5,"commission":233.53,"owner":827.97,"linen":55,"expenses":[{"desc":"Linen & Amenities","amount":55,"date":"2026-05-31"}],"ownerAfter":772.97,"flag":null,"note":null}],"bookings":6,"nights":29,"total":6159.15,"fee":1050.14,"payout":5109.01,"cleaning":1746,"net":3363.01,"commission":739.86,"owner":2623.15,"linen":330,"ownerAfter":2293.15},"2026-04":{"lines":[{"arrive":"2026-04-03","depart":"2026-04-04","nights":1,"channel":"airbnbOfficial","total":556.1,"fee":94.82,"payout":461.28,"cleaning":291,"net":170.28,"commission":37.46,"owner":132.82,"linen":55,"expenses":[{"desc":"Linen & Amenities","amount":55,"date":"2026-04-04"}],"ownerAfter":77.82,"flag":null,"note":null},{"arrive":"2026-04-24","depart":"2026-04-25","nights":1,"channel":"airbnbOfficial","total":573,"fee":97.7,"payout":475.3,"cleaning":291,"net":184.3,"commission":40.55,"owner":143.75,"linen":55,"expenses":[{"desc":"Linen & Amenities","amount":55,"date":"2026-04-25"}],"ownerAfter":88.75,"flag":null,"note":null}],"bookings":2,"nights":2,"total":1129.1,"fee":192.52,"payout":936.58,"cleaning":582,"net":354.58,"commission":78.01,"owner":276.57,"linen":110,"ownerAfter":166.57},"2026-03":{"lines":[{"arrive":"2026-03-23","depart":"2026-03-29","nights":6,"channel":"airbnbOfficial","total":1234.8,"fee":210.53,"payout":1024.27,"cleaning":291,"net":733.27,"commission":161.32,"owner":571.95,"linen":55.01,"expenses":[{"desc":"Linen hire & Amenities","amount":55.01,"date":"2026-03-29"}],"ownerAfter":516.94,"flag":null,"note":null}],"bookings":1,"nights":6,"total":1234.8,"fee":210.53,"payout":1024.27,"cleaning":291,"net":733.27,"commission":161.32,"owner":571.95,"linen":55.01,"ownerAfter":516.94}},"fy":["2026-08","2026-07"]};</script>
+  <script>window.GG_STMT = {"pid":"495920","name":"Victoria House - 3Br, BBQ & Sunroom","months":{"2026-08":{"lines":[{"arrive":"2026-08-05","depart":"2026-08-09","nights":4,"channel":"airbnbOfficial","total":1029,"fee":175.45,"payout":853.55,"cleaning":291,"net":562.55,"commission":123.76,"owner":438.79,"linen":0,"expenses":[],"ownerAfter":438.79,"flag":null,"note":null},{"arrive":"2026-08-14","depart":"2026-08-17","nights":3,"channel":"airbnbOfficial","total":816,"fee":139.13,"payout":676.87,"cleaning":291,"net":385.87,"commission":84.89,"owner":300.98,"linen":0,"expenses":[],"ownerAfter":300.98,"flag":null,"note":null},{"arrive":"2026-08-21","depart":"2026-08-23","nights":2,"channel":"airbnbOfficial","total":741,"fee":24.45,"payout":716.55,"cleaning":291,"net":425.55,"commission":93.62,"owner":331.93,"linen":0,"expenses":[],"ownerAfter":331.93,"flag":null,"note":null},{"arrive":"2026-08-25","depart":"2026-09-01","nights":7,"channel":"airbnbOfficial","total":1209.75,"fee":206.26,"payout":1003.49,"cleaning":291,"net":712.49,"commission":156.75,"owner":555.74,"linen":0,"expenses":[],"ownerAfter":555.74,"flag":null,"note":null}],"bookings":4,"nights":16,"total":3795.75,"fee":545.29,"payout":3250.46,"cleaning":1164,"net":2086.46,"commission":459.02,"owner":1627.44,"linen":0,"ownerAfter":1627.44},"2026-07":{"lines":[{"arrive":"2026-07-21","depart":"2026-07-27","nights":6,"channel":"airbnbOfficial","total":1323.5,"fee":225.65,"payout":1097.85,"cleaning":291,"net":806.85,"commission":177.51,"owner":629.34,"linen":55,"expenses":[{"desc":"Linen & Amenities","amount":55}],"ownerAfter":574.34,"flag":null,"note":null},{"arrive":"2026-07-27","depart":"2026-08-05","nights":9,"channel":"airbnbOfficial","total":1676.25,"fee":285.8,"payout":1390.45,"cleaning":291,"net":1099.45,"commission":241.88,"owner":857.57,"linen":55,"expenses":[{"desc":"Line & Amenities","amount":55}],"ownerAfter":802.57,"flag":null,"note":"a $55.00 credit row sits on this booking and Hostaway's own statement does not count it — worth a look · the expense wording is inconsistent on this booking"}],"bookings":2,"nights":15,"total":2999.75,"fee":511.45,"payout":2488.3,"cleaning":582,"net":1906.3,"commission":419.39,"owner":1486.91,"linen":110,"ownerAfter":1376.91},"2026-06":{"lines":[{"arrive":"2026-06-12","depart":"2026-06-15","nights":3,"channel":"airbnbOfficial","total":826,"fee":140.83,"payout":685.17,"cleaning":291,"net":394.17,"commission":86.72,"owner":307.45,"linen":55,"expenses":[{"desc":"Linen & Amenities","amount":55}],"ownerAfter":252.45,"flag":null,"note":null},{"arrive":"2026-06-19","depart":"2026-06-21","nights":2,"channel":"airbnbOfficial","total":658,"fee":112.19,"payout":545.81,"cleaning":291,"net":254.81,"commission":56.06,"owner":198.75,"linen":55,"expenses":[{"desc":"Linen & Amenities","amount":55}],"ownerAfter":143.75,"flag":null,"note":null},{"arrive":"2026-06-21","depart":"2026-06-24","nights":3,"channel":"airbnbOfficial","total":763.5,"fee":130.17,"payout":633.33,"cleaning":291,"net":342.33,"commission":75.31,"owner":267.02,"linen":55,"expenses":[{"desc":"Linen & Amenities","amount":55}],"ownerAfter":212.02,"flag":null,"note":null},{"arrive":"2026-06-24","depart":"2026-07-02","nights":8,"channel":"airbnbOfficial","total":1341,"fee":228.65,"payout":1112.35,"cleaning":291,"net":821.35,"commission":180.7,"owner":640.65,"linen":55,"expenses":[{"desc":"Linen & Amenities","amount":55}],"ownerAfter":585.65,"flag":null,"note":null}],"bookings":4,"nights":16,"total":3588.5,"fee":611.84,"payout":2976.66,"cleaning":1164,"net":1812.66,"commission":398.79,"owner":1413.87,"linen":220,"ownerAfter":1193.87},"2026-05":{"lines":[{"arrive":"2026-05-02","depart":"2026-05-04","nights":2,"channel":"airbnbOfficial","total":675.8,"fee":115.23,"payout":560.57,"cleaning":291,"net":269.57,"commission":59.31,"owner":210.26,"linen":55,"expenses":[{"desc":"Linen & Amenities","amount":55}],"ownerAfter":155.26,"flag":null,"note":null},{"arrive":"2026-05-05","depart":"2026-05-13","nights":8,"channel":"airbnbOfficial","total":1648.6,"fee":281.08,"payout":1367.52,"cleaning":291,"net":1076.52,"commission":236.83,"owner":839.69,"linen":55,"expenses":[{"desc":"Linen & Amenities","amount":55}],"ownerAfter":784.69,"flag":null,"note":null},{"arrive":"2026-05-15","depart":"2026-05-19","nights":4,"channel":"airbnbOfficial","total":816,"fee":139.13,"payout":676.87,"cleaning":291,"net":385.87,"commission":84.89,"owner":300.98,"linen":55,"expenses":[{"desc":"Linen & Amenities","amount":55}],"ownerAfter":245.98,"flag":null,"note":null},{"arrive":"2026-05-19","depart":"2026-05-22","nights":3,"channel":"airbnbOfficial","total":834.75,"fee":142.33,"payout":692.42,"cleaning":291,"net":401.42,"commission":88.31,"owner":313.11,"linen":55,"expenses":[{"desc":"Linen & Amenities","amount":55}],"ownerAfter":258.11,"flag":null,"note":null},{"arrive":"2026-05-22","depart":"2026-05-24","nights":2,"channel":"airbnbOfficial","total":553.5,"fee":94.37,"payout":459.13,"cleaning":291,"net":168.13,"commission":36.99,"owner":131.14,"linen":55,"expenses":[{"desc":"Linen & Amenities","amount":55}],"ownerAfter":76.14,"flag":null,"note":null},{"arrive":"2026-05-25","depart":"2026-06-04","nights":10,"channel":"airbnbOfficial","total":1630.5,"fee":278,"payout":1352.5,"cleaning":291,"net":1061.5,"commission":233.53,"owner":827.97,"linen":55,"expenses":[{"desc":"Linen & Amenities","amount":55}],"ownerAfter":772.97,"flag":null,"note":null}],"bookings":6,"nights":29,"total":6159.15,"fee":1050.14,"payout":5109.01,"cleaning":1746,"net":3363.01,"commission":739.86,"owner":2623.15,"linen":330,"ownerAfter":2293.15},"2026-04":{"lines":[{"arrive":"2026-04-03","depart":"2026-04-04","nights":1,"channel":"airbnbOfficial","total":556.1,"fee":94.82,"payout":461.28,"cleaning":291,"net":170.28,"commission":37.46,"owner":132.82,"linen":55,"expenses":[{"desc":"Linen & Amenities","amount":55}],"ownerAfter":77.82,"flag":null,"note":null},{"arrive":"2026-04-04","depart":"2026-04-08","nights":4,"channel":"airbnbOfficial","total":1563.8,"fee":266.63,"payout":1297.17,"cleaning":291,"net":1006.17,"commission":221.36,"owner":784.81,"linen":55,"expenses":[{"desc":"Linen & Amenities","amount":55}],"ownerAfter":729.81,"flag":null,"note":null},{"arrive":"2026-04-09","depart":"2026-04-12","nights":3,"channel":"airbnbOfficial","total":1907,"fee":325.15,"payout":1581.85,"cleaning":291,"net":1290.85,"commission":283.99,"owner":1006.86,"linen":55,"expenses":[{"desc":"Linen & Amenities","amount":55}],"ownerAfter":951.86,"flag":null,"note":null},{"arrive":"2026-04-17","depart":"2026-04-21","nights":4,"channel":"airbnbOfficial","total":1259,"fee":214.67,"payout":1044.33,"cleaning":291,"net":753.33,"commission":165.73,"owner":587.6,"linen":55,"expenses":[{"desc":"Linen & Amenities","amount":55}],"ownerAfter":532.6,"flag":null,"note":null},{"arrive":"2026-04-24","depart":"2026-04-25","nights":1,"channel":"airbnbOfficial","total":573,"fee":97.7,"payout":475.3,"cleaning":291,"net":184.3,"commission":40.55,"owner":143.75,"linen":55,"expenses":[{"desc":"Linen & Amenities","amount":55}],"ownerAfter":88.75,"flag":null,"note":null}],"bookings":5,"nights":13,"total":5858.9,"fee":998.97,"payout":4859.93,"cleaning":1455,"net":3404.93,"commission":749.09,"owner":2655.84,"linen":275,"ownerAfter":2380.84},"2026-03":{"lines":[{"arrive":"2026-03-15","depart":"2026-03-21","nights":6,"channel":"airbnbOfficial","total":1302,"fee":221.99,"payout":1080.01,"cleaning":291,"net":789.01,"commission":173.58,"owner":615.43,"linen":55.01,"expenses":[{"desc":"Linen hire & Amenities","amount":55.01}],"ownerAfter":560.42,"flag":null,"note":null},{"arrive":"2026-03-21","depart":"2026-03-23","nights":2,"channel":"airbnbOfficial","total":624.6,"fee":106.49,"payout":518.11,"cleaning":291,"net":227.11,"commission":49.96,"owner":177.15,"linen":55.01,"expenses":[{"desc":"Linen hire & Amenities","amount":55.01}],"ownerAfter":122.14,"flag":null,"note":null},{"arrive":"2026-03-23","depart":"2026-03-29","nights":6,"channel":"airbnbOfficial","total":1234.8,"fee":210.53,"payout":1024.27,"cleaning":291,"net":733.27,"commission":161.32,"owner":571.95,"linen":55.01,"expenses":[{"desc":"Linen hire & Amenities","amount":55.01}],"ownerAfter":516.94,"flag":null,"note":null}],"bookings":3,"nights":14,"total":3161.4,"fee":539.01,"payout":2622.39,"cleaning":873,"net":1749.39,"commission":384.86,"owner":1364.53,"linen":165.03,"ownerAfter":1199.5}},"fy":["2026-08","2026-07"]};</script>
 
   <!-- CALENDAR -->
   <section class="pad-sm owner-panel" data-panel="calendar" hidden>
@@ -423,9 +422,12 @@
         confirmed bookings, $151,280 of booking value, 334 nights sold,
         and the September calendar is your real availability. The revenue chart is your real months.
         The channel split is real. Nothing here is invented.
-        <br><br><strong>Two things on it are still ours rather than yours.</strong> The
-        20% management fee is a placeholder, because you have never told us your real
-        rate. And Hostaway does not expose its own statement documents through the connection, so
+        <br><br><strong>The statements now run on your formula, not our guess.</strong> Your
+        22%&nbsp;commission, the Airbnb fee, the cleaning and your linen charges all come straight
+        out of your own records, in your order. Your July statement for Victoria House reconciles
+        to <strong>$1,377</strong>
+        &mdash; the same figure, to the cent, as the invoice you sent us.
+        <br><br>Hostaway does not expose its own statement documents through the connection, so
         rather than pull your statements we build them from the underlying bookings. That turns out
         better: it is live rather than monthly, it is in your format, and it can show things their
         version cannot.
@@ -445,81 +447,12 @@
   </section>
 </div>
 
-<!-- ============ GUEST — the stay they have booked ============ -->
-<div id="guest-app" hidden>
-  
-  <section class="owner-top">
-    <div class="wrap">
-      <div class="owner-top-row">
-        <div>
-          <p class="eyebrow">Your stay</p>
-          <h1 class="h2" style="font-size:clamp(1.6rem,3.4vw,2.2rem)">The Bungalow & The Cabana</h1>
-          <p class="small muted" style="margin:.3rem 0 0">2 nights &middot; 10 guests &middot; Torrensville, Adelaide</p>
-        </div>
-        <div class="owner-top-actions">
-          <button class="btn btn-ghost" type="button" id="gu-install"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="6" y="2" width="12" height="20" rx="2.5"/><path d="M10.5 18.5h3"/></svg><span>Add to home screen</span></button>
-        </div>
-      </div>
-      <div class="owner-tabs" role="tablist">
-        <button class="owner-tab is-on" type="button" data-gtab="stay" role="tab">Your stay</button>
-        <button class="owner-tab" type="button" data-gtab="arrive" role="tab">Getting in</button>
-        <button class="owner-tab" type="button" data-gtab="area" role="tab">While you're here</button>
-      </div>
-    </div>
-  </section>
-
-  <section class="pad-sm guest-panel is-on" data-gpanel="stay">
-    <div class="wrap">
-      <div class="owner-kpis">
-        <div class="okpi"><div class="okpi-l"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg><span>Check in</span></div><div class="okpi-n" style="font-size:1.3rem">Friday 14 August</div><div class="okpi-s">From 14:00</div></div>
-        <div class="okpi"><div class="okpi-l"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg><span>Check out</span></div><div class="okpi-n" style="font-size:1.3rem">Sunday 16 August</div><div class="okpi-s">By 10:00</div></div>
-        <div class="okpi"><div class="okpi-l"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="12" r="4"/><path d="M12 12h9M18 12v3M15 12v2"/></svg><span>Booking reference</span></div><div class="okpi-n" style="font-size:1.3rem">GG&ndash;23122</div><div class="okpi-s">Quote this if you call us</div></div>
-        <div class="okpi"><div class="okpi-l"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 12a8 8 0 01-8 8H7l-4 3v-5.5A8 8 0 1121 12z"/></svg><span>Any hour</span></div><div class="okpi-n" style="font-size:1.3rem">08 8239 1787</div><div class="okpi-s">A real person in Adelaide</div></div>
-      </div>
-
-      <div class="grid-2 mt-3" style="gap:1.25rem;align-items:start">
-        <div class="ocard">
-          <div class="ocard-head"><h2 class="h3">The home</h2></div>
-          <div class="prop-hero-img" style="aspect-ratio:16/9;margin-bottom:1rem"><img src="https://bookingenginecdn.hostaway.com/listing/179273-472312-WHckDgCCL6WwgMiCBrzBdivjz7uEJKQgdoM-QNSJ-cU-695b57ce8756e?width=1200&height=630&quality=70&format=jpeg&v=2" alt="The Bungalow & The Cabana" loading="lazy" decoding="async"></div>
-          <div class="prop-facts">
-            <span>5 bedrooms</span><span>3 bathrooms</span><span>Sleeps 12</span>
-          </div>
-          <p class="small muted" style="margin-bottom:0">The full address and parking notes appear here three days before you arrive.</p>
-        </div>
-        <div class="ocard">
-          <div class="ocard-head"><h2 class="h3">Good to know</h2></div>
-          <table class="otbl"><tbody>
-            <tr><td>Check-in</td><td class="num">After 14:00</td></tr>
-            <tr><td>Check-out</td><td class="num">By 10:00</td></tr>
-            <tr><td>Parking</td><td class="num">Off street</td></tr>
-            <tr><td>Wi-Fi</td><td class="num">Details on arrival</td></tr>
-            <tr><td>Pets</td><td class="num">By arrangement</td></tr>
-            <tr class="tot"><td>Parties</td><td class="num">Not permitted</td></tr>
-          </tbody></table>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="pad-sm guest-panel" data-gpanel="arrive" hidden>
-    <div class="wrap">
-      <div class="ocard">
-        <div class="ocard-head"><h2 class="h3">Getting in</h2><span class="small muted">Unlocks 3 days before you arrive</span></div>
-        <div class="obook"><div><div class="obook-d">1. Your door code arrives by text</div><div class="obook-s">Sent the morning of check-in to the mobile on the booking. It works from 14:00.</div></div></div><div class="obook"><div><div class="obook-d">2. Park off the street</div><div class="obook-s">There is a dedicated space. Leave the kerb clear for the neighbours.</div></div></div><div class="obook"><div><div class="obook-d">3. The Wi-Fi details are on the fridge</div><div class="obook-s">Along with the bin nights and where the spare linen lives.</div></div></div><div class="obook"><div><div class="obook-d">4. Something not right?</div><div class="obook-s">Call us. Not the platform, not a form. A person in Adelaide, any hour.</div></div></div>
-        <a class="btn btn-primary mt-2" href="tel:+61882391787" style="width:100%;justify-content:center">Call us on 08 8239 1787</a>
-      </div>
-    </div>
-  </section>
-
-  <section class="pad-sm guest-panel" data-gpanel="area" hidden>
-    <div class="wrap">
-      <div class="grid-3">
-        <div class="card"><div class="card-ico"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 21s7-6 7-11a7 7 0 10-14 0c0 5 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/></svg></div><h3 class="h3">Getting around</h3><p>You are close to the tram and about fifteen minutes from the city. Taxis and rideshare run late.</p></div><div class="card"><div class="card-ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 3v4M12 17v4M3 12h4M17 12h4M6 6l2.5 2.5M15.5 15.5L18 18M18 6l-2.5 2.5M8.5 15.5L6 18"/></svg></div><h3 class="h3">Eating nearby</h3><p>A short walk to the local strip: bakery, decent coffee, a pub that does a proper parmi.</p></div><div class="card"><div class="card-ico"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 3l2.7 5.6 6.3.9-4.5 4.4 1 6.1-5.5-2.9-5.5 2.9 1-6.1L3 9.5l6.3-.9z"/></svg></div><h3 class="h3">Worth the trip</h3><p>The beach is twenty minutes west. The Barossa is an hour north and worth a full day.</p></div>
-      </div>
-      
-    </div>
-  </section>
-</div>
+<!-- The GUEST portal was REMOVED 14 Aug 2026 at Nick's request. On the call he said
+     "we don't normally give guests access to the website" - guests already see everything
+     through Airbnb, and a second place to look is a support burden with no upside.
+     A direct booking now ends at the confirmation screen plus a confirmation email, which
+     is what he asked for. The booking still lands in the back office Leads tab.
+     Do NOT reinstate this without him asking for it. -->
 
 <!-- ============ MANAGER / BACK OFFICE (Nick's own side) ============ -->
 <div id="manager-app" hidden>
@@ -1152,8 +1085,8 @@
               <tr>
                   <td><b>Victoria House - 3Br, BBQ & Sunroom</b></td>
                   <td>Owner, Victoria House</td>
-                  <td class="num">$2,184</td>
-                  <td class="num">4</td>
+                  <td class="num">$3,004</td>
+                  <td class="num">6</td>
                   <td>Aug 2026</td>
                   <td class="stmt-links">
                     <a class="tlink" href="statement.html?p=495920&amp;m=fy" target="_blank" rel="noopener"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 3h8l4 4v14H6z"/><path d="M14 3v4h4M9 12h6M9 16h6"/></svg><span>Year</span></a>
@@ -1360,7 +1293,7 @@
   </div>
 </footer>
 
-<script src="assets/app.js?v=fee4cc05"></script>
+<script src="assets/app.js?v=5c769384"></script>
 <!-- Service worker: required before Android/Chrome will offer "Install app".
      Deliberately a pure network passthrough with NO caching — a caching SW on a
      demo means stale pages survive every redeploy, which is exactly the trap we

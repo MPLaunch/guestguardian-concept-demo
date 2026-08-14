@@ -204,41 +204,71 @@
   var est = document.getElementById('estimator');
   if (est) {
     var beds = document.getElementById('est-beds');
-    var area = document.getElementById('est-area');
+    var suburb = document.getElementById('est-suburb');
+    var ptype = document.getElementById('est-type');
     var occ = document.getElementById('est-occ');
     var outNight = document.getElementById('est-night');
     var outMonth = document.getElementById('est-month');
     var outYear = document.getElementById('est-year');
     var occOut = document.getElementById('est-occ-out');
+    var basisOut = document.getElementById('est-basis');
 
-    /* Indicative nightly rates by area band and bedroom count.
-       ANCHOR: Adelaide's median nightly rate across all tracked short-stay
-       listings was $237 (Airbtics market snapshot, June 2026). A 2-bedroom in
-       the city sits close to that median, and the rest of the grid is scaled
-       around it by bedroom count and area.
-       ⚠️ These are ILLUSTRATIVE, not a forecast. A production version would be
-       driven by Guest Guardian's own Hostaway booking history, or by a licensed
-       market data feed, so the numbers are defensible per property. */
-    /* Guest Guardian's REAL achieved nightly rates, injected by the build from
-       their own Hostaway bookings. The literals below are only the fallback for
-       a page built before that data existed. */
-    var BASE = window.GG_RATES ||
-      { coastal: [155, 215, 310, 430], city: [165, 225, 315, 425], inner: [140, 190, 265, 360], hills: [150, 205, 285, 380] };
+    /* ── THE RATE TABLE ──────────────────────────────────────────────────────
+       Real Adelaide listings, from Doorstep Analytics, built by gg_rates.py.
+       🚨 ACCOMMODATION ONLY. Their published nightly figure is a whole-stay total
+       divided by nights, so a fixed cleaning fee is smeared through it. That is
+       solved out per listing before any median is taken — the same bug we removed
+       from this estimator's own numbers on 14 Aug.
+       There is NO fallback grid of literals here on purpose. If the data file is
+       missing, the estimator must go quiet rather than quietly invent a figure. */
+    var R = window.GG_RATES;
+
+    /* Widen the basis until there is enough evidence to speak, and always report
+       WHICH basis answered. Never silently average the whole city. */
+    var lookup = function (sub, b) {
+      var pc = R.suburbs[sub];
+      var cell = pc && R.postcodes[pc] && R.postcodes[pc].beds[b];
+      if (cell) {
+        var near = R.postcodes[pc].suburbs || [];
+        return { rate: cell.rate, n: cell.n,
+                 where: near.length ? near.slice(0, 3).join(', ') : ('postcode ' + pc) };
+      }
+      /* 🚨 The fallback must never be mistakable for a local figure. "Adelaide"
+         alone read identically whether it meant postcode 5000 or the whole city,
+         so an owner could not tell which answer they had been given. */
+      var wide = R.adelaide[b];
+      return wide ? { rate: wide.rate, n: wide.n, where: 'greater Adelaide', wide: true } : null;
+    };
 
     var calc = function () {
-      var b = Math.max(1, Math.min(4, parseInt(beds.value, 10) || 1));
-      var a = area.value in BASE ? area.value : 'city';
+      var b = String(Math.max(1, Math.min(5, parseInt(beds.value, 10) || 1)));
       var o = parseInt(occ.value, 10) || 60;
-      var nightly = BASE[a][b - 1];
-      var month = Math.round(nightly * 30.4 * (o / 100));
-      var year = month * 12;
       occOut.textContent = o + '%';
+      if (!R) return;
+
+      var hit = lookup(suburb.value, b);
+      if (!hit) return;
+      var t = R.types[ptype.value];
+      var nightly = Math.round(hit.rate * ((t && t.mult) || 1));
+      var month = Math.round(nightly * 30.4 * (o / 100));
+
+      if (basisOut) {
+        basisOut.textContent = 'Based on ' + hit.n + ' ' + b + '-bedroom ' +
+          (hit.n === 1 ? 'listing' : 'listings') + ' advertised ' +
+          (hit.wide ? 'across ' : 'in ') + hit.where +
+          /* Only name the suburb if we actually have one. An empty select would
+             otherwise print "too few in  to go on". */
+          (hit.wide ? (suburb.value ? ', because there are too few in ' + suburb.value + ' to go on'
+                                    : ', because there are too few nearby to go on') : '') +
+          '. ' + R.source + ', ' + R.snapshot + '. Accommodation only, before ' +
+          'cleaning, platform fees, management and running costs.';
+      }
       if (!unlocked) return;
       outNight.textContent = '$' + nightly.toLocaleString('en-AU');
       outMonth.textContent = '$' + month.toLocaleString('en-AU');
-      outYear.textContent = '$' + year.toLocaleString('en-AU');
+      outYear.textContent = '$' + (month * 12).toLocaleString('en-AU');
     };
-    [beds, area, occ].forEach(function (el) {
+    [beds, suburb, ptype, occ].forEach(function (el) {
       if (el) { el.addEventListener('input', calc); el.addEventListener('change', calc); }
     });
 
@@ -270,12 +300,45 @@
     };
     if (stepInputs) showStep(1);
 
+    /* STAFF MODE — Nick asked for this on the 14 Aug call, in these words:
+       "we want a way to use the estimator, like for us personally, so when we're
+       talking to owners we can just open up the estimator... he can just open it
+       up on his iPad and go, this is our tool."
+       If you are signed in as Guest Guardian there is no lead to capture — you
+       ARE Guest Guardian, sitting in front of the owner — so the form is skipped
+       and nothing is relayed. Signed out, or signed in as an owner, the gate
+       behaves exactly as before.
+       🔒 This is a convenience, not a security boundary: it only reads our own
+       session flag. The real protection for the numbers is server-side, same as
+       the note above about the gate being a curtain rather than a lock. */
+    var isStaff = function () {
+      try { return sessionStorage.getItem('gg_portal_view') === 'manager'; }
+      catch (e) { return false; }
+    };
+
+    var staffNote = document.querySelector('[data-est-staff]');
+    if (staffNote) staffNote.hidden = !isStaff();
+
     var nextBtn = document.getElementById('est-next');
-    if (nextBtn) nextBtn.addEventListener('click', function () {
-      showStep(2);
-      var f = document.getElementById('eg-name');
-      if (f) f.focus();
-    });
+    if (nextBtn) {
+      if (isStaff()) nextBtn.textContent = 'Show the estimate';
+      nextBtn.addEventListener('click', function () {
+        if (isStaff()) {         // straight to the number, no form, no lead sent
+          unlocked = true;
+          showStep(3);
+          calc();
+          /* The confirmation line promises an email. In staff mode no email is
+             sent and no lead exists, so leaving it would be telling Nick a copy
+             is on its way to an inbox that was never asked for. */
+          if (done) done.textContent = 'Staff view — nothing sent and nothing recorded. ' +
+                                       'Adjust anything above and the figures follow.';
+          return;
+        }
+        showStep(2);
+        var f = document.getElementById('eg-name');
+        if (f) f.focus();
+      });
+    }
     var backBtn = document.getElementById('est-back');
     if (backBtn) backBtn.addEventListener('click', function () { showStep(1); });
 
@@ -303,11 +366,15 @@
         /* Send it on, including what they had the sliders set to — the numbers
            they saw are the whole context for following the lead up. */
         var val = function (id) { var f = document.getElementById(id); return f ? f.value.trim() : ''; };
-        var areaSel = area.options[area.selectedIndex];
+        var typeSel = ptype.options[ptype.selectedIndex];
         relayLead('income estimator', {
           name: val('eg-name'), email: email, phone: val('eg-phone'), suburb: val('eg-suburb'),
         }, {
-          Area: areaSel ? areaSel.textContent.trim() : area.value,
+          /* The suburb they picked in the estimator, which is the property's
+             suburb. The gate also asks for it in writing; both are sent so Nick
+             can see if they differ. */
+          Suburb: suburb.value,
+          'Property type': typeSel ? typeSel.textContent.trim() : ptype.value,
           Bedrooms: beds.value,
           Occupancy: occ.value + '%',
           /* Sent as separate values as well as the readable line, so the
@@ -809,12 +876,14 @@
   var ownerApp = document.getElementById('owner-app');
   var ownerLogin = document.getElementById('owner-login');
   var managerApp = document.getElementById('manager-app');
-  var guestApp = document.getElementById('guest-app');
   if (ownerForm && ownerApp && ownerLogin) {
-    /* ONE login, three destinations. On a real build the account decides where
+    /* ONE login, two destinations. On a real build the account decides where
        you land; here the view is chosen for the preview. Kept in a single
-       function so two portals can never be on screen at once. */
-    var VIEWS = { out: ownerLogin, owner: ownerApp, manager: managerApp, guest: guestApp };
+       function so two portals can never be on screen at once.
+       🚫 The GUEST view was removed 14 Aug 2026 — Nick: "we don't normally give
+       guests access to the website". Guests are served by Hostaway's own
+       messaging, which already works. Do not add a third destination back. */
+    var VIEWS = { out: ownerLogin, owner: ownerApp, manager: managerApp };
 
     /* The header button is the ONLY way in or out. Having a Sign in up top and a
        separate Sign out inside each portal meant two controls for one job, in
@@ -865,37 +934,15 @@
     var standalone = (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) || navigator.standalone;
     if (standalone && ownerLogin.hidden === false) show('owner');
 
-    /* A booking made during the demo takes over the guest view, so signing in
-       after booking shows YOUR stay rather than the worked example. */
-    var mine = demoBookings();
-    if (mine.length && guestApp) {
-      var b = mine[mine.length - 1];
-      var fmtLong = function (s) {
-        var d = new Date(Date.UTC(+s.slice(0, 4), +s.slice(5, 7) - 1, +s.slice(8, 10)));
-        return d.toLocaleDateString('en-AU', { weekday: 'long', day: 'numeric', month: 'long', timeZone: 'UTC' });
-      };
-      var setText = function (sel, txt) {
-        var el = guestApp.querySelector(sel);
-        if (el) el.textContent = txt;
-      };
-      setText('.eyebrow', 'Your stay, ' + b.first);
-      setText('h1', b.property || 'Your stay');
-      setText('.owner-top p.small', b.nights + ' night' + (b.nights > 1 ? 's' : '') +
-        ' · ' + b.guests + ' guest' + (b.guests > 1 ? 's' : '') + ' · booked ' + b.madeAt);
-      var kpis = guestApp.querySelectorAll('.okpi-n');
-      if (kpis.length >= 3) {
-        kpis[0].textContent = fmtLong(b.arrive);
-        kpis[1].textContent = fmtLong(b.depart);
-        kpis[2].textContent = b.ref;
-      }
-    }
+    /* The block that re-dressed the guest view with the demo booking went with
+       the guest portal on 14 Aug. A demo booking still lands in the back office
+       Leads tab, which is the surface Nick actually uses. */
 
     /* Tabs — owner side and manager side share the look and the behaviour, so
        both are scoped to their own container. Selecting on `.owner-tab` alone
        would let an owner-tab click strip the highlight off the manager tabs. */
     [[ownerApp, 'data-tab', 'data-panel'],
-     [managerApp, 'data-mtab', 'data-mpanel'],
-     [guestApp, 'data-gtab', 'data-gpanel']].forEach(function (set) {
+     [managerApp, 'data-mtab', 'data-mpanel']].forEach(function (set) {
       var root = set[0];
       if (!root) return;
       var tabs = root.querySelectorAll('[' + set[1] + ']');
@@ -1737,6 +1784,13 @@
                     val('bp-post'), val('bp-country')].filter(Boolean).join(', '),
           optin: document.getElementById('bp-optin') && document.getElementById('bp-optin').checked ? 'yes' : 'no',
           madeAt: new Date().toISOString().slice(0, 16).replace('T', ' '),
+          /* Kept so the booking confirmation document can show the same
+             itemised breakdown the guest agreed to, rather than just a total.
+             Stored as the rendered labels and amounts, so the document can
+             never disagree with what was on screen at the moment they paid. */
+          lines: (q.lines || []).map(function (l) { return { label: l.label, amt: l.amt }; }),
+          checkin: bp.getAttribute('data-checkin') || '2',
+          checkout: bp.getAttribute('data-checkout') || '10',
         };
         /* 🚨 Note what is NOT in that object: no card number, no expiry, no CVC.
            The card fields are never read, never stored and never relayed. */
@@ -1755,6 +1809,12 @@
           fmt(arrive) + ' to ' + fmt(depart) + ' · ' + booking.guests + ' guest' + (booking.guests > 1 ? 's' : '');
         renderLines(lines3, q);
         document.getElementById('bp-ref').textContent = ref;
+
+        /* Point the confirmation document at THIS booking. Without the
+           reference it falls back to the most recent one, which is right for a
+           single guest but wrong the moment anyone books twice. */
+        var confDoc = document.getElementById('bp-confdoc');
+        if (confDoc) confDoc.setAttribute('href', 'booking.html?ref=' + encodeURIComponent(ref));
 
         /* ---- The confirmation email the guest would receive.
            Built here so there is ONE version of the wording: the same text is
@@ -1903,19 +1963,48 @@
           '<thead><tr><th>Stay</th><th class="num">Booking</th><th class="num">Channel fee</th><th class="num">Received</th></tr></thead>' +
           '<tbody>' + rows + '</tbody>' +
         '</table></div>' +
+        /* 🚨 THE LABELS ARE NICK'S, NOT OURS, AND THAT IS DELIBERATE.
+           His owners already receive a Hostaway statement using exactly these
+           words, in exactly this order. On the 14 Aug call he read "857" off his
+           own invoice and could not find it on our screen — not because our
+           maths was wrong (it was right to the cent) but because we had renamed
+           his lines and dropped his "Owner Payout" subtotal. A statement that
+           cannot be reconciled line-by-line against the one already in the
+           owner's inbox creates exactly the support calls he is afraid of.
+           🪤 "Owner Payout" is BEFORE expenses; "Grand total" is after. Both
+           lines are required — that gap is the $55 he was hunting for.
+           ⏭️ When direct bookings and other channels arrive, the two labels
+           naming Airbnb have to become the channel's name. Today 100% of their
+           confirmed revenue is Airbnb, so this reads identically to his. */
         '<table class="otbl stmt-run">' +
-          line('Received from the channel', m.payout) +
-          line('Cleaning', -m.cleaning, 'neg-row') +
-          line('Net', m.net, 'stmt-sub-total') +
-          line('Management, 22% including GST', -m.commission, 'neg-row') +
-          line('Expenses, from your Hostaway records', -m.linen, 'neg-row') +
-          '<tr class="stmt-total"><td>Paid to you</td><td class="num">' + $(m.ownerAfter) + '</td></tr>' +
-        '</table>';
+          line('Airbnb payout sum', m.payout) +
+          line('Cleaning Fee Value', -m.cleaning, 'neg-row') +
+          line('Total Payout Airbnb', m.net, 'stmt-sub-total') +
+          line('Property Manager Payout', -m.commission, 'neg-row') +
+          line('Owner Payout', m.owner, 'stmt-sub-total') +
+          line('Expenses &amp; extras', -m.linen, 'neg-row') +
+          '<tr class="stmt-total"><td>Grand total</td><td class="num">' + $(m.ownerAfter) + '</td></tr>' +
+        '</table>' +
+        '<p class="small muted stmt-note">All amounts include GST. Management is charged at 22% on the net ' +
+          'accommodation revenue, after the Airbnb fee and cleaning are deducted. A booking ' +
+          'appears in the month the stay begins.</p>';
+    };
+
+    /* 🚨 The PDF button used to be a STATIC href with no month on it, so it
+       always opened the whole financial year no matter which month was chosen.
+       Peter hit this live on the 14 Aug call — picked July, got the FY document.
+       The link now follows the selector. */
+    var pdfBtn = document.getElementById('stmt-pdf');
+    var syncPdf = function (ym) {
+      if (!pdfBtn || !ym) return;
+      pdfBtn.setAttribute('href', 'statement.html?p=' + encodeURIComponent(S.pid) +
+                                  '&m=' + encodeURIComponent(ym));
     };
 
     if (sel) {
-      sel.addEventListener('change', function () { draw(sel.value); });
+      sel.addEventListener('change', function () { draw(sel.value); syncPdf(sel.value); });
       draw(sel.value);
+      syncPdf(sel.value);
     }
 
     /* PDF is the browser's own print-to-PDF against a print stylesheet. It
@@ -2084,7 +2173,10 @@
           '<div><span>Nights</span><b>' + lines.reduce(function (s, l) { return s + (+l.nights || 0); }, 0) + '</b></div>' +
         '</section>' +
 
-        '<div class="doc-headline"><span>Paid to you</span><b>' + mny(t('ownerAfter')) + '</b></div>' +
+        /* Same words as the total at the bottom of the run-down. Two labels for
+           one figure is how a reader starts wondering whether they are two
+           figures. */
+        '<div class="doc-headline"><span>Grand total, paid to you</span><b>' + mny(t('ownerAfter')) + '</b></div>' +
 
         '<table class="doc-tbl">' +
           '<thead><tr><th>Stay</th><th class="num">Nights</th><th>Channel</th><th class="num">Booking</th>' +
@@ -2093,21 +2185,35 @@
           '<tbody>' + rows + '</tbody>' +
         '</table>' +
 
+        /* Same labels, same order, same subtotals as the statement Guest Guardian
+           already sends. See the note in the portal renderer for why. */
         '<table class="doc-run">' +
-          run('Received from the channels', t('payout')) +
-          run('Cleaning', -t('cleaning'), 'sub') +
-          run('Net', t('net'), 'mid') +
-          run('Management, ' + Math.round(prop.commission * 100) + '% including GST', -t('commission'), 'sub') +
-          run('Linen and amenities', -t('linen'), 'sub') +
+          run('Airbnb payout sum', t('payout')) +
+          run('Cleaning Fee Value', -t('cleaning'), 'sub') +
+          run('Total Payout Airbnb', t('net'), 'mid') +
+          run('Property Manager Payout', -t('commission'), 'sub') +
+          run('Owner Payout', t('owner'), 'mid') +
+          run('Expenses &amp; extras', -t('linen'), 'sub') +
           oneOffs.map(function (e) { return run(e.desc, -(e.amount * 1.1), 'sub'); }).join('') +
-          '<tr class="tot"><td>Paid to you</td><td class="num">' + mny(t('ownerAfter')) + '</td></tr>' +
+          '<tr class="tot"><td>Grand total</td><td class="num">' + mny(t('ownerAfter')) + '</td></tr>' +
         '</table>' +
 
         '<section class="doc-foot">' +
           '<p><b>' + D.business.name + '</b> &middot; ABN ' + D.business.abn + ' &middot; ' +
             D.business.phone + ' &middot; ' + D.business.email + '</p>' +
-          '<p>All amounts include GST. Channel fees are charged by the booking platform. ' +
+          /* Nick's own wording, transcribed from his July statement. His words,
+             not ours, so it can never misdescribe how he actually charges. */
+          '<p>All amounts include GST. Commission is calculated on the net accommodation ' +
+          'revenue, after the deduction of Airbnb fees and cleaning costs from gross revenue. ' +
           'A booking is counted in the month the stay begins.</p>' +
+          /* 🚨 DELIBERATELY NOT HEADED "TAX INVOICE" AND DELIBERATELY UNNUMBERED.
+             Nick's Hostaway statement IS a tax invoice and carries a sequential
+             number (July 2026 was invoice 104). We will not mint numbers into
+             someone else's accounting sequence, and we will not label a document
+             a tax invoice on his behalf — both are factual claims about his
+             records that only he can make. If this document is to replace his
+             Hostaway one, we need his numbering sequence from him first.
+             Open question for Nick; do not quietly resolve it here. */
           '<p class="doc-demo">Concept document produced for review. Figures are read from the ' +
           'Guest Guardian booking system.</p>' +
         '</section>';
@@ -2126,6 +2232,135 @@
 
     var dp = document.getElementById('doc-print');
     if (dp) dp.addEventListener('click', function () { window.print(); });
+  }
+
+  /* ==========================================================================
+     GUEST BOOKING CONFIRMATION — booking.html?ref=<reference>
+
+     Built 14 Aug 2026. The guest portal was removed at Nick's request, so a
+     direct booker needs something to KEEP. This is that: one branded page they
+     can save, print or forward, with no login and nothing to support.
+
+     🔒 The booking is read from localStorage, i.e. only from the browser that
+     made it. No guest data is ever written into a file served from a public URL.
+     A real build reads it server-side from the reference instead, and this
+     renderer does not change.
+     ========================================================================== */
+  var bookDoc = document.getElementById('bookdoc');
+  if (bookDoc && window.GG_BOOKDOC) {
+    var B = window.GG_BOOKDOC;
+    var bref = new URLSearchParams(location.search).get('ref');
+    var all = [];
+    try { all = JSON.parse(localStorage.getItem('gg_bookings') || '[]'); } catch (e) {}
+    var bk = bref ? all.filter(function (x) { return x.ref === bref; })[0] : all[all.length - 1];
+
+    var bmny = function (n) {
+      return '$' + Math.abs(Math.round(n)).toLocaleString('en-AU');
+    };
+    /* UTC end to end. A plain new Date('2026-08-08') parses as local midnight
+       and reads back as the previous day in Adelaide. */
+    var bday = function (s, long) {
+      if (!s) return '';
+      var d = new Date(Date.UTC(+s.slice(0, 4), +s.slice(5, 7) - 1, +s.slice(8, 10)));
+      return d.toLocaleDateString('en-AU', long
+        ? { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' }
+        : { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC' });
+    };
+    var hr = function (h) {
+      var n = +h || 0;
+      return (n % 12 === 0 ? 12 : n % 12) + (n < 12 ? 'am' : 'pm');
+    };
+
+    if (!bk) {
+      bookDoc.innerHTML =
+        '<header class="doc-head"><div class="doc-brand">' +
+          '<svg class="doc-mark" viewBox="0 0 50 50" fill="none" aria-hidden="true">' +
+          '<path d="M25 0a25 25 0 000 50z" fill="currentColor"/>' +
+          '<path d="M34.6 50V29.5L25 24.9 48.2 14.1v29z" fill="currentColor" opacity=".55"/>' +
+          '</svg><div><div class="doc-biz">Guest <b>Guardian</b></div>' +
+          '<div class="doc-tag">Short-stay management &middot; Adelaide</div></div></div></header>' +
+        '<p style="margin:1.5rem 0">We could not find that booking in this browser. ' +
+        'A confirmation opens on the device the booking was made on. ' +
+        'If you need a copy, call us on ' + B.business.phone + ' or email ' +
+        B.business.email + ' and we will send one over.</p>';
+    } else {
+      var prop = B.properties[String(bk.listing)] || {};
+      var guests = +bk.guests || 1;
+
+      var lineRows = (bk.lines || []).map(function (l) {
+        return '<tr><td>' + l.label + '</td><td class="num">' +
+               (l.amt < 0 ? '&minus;' : '') + bmny(l.amt) + '</td></tr>';
+      }).join('');
+
+      bookDoc.innerHTML =
+        '<header class="doc-head">' +
+          '<div class="doc-brand">' +
+            '<svg class="doc-mark" viewBox="0 0 50 50" fill="none" aria-hidden="true">' +
+              '<path d="M25 0a25 25 0 000 50z" fill="currentColor"/>' +
+              '<path d="M34.6 50V29.5L25 24.9 48.2 14.1v29z" fill="currentColor" opacity=".55"/>' +
+            '</svg><div>' +
+            '<div class="doc-biz">Guest <b>Guardian</b></div>' +
+            '<div class="doc-tag">Short-stay management &middot; Adelaide</div>' +
+          '</div></div>' +
+          '<div class="doc-meta">' +
+            '<div class="doc-kind">Booking confirmation</div>' +
+            '<div class="doc-period">' + bk.ref + '</div>' +
+            '<div class="doc-range">Booked ' + (bk.madeAt || '').slice(0, 10) + '</div>' +
+          '</div>' +
+        '</header>' +
+
+        '<section class="doc-to">' +
+          '<div><span>Guest</span><b>' + [bk.first, bk.last].filter(Boolean).join(' ') + '</b></div>' +
+          '<div><span>Property</span><b>' + (prop.name || bk.property || '') + '</b></div>' +
+          (prop.suburb ? '<div><span>Where</span><b>' + prop.suburb + ', Adelaide</b></div>' : '') +
+          '<div><span>Guests</span><b>' + guests + '</b></div>' +
+        '</section>' +
+
+        '<div class="doc-headline"><span>You are booked in</span><b>' +
+          bk.nights + ' night' + (bk.nights === 1 ? '' : 's') + '</b></div>' +
+
+        '<table class="doc-tbl">' +
+          '<thead><tr><th>&nbsp;</th><th>Date</th><th>From</th></tr></thead>' +
+          '<tbody>' +
+            '<tr><td class="strong">Check in</td><td>' + bday(bk.arrive, true) + '</td>' +
+              '<td>' + hr(bk.checkin) + '</td></tr>' +
+            '<tr><td class="strong">Check out</td><td>' + bday(bk.depart, true) + '</td>' +
+              '<td>by ' + hr(bk.checkout) + '</td></tr>' +
+          '</tbody>' +
+        '</table>' +
+
+        (bk.extras ? '<p style="margin:1rem 0 0;font-size:.85rem"><b>Added to your stay:</b> ' +
+          bk.extras + '</p>' : '') +
+
+        (lineRows
+          ? '<table class="doc-run">' + lineRows +
+            '<tr class="tot"><td>Total</td><td class="num">' + bmny(bk.total) + '</td></tr></table>'
+          : '<table class="doc-run"><tr class="tot"><td>Total</td><td class="num">' +
+            bmny(bk.total) + '</td></tr></table>') +
+
+        (prop.cancellation && prop.cancellation.length
+          ? '<section style="margin-top:1.6rem"><div class="doc-kind">Cancellation</div>' +
+            '<ul style="margin:.5rem 0 0;padding-left:1.1rem;font-size:.82rem">' +
+            prop.cancellation.map(function (t) { return '<li>' + t + '</li>'; }).join('') +
+            '</ul></section>'
+          : '') +
+
+        '<section class="doc-foot">' +
+          '<p><b>' + B.business.name + '</b> &middot; ABN ' + B.business.abn + ' &middot; ' +
+            B.business.phone + ' &middot; ' + B.business.email + '</p>' +
+          '<p>We will be in touch before you arrive with everything you need to get in. ' +
+            'Any questions, or anything changes, just call or email us.</p>' +
+          '<p>Full terms are at <a href="' + B.business.terms + '">' + B.business.site +
+            '/terms-and-conditions</a>.</p>' +
+          /* 🚨 Nothing was charged anywhere in this concept, so this document must
+             never read as a receipt. Same rule as the owner statement: do not
+             describe money that did not move. */
+          '<p class="doc-demo">Concept document produced for review. No payment has been taken.</p>' +
+        '</section>';
+    }
+
+    var bp2 = document.getElementById('doc-print');
+    if (bp2) bp2.addEventListener('click', function () { window.print(); });
   }
 
   /* ---- Property photo lightbox.

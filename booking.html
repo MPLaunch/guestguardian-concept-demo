@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en-AU">
+<head>
+<script>document.documentElement.className+=' js';</script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Your Booking | Guest Guardian</title>
+<meta name="description" content="Booking confirmation.">
+<link rel="canonical" href="https://guestguardian-concept.mplaunch.com.au/booking.html">
+<!-- CONCEPT ONLY: noindex so this demo can never be indexed or mistaken for the
+     real guestguardian.com.au. The production build would be "index, follow". -->
+<meta name="robots" content="noindex, nofollow">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Your Booking | Guest Guardian">
+<meta property="og:description" content="Booking confirmation.">
+<meta property="og:url" content="https://guestguardian-concept.mplaunch.com.au/booking.html">
+<meta property="og:locale" content="en_AU">
+<meta name="theme-color" content="#1C1D1C">
+<!-- Installable-app plumbing (the "home screen shortcut" Nick asked for).
+     iOS reads apple-mobile-web-app-* and IGNORES the manifest's display mode,
+     so both are required. start_url points at the owner portal, so the icon
+     on an owner's phone opens straight into their reporting. -->
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Guest Guardian">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500&family=Outfit:wght@200;300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css?v=5c769384">
+<script type="application/ld+json">undefined</script>
+</head>
+<body class="bare">
+
+
+
+<main>
+
+<div class="doc-shell">
+  <div class="doc-bar no-print">
+    <a class="tlink" href="book.html"><svg class="arw" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 12h13M12 5l7 7-7 7"/></svg><span>Back to Book your stay</span></a>
+    <div class="doc-bar-actions">
+      <button class="btn btn-primary" type="button" id="doc-print"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 4v12M7 12l5 5 5-5M4 20h16"/></svg><span>Download PDF</span></button>
+    </div>
+  </div>
+
+  <article class="doc" id="bookdoc"></article>
+</div>
+
+<!-- Public listing facts only: what the property is called, where it is, and the
+     times on the door. 🚨 NO GUEST DATA IS EVER BAKED IN HERE — the booking is
+     read from the browser it was made in, so a real person's stay never ends up
+     inside a file served from a public URL. -->
+<script>window.GG_BOOKDOC = {"business":{"name":"Guest Guardian","abn":"84 687 233 389","phone":"08 8239 1787","email":"contact@guestguardian.com.au","site":"guestguardian.com.au","terms":"https://guestguardian.com.au/terms-and-conditions/","privacy":"https://guestguardian.com.au/privacy-policy/"},"properties":{"472310":{"name":"The Bungalow - 3BR, BBQ & Games Room","suburb":"Torrensville","beds":3,"sleeps":7,"cancellation":["100% refund up to 14 days before arrival","50% refund up to 7 days before arrival"]},"472311":{"name":"The Cabana - 2BR with Private Pool & Spa","suburb":"Torrensville","beds":2,"sleeps":5,"cancellation":["100% refund up to 14 days before arrival","50% refund up to 7 days before arrival"]},"472312":{"name":"The Bungalow & The Cabana - Pool, Spa & Games Room","suburb":"Torrensville","beds":5,"sleeps":12,"cancellation":["100% refund up to 14 days before arrival","50% refund up to 7 days before arrival"]},"495920":{"name":"Victoria House - 3Br, BBQ & Sunroom","suburb":"Mile End","beds":3,"sleeps":7,"cancellation":null}}};</script>
+
+</main>
+
+<section class="cta-band pad grain">
+  <div class="wrap">
+    <p class="eyebrow centered">Get started</p>
+    <div class="rule-accent centered"></div>
+    <h2 class="h2">What could your property earn?</h2>
+    <p class="lede">A free, no-obligation appraisal with a realistic nightly rate, an occupancy estimate and a clear net figure after costs. Usually back with you inside one business day.</p>
+    <div class="cta-actions">
+      <a class="btn btn-light" href="contact.html">Request my appraisal <svg class="arw" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 12h13M12 5l7 7-7 7"/></svg></a>
+      <a class="btn btn-outline-light" href="tel:+61882391787">Call 08 8239 1787</a>
+    </div>
+  </div>
+</section>
+
+
+
+<script src="assets/app.js?v=5c769384"></script>
+<!-- Service worker: required before Android/Chrome will offer "Install app".
+     Deliberately a pure network passthrough with NO caching — a caching SW on a
+     demo means stale pages survive every redeploy, which is exactly the trap we
+     already fingerprint the CSS/JS to avoid. -->
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', function () {
+    navigator.serviceWorker.register('sw.js').catch(function () {});
+  });
+}
+</script>
+<!-- Preview open beacon: texts Peter when the prospect opens this.
+     JS-driven so link-unfurling crawlers (iMessage/WhatsApp/Outlook) don't cause
+     a false alarm. sessionStorage stops one visit firing 12 times as they browse.
+     ?v=<tag> splits the SLUG as well as the label, so the server-side 6h throttle
+     is per-audience: Peter testing can never suppress the prospect's alert. -->
+<script>
+(function(){
+  try {
+    var tag = (location.search.match(/[?&]v=([\w-]{1,24})/) || [])[1] || '';
+    var k = 'gg_pv_seen_' + (tag || 'self');
+    if (sessionStorage.getItem(k)) return;
+    sessionStorage.setItem(k, '1');
+    var slug = 'guestguardian-concept-demo' + (tag ? '-' + tag : '');
+    var label = tag
+      ? 'Guest Guardian PROSPECT OPENED (' + tag + ')'
+      : 'Guest Guardian preview (untagged, likely internal)';
+    new Image().src = 'https://mplaunch.com.au/api/preview-view'
+      + '?slug=' + encodeURIComponent(slug)
+      + '&label=' + encodeURIComponent(label)
+      + '&t=' + Date.now();
+  } catch (e) {}
+})();
+</script>
+</body>
+</html>
