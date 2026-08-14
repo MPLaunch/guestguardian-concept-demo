@@ -231,6 +231,97 @@
     Object.keys(R.suburbs).forEach(function (s) { SUB_KEY[s.toLowerCase().trim()] = s; });
     var canonical = function (v) { return SUB_KEY[String(v || '').toLowerCase().trim()] || ''; };
 
+    /* ── The suburb type-ahead ────────────────────────────────────────────────
+       Deliberately NOT a native <datalist>. That version showed all 243 suburbs
+       the moment the field was focused, in the browser's own light styling on a
+       dark card, positioned wherever it felt like. This one:
+         · stays hidden until 2 characters are typed
+         · shows at most 8 matches, sitting directly under the box
+         · puts anything starting with what you typed FIRST (typing "pro" should
+           lead with Prospect, not with somewhere that merely contains "pro")
+         · is keyboard driven: up, down, enter, escape
+       🚨 Selecting must fire calc(). The figure on screen has to follow the box,
+       or someone picks a suburb and reads a number for the previous one. */
+    var acList = document.getElementById('est-suburb-list');
+    if (suburb && acList) {
+      var ALL = (suburb.getAttribute('data-suburbs') || '').split('|').filter(Boolean);
+      var acIndex = -1, acItems = [];
+
+      var acClose = function () {
+        acList.hidden = true; acList.innerHTML = ''; acIndex = -1; acItems = [];
+        suburb.setAttribute('aria-expanded', 'false');
+      };
+
+      var acPick = function (val) {
+        suburb.value = val;
+        acClose();
+        calc();                       // keep the number and the box in step
+      };
+
+      var acOpen = function () {
+        var q = suburb.value.toLowerCase().trim();
+        if (q.length < 2) return acClose();
+
+        var starts = [], contains = [];
+        for (var i = 0; i < ALL.length; i++) {
+          var low = ALL[i].toLowerCase();
+          var at = low.indexOf(q);
+          if (at === 0) starts.push(ALL[i]);
+          else if (at > 0) contains.push(ALL[i]);
+        }
+        acItems = starts.concat(contains).slice(0, 8);
+
+        if (!acItems.length) {
+          acList.innerHTML = '<li class="est-ac-none">No Adelaide suburb matches that</li>';
+          acList.hidden = false;
+          suburb.setAttribute('aria-expanded', 'true');
+          return;
+        }
+        acList.innerHTML = acItems.map(function (s, i) {
+          var at = s.toLowerCase().indexOf(q);
+          /* Bold the bit they typed, wherever it sits in the name. */
+          var shown = s.slice(0, at) + '<b>' + s.slice(at, at + q.length) + '</b>' + s.slice(at + q.length);
+          return '<li role="option" data-i="' + i + '" aria-selected="false">' + shown + '</li>';
+        }).join('');
+        acList.hidden = false;
+        acIndex = -1;
+        suburb.setAttribute('aria-expanded', 'true');
+      };
+
+      var acHighlight = function (n) {
+        var lis = acList.querySelectorAll('li[role="option"]');
+        if (!lis.length) return;
+        acIndex = (n + lis.length) % lis.length;
+        for (var i = 0; i < lis.length; i++) {
+          lis[i].setAttribute('aria-selected', i === acIndex ? 'true' : 'false');
+        }
+        lis[acIndex].scrollIntoView({ block: 'nearest' });
+      };
+
+      suburb.addEventListener('input', acOpen);
+      suburb.addEventListener('focus', function () { if (suburb.value.trim().length >= 2) acOpen(); });
+
+      suburb.addEventListener('keydown', function (ev) {
+        if (acList.hidden) return;
+        if (ev.key === 'ArrowDown') { ev.preventDefault(); acHighlight(acIndex + 1); }
+        else if (ev.key === 'ArrowUp') { ev.preventDefault(); acHighlight(acIndex - 1); }
+        else if (ev.key === 'Enter' && acIndex > -1) { ev.preventDefault(); acPick(acItems[acIndex]); }
+        else if (ev.key === 'Escape') { acClose(); }
+      });
+
+      /* mousedown, not click: a click fires after blur has already closed the list. */
+      acList.addEventListener('mousedown', function (ev) {
+        var li = ev.target.closest('li[data-i]');
+        if (!li) return;
+        ev.preventDefault();
+        acPick(acItems[+li.getAttribute('data-i')]);
+      });
+
+      document.addEventListener('click', function (ev) {
+        if (!suburb.contains(ev.target) && !acList.contains(ev.target)) acClose();
+      });
+    }
+
     var lookup = function (sub, b) {
       var pc = R.suburbs[canonical(sub)];
       var cell = pc && R.postcodes[pc] && R.postcodes[pc].beds[b];
