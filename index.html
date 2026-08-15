@@ -29,7 +29,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500&family=Outfit:wght@200;300;400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/style.css?v=5f9ea768">
+<link rel="stylesheet" href="assets/style.css?v=261d39a8">
 <script type="application/ld+json">{
  "@context": "https://schema.org",
  "@type": "LocalBusiness",
@@ -188,7 +188,11 @@
 
 <section class="dark pad" id="estimator">
   <div class="wrap">
-    <div class="sec-head centered rv">
+    <!-- est-head widens the block and trims the type just enough that the
+         heading holds one line on desktop. At the standard .h2 size it broke
+         after "could" and left "earn?" stranded on its own, which reads as a
+         mistake rather than a design. -->
+    <div class="sec-head centered rv est-head">
       <p class="eyebrow centered">Estimator</p>
       <h2 class="h2">What your property could earn?</h2>
       <p class="lede" style="margin-inline:auto">Move the numbers to see an indicative range. A real appraisal accounts for your actual property, position and presentation.</p>
@@ -609,7 +613,7 @@
   </div>
 </footer>
 
-<script src="assets/app.js?v=5f9ea768"></script>
+<script src="assets/app.js?v=261d39a8"></script>
 <!-- Service worker: required before Android/Chrome will offer "Install app".
      Deliberately a pure network passthrough with NO caching — a caching SW on a
      demo means stale pages survive every redeploy, which is exactly the trap we

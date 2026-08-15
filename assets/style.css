@@ -2106,3 +2106,12 @@ b.tag-auto, b.tag-web { font-weight: 500; padding: .1rem .45rem; border-radius: 
 .est-ac-list li b { color: #fff; font-weight: 600; }   /* the matched characters */
 .est-ac-list li[aria-selected="true"], .est-ac-list li:hover { background: rgba(255,255,255,.11); }
 .est-ac-none { padding: .55rem .7rem; color: rgba(255,255,255,.5); font-size: .88rem; }
+
+/* Estimator heading — hold it on one line.
+   "What your property could earn?" broke after "could" at the standard .h2
+   size, orphaning "earn?" on its own line. Wider block, slightly smaller type,
+   and nowrap once there is genuinely room for it. Below that it wraps, but
+   text-wrap:balance splits it evenly instead of stranding one word. */
+.est-head { max-width: 880px; }
+.est-head .h2 { font-size: clamp(1.85rem, 3.6vw, 2.85rem); text-wrap: balance; }
+@media (min-width: 820px) { .est-head .h2 { white-space: nowrap; } }
